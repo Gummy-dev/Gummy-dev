@@ -2,6 +2,14 @@ import pygame
 import sys
 from pathlib import Path
 
+# 클래스에서 스네이크 생성, 회전, 움직임을 하나의 객체 단위로 정의
+class SnakeMoveRotateDraw:
+    # 필요한 부품들을 정의 / 최초 위치, 각도, 속도, 호출될 이미지 및 이미지 정보
+    def __init__(self, x, y): #최초 생성시 포지션을 정의
+        self.x = x
+        self.y = y
+
+
 # Pygame 초기화
 pygame.init()
 
@@ -67,16 +75,6 @@ while running:
     if 330 > posX >= -330:
         posX -= 10
     
-    rotated = pygame.math.Vector2.rotate(90)
-    posX = rotated.x
-    posY = rotated.y
-
-    rotated_snake = pygame.transform.rotate(image, 90)
-    snake_rect = rotated_snake.get_rect(center=(posX,posY))
-
-    screen.blit(image, (0, 0))
-
-
 
     # 화면 채우기
     screen.fill(BLACK)
@@ -84,7 +82,10 @@ while running:
     # 이미지 영역, value
     for value in image_BG_resources.values():
         screen.blit(value, (0, 0))
+    
+    screen.blit(image, (posX, posY))
 
+    
     # 화면 업데이트
     pygame.display.flip()
     pygame.display.update()
