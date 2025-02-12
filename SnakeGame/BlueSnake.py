@@ -1,3 +1,4 @@
+import math
 import pygame
 import sys
 from pathlib import Path
@@ -6,8 +7,29 @@ from pathlib import Path
 class SnakeMoveRotateDraw:
     # 필요한 부품들을 정의 / 최초 위치, 각도, 속도, 호출될 이미지 및 이미지 정보
     def __init__(self, x, y): #최초 생성시 포지션을 정의
+    #클래스가 가질 재료들 정의
         self.x = x
         self.y = y
+        self.angle = 0
+        self.speed = 5
+        self.image = pygame.image.load("CH_Head")
+    # 회전 함수 정의
+    def rotate(self, direction):
+        self.angle += direction * 5
+    # 전진 함수 정의
+    def move_forward(self):
+        radians = math.radians(self.angle)
+        self.x += math.cos(radians) * self.speed
+        self.y -= math.sin(radians) * self.speed
+    # 그리기 함수 정의
+    def draw(self, screen):
+        rotated_image = pygame.transform.rotate(self.image, -self.angle)
+        rect = rotated_image.get_rect(center=(self.x, self.y))
+        screen.blit(rotated_image, rect.topleft)
+
+# 스네이크 객체 생성
+snake = SnakeMoveRotateDraw(400, 300)
+
 
 
 # Pygame 초기화
