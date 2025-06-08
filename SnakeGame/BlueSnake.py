@@ -78,9 +78,8 @@ class SnakeBodyGrow:
 
         radians = math.radians(follow_Object.angle)
 
-        offset_x = -math.cos(radians) * -100
-        offset_y = -math.sin(radians) * -100
-
+        offset_x = -math.cos(radians) * -50
+        offset_y = -math.sin(radians) * -50
 
         self.x = follow_Object.x + offset_x
         self.y = follow_Object.y + offset_y
@@ -88,13 +87,14 @@ class SnakeBodyGrow:
         self.flip = follow_Object.flip
         self.image = image_CH_resources["CH_Body"]
 
-
-    def draw(self, screen, follow_Object):
+    def draw(self, screen):
         rotated_image = pygame.transform.rotate(self.image, -self.angle)
         rotated_image = pygame.transform.flip(rotated_image, False, self.flip)
 
+        added_image = pygame.transform.scale(rotated_image, (100, 100))  # 크기 조정
         rect = rotated_image.get_rect(center=(self.x, self.y))
         screen.blit(rotated_image, rect.topleft)
+        # screen.blit(added_image, rect.topleft)
 
 
 # 스네이크 객체 생성
@@ -122,7 +122,7 @@ while running:
             if event.key == pygame.K_LEFT:
                 snake.rotate(0)
                 snake.flip = False
-                print("왼")
+                print("좌")
             elif event.key == pygame.K_UP:
                 snake.rotate(90)
                 snake.flip = False
@@ -130,7 +130,7 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 snake.rotate(180)
                 snake.flip = True
-                print("오")
+                print("우")
             elif event.key == pygame.K_DOWN:
                 snake.rotate(270)
                 snake.flip = False
@@ -142,7 +142,7 @@ while running:
     snake.move_forward()
     snake.draw(screen)
     snake_body.move_follow(snake)  # 스네이크 몸체가 머리를 따라 움직임
-    snake_body.draw(screen, snake)
+    snake_body.draw(screen)
 
 
     # if 330 > posX >= -330:
