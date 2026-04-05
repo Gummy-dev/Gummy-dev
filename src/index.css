@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-100 font-sans;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md transition-all;
+  }
+  .card:hover {
+    @apply border-gray-500 shadow-lg;
+  }
+  .btn {
+    @apply rounded px-3 py-1.5 text-sm font-semibold transition-colors disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply btn bg-amber-600 text-white hover:bg-amber-500;
+  }
+  .btn-secondary {
+    @apply btn bg-gray-700 text-gray-200 hover:bg-gray-600;
+  }
+  .btn-danger {
+    @apply btn bg-red-800 text-white hover:bg-red-700;
+  }
+  .resource-badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold;
+  }
+
+  .action-effect-card {
+    @apply relative overflow-hidden rounded-2xl border px-5 py-4 shadow-2xl backdrop-blur-sm;
+    min-width: 280px;
+    animation: action-pop 1800ms ease forwards;
+  }
+
+  .action-effect-burst {
+    position: absolute;
+    inset: -30%;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.28), transparent 24%),
+      conic-gradient(from 0deg, rgba(255,255,255,0.12), transparent 22%, rgba(255,255,255,0.08) 30%, transparent 44%, rgba(255,255,255,0.12) 52%, transparent 70%, rgba(255,255,255,0.08) 84%, transparent 100%);
+    opacity: 0.55;
+    animation: shard-spin 1300ms ease-out forwards;
+    pointer-events: none;
+  }
+
+  .action-effect-cracks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      linear-gradient(118deg, transparent 0 36%, rgba(255,255,255,0.45) 36.5%, transparent 37.2%) center/100% 100% no-repeat,
+      linear-gradient(72deg, transparent 0 48%, rgba(255,255,255,0.3) 48.4%, transparent 49.1%) center/100% 100% no-repeat,
+      linear-gradient(154deg, transparent 0 60%, rgba(255,255,255,0.28) 60.4%, transparent 61.1%) center/100% 100% no-repeat;
+    mix-blend-mode: screen;
+    animation: crack-flash 1200ms ease-out forwards;
+  }
+
+  .screen-shake {
+    animation: screen-shake 620ms cubic-bezier(.36,.07,.19,.97) both;
+  }
+}
+
+@keyframes action-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.92) rotate(-1.2deg);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02) rotate(0.8deg);
+  }
+  26% {
+    transform: translateY(0) scale(0.99) rotate(-0.6deg);
+  }
+  74% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+@keyframes shard-spin {
+  0% {
+    transform: scale(0.65) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.15) rotate(120deg);
+    opacity: 0;
+  }
+}
+
+@keyframes crack-flash {
+  0% {
+    opacity: 0;
+    transform: scale(1.04) rotate(-1deg);
+  }
+  18% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes screen-shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
