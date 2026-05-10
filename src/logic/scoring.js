@@ -1,72 +1,44 @@
-import { AFFINITY_MATRIX, LEADER_ADJACENCY_BONUS } from '../data/survivors.js'
 import { RULES } from '../data/rules.js'
 
-// 파티 내 상성 점수 계산
+// 파티 점수 계산
+// 인접 상성 점수는 폐기하고, 생존자 기본 점수와 명시적 조건 보너스만 계산합니다.
 export function calcPartyScore(party, leaderId) {
-  if (!party || party.length === 0) return { total: 0, breakdown: [] }
+  if (!party || party.length === 0) return { total: 0, baseTotal: 0, bonusTotal: 0, breakdown: [] }
 
-  const leaderBonus = LEADER_ADJACENCY_BONUS[leaderId]
   const breakdown = []
   let total = 0
+  let baseTotal = 0
+  let bonusTotal = 0
 
-  party.forEach((survivor, i) => {
+  party.forEach((survivor) => {
     const baseScore = survivor.score ?? 0
-    let adjacencyScore = 0
-    const details = []
-
-    const left = party[i - 1]
-    const right = party[i + 1]
-
-    ;[left, right].forEach((neighbor) => {
-      if (!neighbor) return
-      const delta = AFFINITY_MATRIX[survivor.type]?.[neighbor.type] ?? 0
-      if (delta !== 0) {
-        adjacencyScore += delta
-        details.push(`${neighbor.name}(${delta > 0 ? '+' : ''}${delta})`)
-      }
-    })
-
-    // 지도자 인접 보너스
-    let leaderBonusScore = 0
-    if (leaderBonus && survivor.type === leaderBonus.type) {
-      leaderBonusScore = leaderBonus.bonus
-      details.push(`지도자 인접 +${leaderBonus.bonus}`)
-    }
-
-    const rowTotal = baseScore + adjacencyScore + leaderBonusScore
-    total += rowTotal
+    total += baseScore
+    baseTotal += baseScore
     breakdown.push({
       survivor,
       baseScore,
-      adjacencyScore,
-      leaderBonusScore,
-      rowTotal,
-      details,
+      adjacencyScore: 0,
+      rowTotal: baseScore,
+      details: [],
+      edgeRight: 0,   // 이 슬롯과 오른쪽 슬롯 사이 엣지 값
     })
   })
 
-  // 전원 평범 보너스
   const allNormal = party.every((s) => s.type === '평범')
   if (allNormal && party.length > 0) {
     total += RULES.allNormalPartyBonus
+    bonusTotal += RULES.allNormalPartyBonus
     breakdown.push({ specialBonus: `전원 평범 보너스 +${RULES.allNormalPartyBonus}` })
   }
 
-  return { total, breakdown }
+  return { total, baseTotal, bonusTotal, breakdown }
 }
 
 // 이벤트 해결 점수 계산
 export function calcEventScore(diceResults, party, event) {
   const diceSum = diceResults.reduce((a, b) => a + b, 0)
 
-  let bonus = 0
-  if (event.affinityBonus) {
-    const types = event.affinityBonus.type.split('+')
-    const hasAll = types.every((t) => party.some((s) => s.type === t || s.leaderId === t))
-    if (hasAll) bonus += 3
-  }
-
-  return { diceSum, bonus, total: diceSum + bonus }
+  return { diceSum, bonus: 0, total: diceSum }
 }
 
 // 주사위 굴리기

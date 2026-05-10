@@ -3,11 +3,14 @@ import { useGameStore } from '../store/gameStore.js'
 import PlayerPanel from './PlayerPanel.jsx'
 import EventZone from './EventZone.jsx'
 import MercenaryPool from './MercenaryPool.jsx'
+import DiceRollModal from './DiceRollModal.jsx'
+import SurvivorDiceModal from './SurvivorDiceModal.jsx'
 
 export default function GameBoard() {
   const {
     players, currentPlayerIndex, round,
     endTurn, resetGame, globalLog, actionEffects, dismissActionEffect,
+    gameEnded, finalRoundActive, winnerIds, finalStandings, finalReason,
   } = useGameStore()
 
   const myIndex = 0
@@ -19,7 +22,10 @@ export default function GameBoard() {
   const opponents = players.filter((_, i) => i !== myIndex)
 
   return (
-    <div className="min-h-screen flex flex-col gap-3 p-3 md:p-4 max-w-7xl mx-auto">
+    <div className="min-h-screen flex gap-3 p-3 md:p-4 max-w-[100rem] mx-auto">
+
+      {/* ── 메인 콘텐츠 ── */}
+      <div className="flex-1 flex flex-col gap-3 min-w-0">
 
       {/* 상단 상태 바 */}
       <div className="flex items-center justify-between">
@@ -28,22 +34,34 @@ export default function GameBoard() {
           <p className="text-xs text-gray-500">
             라운드 {round} &nbsp;·&nbsp;
             <span style={{ color: currentPlayer?.leaderColor }}>{currentPlayer?.name}</span> 턴
+            {finalRoundActive && <span className="text-yellow-300"> &nbsp;·&nbsp; 최종 라운드</span>}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {isMyTurn && (
+          {isMyTurn && !gameEnded && (
             <button onClick={endTurn} className="btn-primary text-xs px-4 py-1.5">
               턴 종료 →
             </button>
           )}
-          {!isMyTurn && (
+          {!isMyTurn && !gameEnded && (
             <span className="text-xs text-gray-500 italic">
               {currentPlayer?.isBot ? '🤖 봇 생각 중...' : `${currentPlayer?.name} 턴`}
             </span>
           )}
+          {gameEnded && (
+            <span className="text-xs text-yellow-300 italic">게임 종료</span>
+          )}
           <button onClick={resetGame} className="btn-secondary text-xs px-3 py-1.5">처음으로</button>
         </div>
       </div>
+
+      {gameEnded && (
+        <GameOverBanner
+          finalReason={finalReason}
+          winnerIds={winnerIds}
+          finalStandings={finalStandings}
+        />
+      )}
 
       {/* ── 상대 플레이어 패널 ── */}
       {opponents.length > 0 && (
@@ -65,7 +83,7 @@ export default function GameBoard() {
       )}
 
       <div className="flex flex-col gap-3">
-        <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_19.5rem]">
+        <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_30rem] xl:grid-cols-[minmax(0,1fr)_31rem]">
           {/* ── 이벤트 존 (플레이어 사이) ── */}
           <div className="card border-gray-700 bg-gray-900/80 min-w-0">
             <EventZone isMyTurn={isMyTurn} />
@@ -100,6 +118,58 @@ export default function GameBoard() {
       </div>
 
       <ActionEffectOverlay effects={actionEffects} onDismiss={dismissActionEffect} />
+      <DiceRollModal isMyTurn={isMyTurn} myIndex={myIndex} />
+      <SurvivorDiceModal />
+      </div>{/* end 메인 콘텐츠 */}
+
+    </div>
+  )
+}
+
+function GameOverBanner({ finalReason, winnerIds, finalStandings }) {
+  return (
+    <div className="card border-yellow-600 bg-yellow-950/30">
+      <div className="flex flex-col gap-3">
+        <div>
+          <div className="text-sm font-bold text-yellow-300">게임 종료</div>
+          <div className="text-xs text-yellow-100/80">{finalReason}</div>
+        </div>
+        <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+          {finalStandings.map((entry, index) => {
+            const isWinner = winnerIds.includes(entry.playerId)
+            return (
+              <div
+                key={entry.playerId}
+                className={`rounded-lg border px-3 py-2 ${
+                  isWinner ? 'border-yellow-400 bg-yellow-900/30' : 'border-gray-700 bg-gray-900/50'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-sm font-semibold text-gray-100">
+                    {index + 1}. {entry.name}
+                  </div>
+                  <div className={`text-sm font-bold ${isWinner ? 'text-yellow-300' : 'text-gray-200'}`}>
+                    {entry.total}점
+                  </div>
+                </div>
+                <div className="mt-2 space-y-1 text-xs text-gray-300">
+                  <div>파티 점수 {entry.partyScore}</div>
+                  <div>파티 보너스 {entry.partyBonusScore}</div>
+                  <div>이벤트 해결 점수 {entry.eventScore}</div>
+                  {entry.abandonedPenalty > 0 && (
+                    <div className="text-red-300">넘긴 이벤트 벌점 -{entry.abandonedPenalty}</div>
+                  )}
+                  <div>
+                    지도자 종료 조건 {entry.leaderEndScore}
+                    <span className="text-gray-500"> · {entry.leaderEndLabel}</span>
+                  </div>
+                  <div className="text-yellow-300">유토피아 단서 {entry.clueTokens}장</div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
