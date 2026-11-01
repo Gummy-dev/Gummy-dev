@@ -1,3 +1,5 @@
+> 보관 문서: 과거 기획·실험 기록입니다. 현재 규칙은 [프로토타입 규칙](../expedition-prototype.md)을 따릅니다.
+
 # Apocalypse Card 카드 리스트
 
 기준일: 2026-04-21

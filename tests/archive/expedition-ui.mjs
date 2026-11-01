@@ -1,3 +1,4 @@
+// Historical browser scenario; fixtures and selectors require review against current rules before use.
 import assert from 'node:assert/strict'
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const browser = await chromium.launch({ headless: true, executablePath: process.env.BROWSER_PATH || '/Applications/Google Chrome 2.app/Contents/MacOS/Google Chrome' })

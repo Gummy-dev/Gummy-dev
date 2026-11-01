@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { createGame, applyCommand, actorId, botCommand, runBot, mealCost, publicGame, joinSlot, upgradeGame, requirements, explorationPrizes, canEscape, escapeCrew, escapeBonus, disasterCrewValid, eventCrewValid, canSolveEvent, eventSolveCost, eventBonus, recruitCost, dispatchLimit } from '../src/expedition/engine.js'
 import { PLAIN, SURVIVOR_CARDS, LOCATIONS, VERSION, RULES, LEADERS, cardScore } from '../src/expedition/cards.js'
 import { EVENT_CARDS, EVENT_SPACES, eventModifier } from '../src/expedition/events.js'
-import { OMEN_TILES } from '../src/expedition/omens.js'
+import { OMEN_TILES } from '../src/legacy/omens.js'
 const DISASTERS = OMEN_TILES.filter(d => d.legacyDay).map(d => ({ ...d, day: d.legacyDay }))
 const seats = [{ id: 'a', name: 'A', leaderId: 'shy' }, { id: 'b', name: 'B', leaderId: 'robot' }]
 const rng = seed => () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296)

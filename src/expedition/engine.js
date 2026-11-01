@@ -1,5 +1,5 @@
 import { VERSION, COLORS, RULES, LEADERS, SURVIVOR_CARDS, LOCATIONS, locationPrizes, abilityPhase, hazardText, siteCapacity, cardScore } from './cards.js'
-import { OMEN_TILES, createOmens, upcomingOmen, publicOmens, disasterCrewValid } from './omens.js'
+import { OMEN_TILES, createOmens, upcomingOmen, publicOmens, disasterCrewValid } from '../legacy/omens.js'
 import { EVENT_SPACES, EVENT_CARDS, createEventDeck, eventModifier, eventCrewValid } from './events.js'
 export { upcomingOmen, disasterCrewValid, eventCrewValid }
 const requireRule = (ok, message) => { if (!ok) throw new Error(message) }

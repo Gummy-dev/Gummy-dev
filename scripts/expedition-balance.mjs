@@ -1,6 +1,6 @@
 // Deterministic pacing diagnostics, not a model of negotiation or human win rates.
 import { createGame, runBot, botCommand, crewCount, applyCommand } from '../src/expedition/engine.js'
-import { LEADERS, SURVIVOR_CARDS, PLAIN, RULES } from '../src/expedition/cards.js'
+import { LEADERS, SURVIVOR_CARDS, RULES } from '../src/expedition/cards.js'
 const count=Number(process.argv[2]??30)
 if(!Number.isInteger(count)||count<1)throw new Error('Use a positive game count')
 const rng=seed=>()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296)
@@ -34,23 +34,23 @@ for(const n of [2,3,4]){
   const winner=g.players.findIndex(p=>p.seatId===g.standings?.[0]?.seatId)
   runs.push({ended:g.gameEnded,score:g.standings,day:g.day,escaped:g.players.filter(p=>p.escaped).length,topRoute:Math.max(...g.players.map(p=>p.route)),routes:g.players.map(p=>p.route),firstDeep,attempts,resolved,failed,losses,prepared,recruited,initial,fiveParty,abilityUses,actions,snapshots,omens:[...g.eventDiscard,...(g.activeEvent?[g.activeEvent.card]:[])].map(c=>c.kind),comeback:day4&&g.gameEnded&&g.standings.filter(p=>p.rank===1).length===1&&Math.max(...day4)-day4[winner]>=2})
  }
- summary.push({players:n,games:count,gamesWithEscape:runs.filter(r=>r.escaped).length,unfinished:runs.filter(r=>!r.ended).map(r=>({day:r.day,routes:r.routes})),meanDay:mean(runs.filter(r=>r.ended).map(r=>r.day)),medianDay:[...runs].filter(r=>r.ended).sort((a,b)=>a.day-b.day)[Math.floor(runs.filter(r=>r.ended).length/2)]?.day,meanTopRoute:mean(runs.map(r=>r.topRoute)),meanPlayerRoute:mean(runs.flatMap(r=>r.routes)),meanAttempts:mean(runs.map(r=>r.attempts)),meanResolved:mean(runs.map(r=>r.resolved)),meanFailed:mean(runs.map(r=>r.failed)),gamesSeeingTier3:runs.filter(r=>r.firstDeep!==null).length,meanFirstTier3:mean(runs.filter(r=>r.firstDeep!==null).map(r=>r.firstDeep)),meanRecruited:mean(runs.map(r=>r.recruited)),meanInitialParty:mean(runs.flatMap(r=>r.initial)),gamesWithFivePersonParty:runs.filter(r=>r.fiveParty).length,meanAbilityUses:mean(runs.map(r=>r.abilityUses)),meanDisasterLosses:mean(runs.map(r=>r.losses)),meanSolvedEvents:mean(runs.map(r=>r.prepared)),winsFrom2CluesBehindDay4:runs.filter(r=>r.comeback).length,meanEvents:mean(runs.map(r=>r.omens.length)),meanDisasters:mean(runs.map(r=>r.omens.filter(k=>k==='disaster').length)),meanMiracles:mean(runs.map(r=>r.omens.filter(k=>k==='miracle').length)),days:[2,4,6,8].map(day=>{const rows=runs.flatMap(r=>r.snapshots.filter(s=>s.day===day));return{day,samples:rows.length,can:mean(rows.map(r=>r.can)),caps:mean(rows.map(r=>r.caps)),crew:mean(rows.map(r=>r.crew)),route:mean(rows.map(r=>r.route)),lead:mean(rows.map(r=>r.lead))}})})
+ summary.push({players:n,games:count,gamesWithEscape:runs.filter(r=>r.escaped).length,unfinished:runs.filter(r=>!r.ended).map(r=>({day:r.day,routes:r.routes})),meanDay:mean(runs.filter(r=>r.ended).map(r=>r.day)),medianDay:[...runs].filter(r=>r.ended).sort((a,b)=>a.day-b.day)[Math.floor(runs.filter(r=>r.ended).length/2)]?.day,meanTopRoute:mean(runs.map(r=>r.topRoute)),meanPlayerRoute:mean(runs.flatMap(r=>r.routes)),meanAttempts:mean(runs.map(r=>r.attempts)),meanResolved:mean(runs.map(r=>r.resolved)),meanFailed:mean(runs.map(r=>r.failed)),gamesSeeingTier3:runs.filter(r=>r.firstDeep!==null).length,meanFirstTier3:mean(runs.filter(r=>r.firstDeep!==null).map(r=>r.firstDeep)),meanRecruited:mean(runs.map(r=>r.recruited)),meanInitialParty:mean(runs.flatMap(r=>r.initial)),gamesWithFivePersonParty:runs.filter(r=>r.fiveParty).length,meanAbilityUses:mean(runs.map(r=>r.abilityUses)),meanDisasterLosses:mean(runs.map(r=>r.losses)),meanSolvedEvents:mean(runs.map(r=>r.prepared)),winsFrom2SpacesBehindDay4:runs.filter(r=>r.comeback).length,meanEvents:mean(runs.map(r=>r.omens.length)),meanDisasters:mean(runs.map(r=>r.omens.filter(k=>k==='disaster').length)),meanMiracles:mean(runs.map(r=>r.omens.filter(k=>k==='miracle').length)),days:[2,4,6,8].map(day=>{const rows=runs.flatMap(r=>r.snapshots.filter(s=>s.day===day));return{day,samples:rows.length,can:mean(rows.map(r=>r.can)),caps:mean(rows.map(r=>r.caps)),crew:mean(rows.map(r=>r.crew)),route:mean(rows.map(r=>r.route)),lead:mean(rows.map(r=>r.lead))}})})
 }
-// Enumerate every equally likely die stream through the real final-expedition engine.
+// Use recruitable named survivors; removed plain survivors are not a current balance baseline.
 const odds=[]
 for(const [name, abilities, route, eventDie = 0] of [
- ['기본 3타입', ['plain','plain','plain'],RULES.route],
- ['앞 용감이 포함', ['plain','plain','brave'],RULES.route],
- ['앞 용감이 + 여정 '+(RULES.route+4), ['plain','plain','brave'],RULES.route+4],
- ['선생님 + 앞 용감이', ['teacher','plain','brave'],RULES.route],
- ['고양이 + 앞 용감이', ['plain','scout','brave'],RULES.route],
- ['선생님 + 고양이 + 앞 용감이', ['teacher','scout','brave'],RULES.route],
- ['기본 3타입 + 사건 1', ['plain','plain','plain'],RULES.route,1],
- ['기본 3타입 + 사건 2', ['plain','plain','plain'],RULES.route,2],
- ['고양이 + 선생님 + 앞 용감이 + 사건 1', ['teacher','scout','brave'],RULES.route,1],
+ ['반장·자급·사냥꾼', ['captain','free','hunter'],RULES.route],
+ ['앞 용감이 포함', ['captain','free','hunter'],RULES.route],
+ ['앞 용감이 + 여정 '+(RULES.route+4), ['captain','free','hunter'],RULES.route+4],
+ ['선생님 + 앞 용감이', ['teacher','free','hunter'],RULES.route],
+ ['고양이 + 앞 용감이', ['captain','scout','hunter'],RULES.route],
+ ['선생님 + 고양이 + 앞 용감이', ['teacher','scout','hunter'],RULES.route],
+ ['반장·자급·사냥꾼 + 사건 1', ['captain','free','hunter'],RULES.route,1],
+ ['반장·자급·사냥꾼 + 사건 2', ['captain','free','hunter'],RULES.route,2],
+ ['고양이 + 선생님 + 앞 용감이 + 사건 1', ['teacher','scout','hunter'],RULES.route,1],
 ]) {
  const g=createGame([{id:'a',name:'A'},{id:'b',name:'B'}],rng(1));g.phase='dispatch';const p=g.players[0];p.route=route;p.utopiaDie=eventDie;p.resources.can=20
- p.party=abilities.map((ability,i)=>({...(['plain','brave'].includes(ability)?PLAIN.find(c=>c.type===(ability==='brave'?'용감이':i===0?'반장':i===1?'겁쟁이':'분위기메이커')):SURVIVOR_CARDS.find(c=>c.ability===ability)),uid:'odds'+i,slot:ability==='brave'?0:i+2,ready:true}))
+ p.party=abilities.map((ability,i)=>({...SURVIVOR_CARDS.find(c=>c.ability===ability),uid:'odds'+i,slot:ability==='hunter'?0:i+2,ready:true}))
  const n=3+Number(abilities.includes('scout'))+Number(abilities.includes('teacher')), total=6**n;let wins=0
  for(let sequence=0;sequence<total;sequence++){let encoded=sequence, stream=Array.from({length:n},()=>{const value=encoded%6;encoded=Math.floor(encoded/6);return value/6}),i=0;const out=applyCommand(g,'a',{type:'escape',uids:p.party.map(c=>c.uid)},()=>stream[i++]);wins+=Number(out.lastUtopia.success)}
  odds.push({party:name,successfulStreams:wins,totalStreams:total,chance:+(100*wins/total).toFixed(2)})

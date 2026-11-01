@@ -2,7 +2,8 @@ import { SURVIVORS } from '../data/survivors.js'
 import { LEADERS as ORIGINAL_LEADERS } from '../data/leaders.js'
 
 export const VERSION = 'expedition-v2'
-export const TYPES = ['겁쟁이', '분위기메이커', '반장', '용감이', '4차원']
+import { TYPES } from '../game/types.js'
+export { TYPES }
 export const COLORS = ['#b45d43', '#397f94', '#7a619d', '#6d8740']
 export const RULES = { route: 20, escapePeople: 3, escapeFood: 3, utopiaTarget: 12, escapeTypes: 3, routeBonus: 0, party: 5, mealCost: 2, utopiaFirst: 5, utopiaLater: 3, suppliesPerPoint: 3 }
 // Every ability prints its timing. Original source cards remain untouched.

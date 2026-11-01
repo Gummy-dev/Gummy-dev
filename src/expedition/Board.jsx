@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Die, Icon, Portrait, Scene, Token, TypeBadge } from '../tabletop/Visuals.jsx'
+import { Die, Icon, Portrait, Token, TypeBadge } from '../tabletop/Visuals.jsx'
 import { RULES, LEADERS, cardScore, locationPrizes, distributionText, placementLabel, hazardText } from './cards.js'
 import { actorId, crewCount, requirements, partyLimit, explorationPrizes, canEscape, escapeCrew, ownedCrew, joinSlot, mealCost, reorderCost, eventBonus, dispatchLimit } from './engine.js'
-import { TYPES, TYPE_COLORS, TYPE_PAPER_COLORS } from '../game/cards.js'
+import { TYPES, TYPE_COLORS, TYPE_PAPER_COLORS } from '../game/types.js'
 import Management, { PendingManagement, LeaderActions, ExplorationTrade, SearchActions, DisasterActions, AbilityActions, CounterActions, EventActions } from './Management.jsx'
 import PlaceFace from './LocationCard.jsx'
 import { CardMenu, GainToasts } from './CardMenu.jsx'
@@ -55,7 +55,7 @@ export function ExpeditionRules() {
     <p><b>사건</b> 여정 3·6·9·12·15·18칸을 어느 파티든 처음 지나거나 도착하면 진행도 아래 사건 덱을 한 장 공개합니다. 공개 전에는 재난인지 기적인지 알 수 없습니다. 환경 효과는 모든 파티에 적용되고 다음 사건을 공개할 때 교체됩니다. 사건은 적어도 한 번의 낮 전체에 적용됩니다. 그동안 지나친 사건 칸은 대기시키고, 다음 낮 시작에 한 장씩 공개합니다. 낮에 카드의 인원·타입을 갖춘 준비된 동료와 병뚜껑을 함께 사용하면 해결합니다. 먼저 해결한 한 파티만 유토피아에 자기 주사위를 놓거나 눈을 1 올립니다(최대 6). 동료는 피로해지며, 해결한 뒤에도 환경 효과는 유지됩니다.</p>
     <p><b>유토피아</b> 여정 {RULES.route}칸·서로 다른 타입의 준비된 동료 3명·통조림 3개로 낮의 내 차례에 하루 한 번 도전합니다. 파견자는 모두 귀환해야 합니다. 높은 주사위 3개 합계 + 유토피아에 놓인 내 주사위 눈이 {RULES.utopiaTarget} 이상이면 유토피아에 진입합니다. 추가 주사위도 굴리지만 높은 3개만 합산합니다. 20칸을 넘겨도 추가 보너스는 없습니다. 유토피아에 놓인 주사위는 굴리거나 소모하지 않습니다. 실패 시 여정과 보너스는 유지하고 동료는 피로합니다.</p>
     <p><b>승리</b> 처음 진입한 파티는 {RULES.utopiaFirst}점, 그 뒤 진입한 파티는 {RULES.utopiaLater}점을 받습니다. 첫 진입이 나오면 그날 낮·밤을 마저 진행하고, 다음 낮을 마지막 라운드로 진행합니다. 마지막 낮의 탐색 정산이 끝나면 여정을 마칩니다. 유토피아 진입 점수 + 동료 카드 점수 합(파견 중 포함) + 통조림·병뚜껑 각각 {RULES.suppliesPerPoint}개당 1점을 합산합니다. 최종 탐색 정산 후 여정 {RULES.route}칸 이상인 파티끼리 점수를 비교하고 미도달 파티는 탈락합니다. 유토피아 진입에 실패했어도 {RULES.route}칸에 도달했다면 점수로 승리할 수 있습니다. 진입한 파티는 그 뒤 행동하지 않고 밤 보급도 받지 않습니다.</p>
-    <p><b>판 조작</b> 생존자를 탐색 카드로 끌어 놓거나 클릭 후 파견을 확인합니다. 카드 근처에서 낮 능력·밤 식사·영입을 선택합니다. 식사는 팝업에서 즉시 확정하고, 오른쪽 바에서는 낮·밤 종료를 선택합니다. 밤에 파티 안의 카드를 끌어 자리를 바꿉니다. 빈 바닥을 끌어 보드를 이동합니다. 구판 원정은 /expedition-v1에서 보존합니다.</p>
+    <p><b>판 조작</b> 생존자를 탐색 카드로 끌어 놓거나 클릭 후 파견을 확인합니다. 카드 근처에서 낮 능력·밤 식사·영입을 선택합니다. 식사는 팝업에서 즉시 확정하고, 오른쪽 바에서는 낮·밤 종료를 선택합니다. 밤에 파티 안의 카드를 끌어 자리를 바꿉니다. 빈 바닥을 끌어 보드를 이동합니다.</p>
   </div>
 }
 // Player aid: the whole round on one card. Native <details> hides it to a tab at the bottom.

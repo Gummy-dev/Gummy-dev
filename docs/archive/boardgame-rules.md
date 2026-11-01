@@ -1,6 +1,8 @@
+> 보관 문서: 과거 기획·실험 기록입니다. 현재 규칙은 [프로토타입 규칙](../expedition-prototype.md)을 따릅니다.
+
 # Apocalypse Card 보드게임 규칙서
 
-> 이 문서는 보존된 원본 판의 설계입니다. 현재 `/expedition` 규칙은 [공동 파견 프로토타입](expedition-prototype.md)을 기준으로 합니다.
+> 이 문서는 보존된 원본 판의 설계입니다. 현재 `/expedition` 규칙은 [공동 파견 프로토타입](../expedition-prototype.md)을 기준으로 합니다.
 
 
 기준일: 2026-04-21

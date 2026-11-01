@@ -1,5 +1,5 @@
-import { SURVIVORS } from '../data/survivors.js'
-import { LEADERS as ORIGINAL_LEADERS } from '../data/leaders.js'
+import { SURVIVORS } from '../../data/survivors.js'
+import { LEADERS as ORIGINAL_LEADERS } from '../../data/leaders.js'
 
 export const VERSION = 'expedition-v1'
 export const TYPES = ['겁쟁이', '분위기메이커', '반장', '용감이', '4차원']

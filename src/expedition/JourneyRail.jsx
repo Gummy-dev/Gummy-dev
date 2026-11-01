@@ -1,6 +1,6 @@
 import { Die, Icon, Token, TypeBadge } from '../tabletop/Visuals.jsx'
 import { RULES } from './cards.js'
-import { STAGE_MARKS } from './omens.js'
+import { STAGE_MARKS } from './events.js'
 import './journey.css'
 
 const TOP = RULES.route

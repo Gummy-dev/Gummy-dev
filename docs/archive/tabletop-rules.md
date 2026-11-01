@@ -1,3 +1,5 @@
+> 보관 문서: 과거 기획·실험 기록입니다. 현재 규칙은 [프로토타입 규칙](../expedition-prototype.md)을 따릅니다.
+
 # 멸망했는데 바쁨 — 현재 프로토타입 기준
 
 2026-09-30 복원. 사용자가 지정한 이전 설계(`src/store/gameStore.js`, `src/data`, `design`, `src/components`)를 실행 기준으로 되돌렸다. `src/game/restored.js`는 같은 규칙을 온라인 방별로 실행하는 연결 계층이다.

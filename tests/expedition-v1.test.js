@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createGame, applyCommand, actorId, publicGame, runBot, requirements, crewCount } from '../src/expedition-v1/engine.js'
-import { RULES, PLAIN, SURVIVOR_CARDS, LOCATIONS, DISASTERS, locationPrizes } from '../src/expedition-v1/cards.js'
+import { createGame, applyCommand, actorId, publicGame, runBot, requirements, crewCount } from '../src/legacy/expedition-v1/engine.js'
+import { RULES, PLAIN, SURVIVOR_CARDS, LOCATIONS, DISASTERS, locationPrizes } from '../src/legacy/expedition-v1/cards.js'
 const seats = [{ id: 'a', name: '첫째', leaderId: 'shy', starters: [0, 2] }, { id: 'b', name: '둘째', leaderId: 'robot', starters: [1, 3] }]
 const act = (g, command, id = actorId(g), random = () => .75) => applyCommand(g, id, command, random)
 function sharedGame() {

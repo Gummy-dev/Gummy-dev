@@ -1,7 +1,5 @@
-export const TYPES = ['겁쟁이', '분위기메이커', '반장', '용감이', '4차원']
-export const TYPE_COLORS = ['#8063a0', '#aa5d70', '#50819b', '#a65132', '#b18c32']
-// Pastel type hues; brave uses warmer, clearer vermilion to stay distinct from rescue pink.
-export const TYPE_PAPER_COLORS = ['#d6cedf', '#e5cdd3', '#cdd6da', '#eabdac', '#ecdbb3']
+import { TYPES } from './types.js'
+export { TYPES, TYPE_COLORS, TYPE_PAPER_COLORS } from './types.js'
 export const LEADERS = [
   { id: 'robot', name: 'HAL-4935', title: '계획대로 살고 싶어', type: '반장', art: 's_military_1', skill: '영입 때 덱 위 2명도 확인하고 선택합니다.', utopia: '완전 관리 구역', goal: '서로 다른 타입 4종' },
   { id: 'idol', name: '소염 더 고트', title: '앙코르는 멸망 이후에', type: '분위기메이커', art: 's_mood_1', skill: '파티에 6명까지 함께할 수 있습니다.', utopia: '영원한 페스티벌', goal: '분위기메이커 2명' },

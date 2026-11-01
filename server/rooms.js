@@ -4,10 +4,13 @@ import { tmpdir } from 'node:os'
 import { join, dirname } from 'node:path'
 import * as original from '../src/game/restored.js'
 import * as expedition from '../src/expedition/engine.js'
-import * as expeditionV1 from '../src/expedition-v1/engine.js'
+import * as expeditionV1 from '../src/legacy/expedition-v1/engine.js'
 import { VERSION } from '../src/expedition/cards.js'
+// Keep archived engines for saved rooms; their rules never fall back into current games.
+const engines = { [VERSION]: expedition, 'expedition-v1': expeditionV1, 'original-v2': original }
 const engineFor = r => {
-  const version = r.rulesVersion ?? r.game?.rulesVersion, engine = version === VERSION ? expedition : version === 'expedition-v1' ? expeditionV1 : original
+  const version = r.rulesVersion ?? r.game?.rulesVersion ?? 'original-v2', engine = engines[version]
+  if (!engine) throw new Error('지원하지 않는 게임 버전입니다.')
   engine.upgradeGame?.(r.game)
   return engine
 }
@@ -94,7 +97,7 @@ export function createRoomService({ savePath = process.env.ROOM_SAVE_PATH || joi
         const data = await body(req)
         fail(rooms.size < 200, '지금은 새 방을 만들 수 없습니다. 잠시 후 다시 시도하세요.', 503)
         const name = seatName(data.name)
-        fail(data.rulesVersion == null || ['original-v2', 'expedition-v1', VERSION].includes(data.rulesVersion), '지원하지 않는 게임 버전입니다.')
+        fail(data.rulesVersion == null || Object.hasOwn(engines, data.rulesVersion), '지원하지 않는 게임 버전입니다.')
         let code
         do { code = Array.from({ length: 6 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(32)]).join('') } while (rooms.has(code))
         const seat = { id: id(), token: id(), name, leaderId: 'shy', starters: [0, 1], ready: false, bot: false, connected: false, disconnectedAt: Date.now() }

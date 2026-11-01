@@ -1,3 +1,4 @@
+// Compatibility for saved games from before persistent events. New games use expedition/events.js.
 // Face-down omen tiles on the Utopia journey track. A flipped tile is a disaster or a miracle; both hit every party.
 export const OMEN_SPACES = [3, 6, 9, 12, 15, 18]
 export const OMEN_TILES = [

@@ -1,4 +1,4 @@
-import { TYPES, TYPE_COLORS } from '../game/cards.js'
+import { TYPES, TYPE_COLORS } from '../game/types.js'
 import { survivorIconsById } from '../assets/personal-icons/index.jsx'
 
 export function Icon({ name, size = 22, ...props }) {

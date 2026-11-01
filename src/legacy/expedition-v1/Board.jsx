@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Die, Icon, Portrait, Scene, Token, TypeBadge } from '../tabletop/Visuals.jsx'
+import { Die, Icon, Portrait, Scene, Token, TypeBadge } from '../../tabletop/Visuals.jsx'
 import { RULES, DISASTERS, LEADERS, locationPrizes, distributionText } from './cards.js'
 import { actorId, crewCount, nextDisaster, requirements } from './engine.js'
-import { TYPES, TYPE_COLORS } from '../game/cards.js'
-import './expedition.css'
+import { TYPES, TYPE_COLORS } from '../../game/cards.js'
+import '../../tabletop/expedition-base.css'
 
 const resourceKind = kind => kind === 'bottleCap' ? 'cap' : kind === 'route' ? 'clue' : kind
 
