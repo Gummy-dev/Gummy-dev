@@ -5,9 +5,11 @@ export const UTOPIA_CARDS = {
     leaderType: '겁쟁이',
     name: '고요한 은신처',
     emoji: '🌿',
-    description: '누구도 침범하지 않는 안전한 숨숨집. 겁쟁이들이 오래 살아남을 수 있는 유토피아.',
+    description: '5인 파견 + 🥫10 지불 필수. 겁쟁이 2명·반장 1명 이상 포함 시 주사위 합산 +6. 목표 23.',
+    endingText: '{지도자}가 길을 찾아냈고, 친구들은 숨고 또 숨다가 결국 여기까지 왔다. 이게 유토피아인지는 아직 확인 중이다.',
+    boardGameTemplate: '파티원 이름을 순서대로 넣어 읽으세요 (있는 만큼만):\n\n[파티원1]은 아직도 숨을 곳을 찾고 있다.\n[파티원2]는 여기가 진짜 안전한지 세 번째 확인 중이다.\n[파티원3]는 소리가 날까봐 발끝으로 걷고 있다.\n[파티원4]는 일단 이불 속에 들어갔다.\n[파티원5]는 문 잠갔냐고 물어봤다. 잠겼다.\n[파티원6]은 조용히 앉아 아무것도 안 하고 있다. 그게 맞는 것 같다.',
     assignment: {
-      minSurvivors: 3,
+      minSurvivors: 5,
       maxSurvivors: 5,
     },
     recommendedParty: [
@@ -16,8 +18,9 @@ export const UTOPIA_CARDS = {
     ],
     check: {
       type: 'roll_dice',
-      diceCount: 1, target: 15,
-      recommendedPartyBonus: 2,
+      diceCount: 1, target: 23,
+      recommendedPartyBonus: 6,
+      payCan: 10,
     },
   },
 
@@ -27,19 +30,20 @@ export const UTOPIA_CARDS = {
     leaderType: '용감이',
     name: '끝없는 사냥터',
     emoji: '🩸',
-    description: '용감한 자만 살아남는 약육강식의 낙원. 밀어붙이는 자에게만 길이 열린다.',
+    description: '용감한 자만 살아남는 약육강식의 낙원. 5인 파견 필수 — 용감이 4명 이상 포함 시 주사위 합산 +8. 목표 23.',
+    endingText: '{지도자}가 앞장섰고, 동료들은 유토피아에서도 싸울 게 있을 것 같다고 했다. 실제로 있었다.',
+    boardGameTemplate: '파티원 이름을 순서대로 넣어 읽으세요 (있는 만큼만):\n\n[파티원1]은 유토피아에도 싸울 게 있을 것 같다고 한다.\n[파티원2]는 경계를 풀지 않고 주변을 살피고 있다.\n[파티원3]는 이미 뭔가를 쫓기 시작했다.\n[파티원4]는 도착하자마자 훈련을 시작했다.\n[파티원5]는 먼저 지형을 파악해야 한다고 했다.\n[파티원6]은 "이게 끝이냐"고 물었다. 아직 아닌 것 같다.',
     assignment: {
-      minSurvivors: 3,
+      minSurvivors: 5,
       maxSurvivors: 5,
     },
     recommendedParty: [
-      { type: '용감이', count: 2 },
-      { type: '분위기메이커', count: 1 },
+      { type: '용감이', count: 4 },
     ],
     check: {
       type: 'roll_dice',
-      diceCount: 1, target: 15,
-      recommendedPartyBonus: 2,
+      diceCount: 1, target: 23,
+      recommendedPartyBonus: 8,
     },
   },
 
@@ -49,19 +53,24 @@ export const UTOPIA_CARDS = {
     leaderType: '반장',
     name: '완전 관리 구역',
     emoji: '🏙️',
-    description: '모든 것이 계획되고 통제되는 도시. 정돈된 조합만이 진입할 수 있다.',
+    description: '모든 것이 계획되고 통제되는 도시. 5인 파견 필수 — 겁쟁이·용감이·반장·분위기메이커·4차원 각 1명씩 파견 시 주사위 합산 +9. 목표 23.',
+    endingText: '{지도자}가 경로를 계산했고, 부품들의 입장이 시스템에 의해 처리되었습니다. 다음 회의는 내일 오전 9시입니다.',
+    boardGameTemplate: '파티원 이름을 순서대로 넣어 읽으세요 (있는 만큼만):\n\n[파티원1]의 입장 처리가 완료되었습니다.\n[파티원2]의 정착 일정이 시스템에 등록되었습니다.\n[파티원3]는 구역 배정 대기 중입니다.\n[파티원4]의 서류가 접수되었습니다. 검토에 3~5일이 소요됩니다.\n[파티원5]는 오리엔테이션 일정을 문자로 받았습니다.\n[파티원6]은 비상구 위치를 숙지하였음을 확인합니다.',
     assignment: {
-      minSurvivors: 3,
+      minSurvivors: 5,
       maxSurvivors: 5,
     },
     recommendedParty: [
-      { type: '반장', count: 2 },
+      { type: '겁쟁이', count: 1 },
+      { type: '용감이', count: 1 },
+      { type: '반장', count: 1 },
+      { type: '분위기메이커', count: 1 },
       { type: '4차원', count: 1 },
     ],
     check: {
       type: 'roll_dice',
-      diceCount: 1, target: 15,
-      recommendedPartyBonus: 2,
+      diceCount: 1, target: 23,
+      recommendedPartyBonus: 9,
     },
   },
 
@@ -71,19 +80,20 @@ export const UTOPIA_CARDS = {
     leaderType: '4차원',
     name: '꽥의 차원문',
     emoji: '🌀',
-    description: '상식이 무너진 문 너머의 낙원. 규칙을 비트는 자만이 도달할 수 있다.',
+    description: '상식이 무너진 문 너머의 낙원. 5인 파견 필수 — 4차원 3명 이상 포함 시 주사위 합산 +7. 목표 23.',
+    endingText: '꽥. {지도자}가 문을 열었고, 자유로운 영혼들은 문을 통과했다. 이유는 오리도 몰랐다.',
+    boardGameTemplate: '파티원 이름을 순서대로 넣어 읽으세요 (있는 만큼만):\n\n[파티원1]은 문을 통과했다. 어떻게 됐는지는 모른다.\n[파티원2]는 아직 반쯤 이쪽에 걸쳐 있다.\n[파티원3]는 꽥 소리를 들었다고 한다.\n[파티원4]는 여기가 어딘지 물었다. 오리도 모른다.\n[파티원5]는 중력이 이상하다고 했다. 원래 그렇다.\n[파티원6]은 괜찮다고 했다. 표정은 괜찮지 않았다.',
     assignment: {
-      minSurvivors: 3,
+      minSurvivors: 5,
       maxSurvivors: 5,
     },
     recommendedParty: [
-      { type: '4차원', count: 2 },
-      { type: '겁쟁이', count: 1 },
+      { type: '4차원', count: 3 },
     ],
     check: {
       type: 'roll_dice',
-      diceCount: 1, target: 15,
-      recommendedPartyBonus: 2,
+      diceCount: 1, target: 23,
+      recommendedPartyBonus: 7,
     },
   },
 
@@ -93,9 +103,11 @@ export const UTOPIA_CARDS = {
     leaderType: '분위기메이커',
     name: '영원한 페스티벌',
     emoji: '🎆',
-    description: '모두가 서로를 북돋우는 끝없는 축제. 연결과 증폭이 완성되는 무대.',
+    description: '생존자 5명 전원 파견 필수 (소모됨). 분위기메이커 2명·용감이 1명 이상 포함 시 주사위 합산 +6. 목표 23.',
+    endingText: '{지도자}가 무대를 열었고, 팬들이 도착하자 폭죽이 터졌다. 쏜 사람은 아무도 없었다.',
+    boardGameTemplate: '파티원 이름을 순서대로 넣어 읽으세요 (있는 만큼만):\n\n[파티원1]은 이미 춤을 추고 있다.\n[파티원2]는 폭죽을 하나 더 꺼냈다.\n[파티원3]는 이게 끝인지 시작인지 모르겠다고 했다.\n[파티원4]는 무대 위에 올라갔다.\n[파티원5]는 다음 곡을 요청했다.\n[파티원6]은 피곤하지만 계속 있을 것 같다.',
     assignment: {
-      minSurvivors: 3,
+      minSurvivors: 5,
       maxSurvivors: 5,
     },
     recommendedParty: [
@@ -104,8 +116,9 @@ export const UTOPIA_CARDS = {
     ],
     check: {
       type: 'roll_dice',
-      diceCount: 1, target: 15,
-      recommendedPartyBonus: 2,
+      diceCount: 1, target: 23,
+      recommendedPartyBonus: 6,
+      requireAllSurvivors: true,
     },
   },
 }

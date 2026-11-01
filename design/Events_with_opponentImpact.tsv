@@ -1,0 +1,80 @@
+tier	id	eventType	opponentImpact	category	emoji	name	description	scope	assignment	resolution	requiredTypes	recommendedParty	failPenalty	rewardText	reward	globalEffect	count
+1	e_clue_1_flyer	utopia	전체 이득	clue	📄	낡은 전단지	근처 건물 벽에 붙어있던 오래된 전단지. \n점선이 어딘가를 가리키고 있다.\n실패시 통조림 1개를 잃는다.	personal	3	🎲10+		겁쟁이:1, 분위기메이커:1		clue+1	clue+1	"{""type"":""add_survivors_all"",""amount"":1}"	1
+1	e_clue_1_radio	utopia	없음	clue	📻	흐릿한 라디오 신호	잡음 속에 누군가의 목소리가 들린다. \n집중하면 방향을 파악할 수 있을 것 같다.\n실패시 통조림 1개를 잃는다.	personal	3	"{""type"":""gain_can_all"",""amount"":3}"		겁쟁이:1, 분위기메이커:1		clue+1	clue+1		1
+1	e_clue_1_sketch	utopia	없음	clue	✏️	낙서된 약도	누군가 급히 그린 것 같은 약도가 보인다. \n해독하면 단서가 될 수 있다.\n실패시 통조림 1개를 잃는다.	personal	3	"{""type"":""gain_cap_all"",""amount"":2}"		겁쟁이:1, 분위기메이커:1		clue+1	clue+1		1
+1	e_clue_1_rumor	utopia	없음	clue	👂	목격자의 소문	근처 주민에게 들은 소문. \n어딘가에 안전한 곳이 있다고...\n실패시 통조림 1개를 잃는다.	personal	3	"{""type"":""add_survivors_all"",""amount"":1}"		분위기메이커:1, 겁쟁이:1		clue+1	clue+1		1
+2	e_clue_map	utopia	없음	clue	🗺️	유토피아 지도 조각	찢긴 지도 한 조각. \n점선이 가리키는 방향에 우리가 찾던 그 땅이 있는 것 같다.\n실패시 생존자 1명이 다친다.	personal	3	🎲17+		용감이:1, 반장:1		clue+1	clue+1		1
+2	e_clue_witness	utopia	없음	clue	👁️	생존자의 증언	「거긴 진짜 있어. 내가 봤다고.」 유토피아를 목격한 생존자의 증언.\n실패시 통조림 3개를 잃는다.	personal	3	🎲17+		용감이:1, 반장:1		clue+1	clue+1		1
+2	e_clue_2_audio	utopia	없음	clue	🎙️	음성 기록 단편	연구소에서 발견한 손상된 녹음기. \n내용을 복원하면 좌표에 대한 단서를 얻을 수 있다.\n실패시 통조림 2개를 잃는다.	personal	3	🎲19+		용감이:1, 반장:1		clue+1	clue+1		1
+2	e_clue_2_docs	utopia	없음	clue	📋	비밀 연구 문서	분류 표시가 된 문서. \n유토피아 관련 연구 기록인 것 같다.\n실패시 생존자 1명이 다친다.	personal	3	🎲19+		겁쟁이:1, 분위기메이커:1		clue+1	clue+1		1
+3	e_clue_3_broadcast	utopia	없음	clue	📺	최후의 방송	세상이 무너지기 직전 마지막으로 송출된 방송. \n좌표를 해독할 수 있다면...\n실패시 생존자 1명이 다친다.	personal	3	🎲17+		4차원:2, 분위기메이커:1		clue+1	clue+1		1
+3	e_clue_3_coords	utopia	없음	clue	🛰️	유토피아 좌표	암호화된 좌표 데이터. \n해독 완료 시 목적지가 확정된다.\n실패시 통조림 4개를 잃는다.	personal	3	🎲17+		4차원:2, 반장:1		clue+1	clue+1		1
+3	e_clue_3_blueprint	utopia	없음	clue	📐	유토피아 설계도	방대한 도면. \n규모가 실제라면, 수천 명이 살 수 있는 곳이다.\n실패시 생존자 1명이 다친다.	personal	3	🎲17+		4차원:2, 반장:1		clue+1	clue+1		1
+3	e_clue_3_code	utopia	없음	clue	🔑	핵심 접근 코드	유토피아 진입을 위한 마지막 코드. \n이게 진짜라면...\n실패시 통조림 3개를 잃는다.	personal	3	🎲17+		4차원:2, 겁쟁이:1		clue+1	clue+1		1
+1	e_disaster_rain	disaster	전체 피해	disaster	🌧️	폭우	갑작스러운 폭우가 쏟아진다. 식량이 물에 잠긴다.\n모든 플레이어의 통조림이 2개 감소한다.	disaster	1								1
+2	e_global_conflict	disaster	전체 피해	disaster	⚔️	세력 충돌	각 파티에서 생존자 1명씩 제거된다.	global	1								1
+2	e_global_drain	disaster	전체 피해	disaster	💸	물자 약탈	약탈이 번진다. 받아들이면 모든 플레이어의 병뚜껑이 2개 감소한다.	disaster	1								1
+2	e_disaster_drought	disaster	전체 피해	disaster	🏜️	극심한 가뭄	모든 플레이어의 통조림이 절반으로 줄어든다.	disaster									1
+2	e_disaster_quake	disaster	전체 피해	disaster	🌋	대지진	모든 파티의 생존자 순서가 무작위로 섞이고 생존자 1명이 제거된다.	disaster									1
+3	e_disaster_flood	disaster	전체 피해	disaster	🌊	대홍수	모든 플레이어의 통조림 5개 감소, 생존자 1명 무작위 제거.	disaster									1
+3	e_disaster_comet	disaster	전체 피해	disaster	☄️	혜성 충돌	모든 파티에서 생존자 2명씩 제거된다.	disaster									1
+3	e_disaster_nuclear	disaster	전체 피해	disaster	☢️	핵폭발 여파	지평선 너머에서 버섯구름이 피어오른다.\n모든 파티에서 생존자 2명이 제거되고, 병뚜껑이 4개 감소한다.	disaster									1
+3	e_two_gone	resource	없음	normal	🚪	최종 진형 정비	유토피아 직전, 더는 모두를 데려갈 수 없다. \n4차원의 판단으로 원하는 생존자 2명을 제거해 최종 진형을 완성하면 숨겨진 보물을 획득한다.	personal	1	병뚜껑-4	4차원:1, 용감이:1	4차원:1		treasure+1	treasure+1		1
+3	e_distorted_beacon	resource	없음	normal	📶	왜곡된 신호탑	먼 곳의 신호탑을 조작해 상대 파티의 생존자 1명을 혼란에 빠뜨려 이탈시킨다. 병뚜껑 3개를 지불하면 보물을 획득한다.	personal	1	병뚜껑-3	4차원:2	4차원:1		treasure+1	treasure+1		1
+3	e_double_threat	resource	없음	normal	🔱	이중 협박	강력한 위협으로 상대 파티의 생존자 1명을 이탈시킨다. 병뚜껑 4개를 지불하면 보물도 획득한다.	personal	1	병뚜껑-4	4차원:1, 용감이:1	용감이:1		treasure+1	treasure+1		1
+3	e_dice_lastbet	item	없음	normal	🃏	최후의 도박	열쇠로 봉인된 금고를 연다. 모든 것을 걸었다. \n실패시 동료를 한명 잃는다.	personal	2	🎲15+	열쇠:1	4차원:2		treasure+1	treasure+1		1
+3	e_key_hidden_vault	item	없음	normal	💎	숨겨진 금고	여정 끝에서 열쇠 구멍이 남은 금고를 발견했다. 열면 판을 뒤집을 만한 보물이 잠들어 있다.\n실패시 통조림 3개를 잃는다.	personal	3	열쇠 + 🎲14+		4차원:1, 반장:1		treasure+1	treasure+1		1
+1	e_key_caution	item	없음	item	🛤️	낡은 열쇠	무너진 담장 사이에서 오래된 열쇠를 발견했다. 조심성, 설득력, 통솔력이 모두 갖춰진 파티라면 안전하게 회수할 수 있다.	personal	3		겁쟁이:2, 용감이:1			key+1	key+1		2
+1	e_key_bold	item	없음	item	🚪	낡은 열쇠	봉쇄된 구역 입구에서 열쇠가 보인다. 담력과 신중함, 분위기가 조화를 이루는 파티라면 경계를 넘을 수 있다.	personal	3		겁쟁이:2, 분위기메이커:1			key+1	key+1		2
+1	e_key_front	item	없음	item	🤝	낡은 열쇠	건물 경비가 지키는 잠긴 문 너머에 열쇠가 있다. 행동력, 설득력, 통솔력이 갖춰진 파티라면 경비를 통과시킬 수 있다.	personal	3		반장:2, 용감이:1			key+1	key+1		1
+2	e_key_tactics	item	없음	item	🗝️	낡은 열쇠	외곽의 잠긴 보급함에서 오래된 열쇠를 발견했다. 돌파력, 기묘한 발상, 지휘가 모두 맞아떨어지면 안전하게 회수할 수 있다.	personal	1		반장:2, 용감이:1			key+1	key+1		1
+2	e_key_trap	item	없음	item	⚙️	낡은 열쇠	함정으로 뒤덮인 복도 끝에 열쇠가 보인다. 기묘한 예측을 두 겹으로 세우고 조직력이 받쳐주는 파티라면 안전하게 회수할 수 있다.	personal	1		반장:1			key+1	key+1		1
+3	e_sacrifice	item	없음	normal	🔥	위험한 잔해 정리	무너진 잔해 너머로 길이 이어진다. \n4차원의 기묘한 직감으로 생존자 한 명을 보내면 잔해 속에서 쓸만한 아이템을 발견한다.	personal	1	-4		4차원:1		item+1	item+1		1
+3	e_random_misfortune	item	전체 피해	normal	💥	낙석 사고	외곽 절벽에서 돌무더기가 쏟아진다. \n사고를 수습하는 동안 무작위 생존자 1명을 잃지만, \n잔해 속에서 쓸만한 아이템을 발견한다.	personal	1					item+1	item+1	"{""type"":""remove_all_n"",""amount"":1}"	1
+3	e_revive_grave	item	전체 피해	normal	💫	기적의 소생	겁쟁이 생존자의 간절한 바람이 기적을 불러온다. 떠난 생존자 더미에서 생존자 1명을 파티로 되돌리고, 작은 아이템을 발견한다. 파티가 가득 차 있거나 떠난 생존자가 없으면 해결 불가.	personal	1	(겁)		겁쟁이:1		item+1	item+1 / 통조림+3	"{""type"":""lose_cap_all"",""amount"":2}"	1
+3	e_dice_wait	item	없음	normal	🫣	숨죽여 기다리기	4차원의 이상한 예감으로 잠긴 보급함 앞에서 위험이 지나가길 기다린다. 열쇠가 있다면 조용히 열어 아이템을 챙길 수 있다.\n실패시 통조림 2개를 잃는다.	personal	2	열쇠 + 🎲9+		4차원:1		item+1	item+1		1
+3	e_key_cache_supply	item	없음	normal	🧰	잠긴 구호함	낡은 열쇠가 맞는 구호함을 발견했다. 조심스럽게 열면 아직 쓸 수 있는 아이템이 나온다.\n실패시 병뚜껑 2개를 잃는다.	personal	2	"{""type"":""remove_all_n"",""amount"":1}"		반장:1		item+1	item+1		1
+3	e_key_old_armory	item	없음	normal	🧥	봉인된 장비고	오래된 장비고 문이 열쇠에 반응한다. 안쪽에서 파티를 지켜줄 물건을 꺼낼 수 있다.\n실패시 통조림 2개를 잃는다.	personal	2	"{""type"":""lose_cap_all"",""amount"":2}"		겁쟁이:1		item+1	item+1		1
+1	e_near_cache	resource	없음	normal	🧃	동네 비상식량	가까운 주택가 지하실에서 비상식량 상자를 발견했다. 문이 잠겨 있지만 어렵지 않게 열린다.	personal	1	🎲5+		겁쟁이:1		통조림+4 / 병뚜껑+1	통조림+5		3
+1	e_scrap_deal	resource	없음	normal	🔩	고철 매각	근처 폐차장에서 고철을 팔아 병뚜껑을 번다. 별 위험은 없다.	personal	1	🎲3+		겁쟁이:1		통조림+2 / 병뚜껑+2	병뚜껑+4		3
+1	e_dice_lucky	resource	없음	normal	🍀	행운의 발견	폐허에서 홀로 떠도는 생존자를 발견했다. 같이 가자고 제안해볼까?\n실패시 통조림 1개를 잃는다.	personal	1	🎲5+		분위기메이커:1		생존자+1 / 병뚜껑+1	생존자+1 / 병뚜껑+1		1
+1	e_dice_rescue	resource	없음	normal	🆘	구조 작전	위험에 빠진 생존자를 찾았다. 실패시 통조림 1개를 잃는다.	personal	1	🎲5+	반장:1	분위기메이커:1		생존자+1 / 통조림+2	생존자+1 / 통조림+2		1
+1	e_dice_negotiate	resource	없음	normal	📦	동네 창고 수색	근처 창고를 조심스럽게 뒤져 쓸만한 물자를 찾는다. 성공하면 병뚜껑을 넉넉히 확보한다.\n실패시 통조림 2개를 잃는다.	personal	1	🎲8+		겁쟁이:1, 분위기메이커:1		통조림+3 / 병뚜껑+3	병뚜껑+6		1
+1	e_global_supply	luck	전체 이득	normal	📦	구호물자 도착	구호물자 수송대가 도착했다. 받아들이면 모든 플레이어가 통조림 3개를 받는다.	personal	1							"{""type"":""gain_can_all"",""amount"":3}"	1
+1	e_global_cap_run	resource	전체 이득	normal	🪙	병뚜껑 유통	근처 물물교환 시장이 열렸다. 받아들이면 모든 플레이어가 병뚜껑 2개를 받는다.	personal	1		겁쟁이:1					"{""type"":""gain_cap_all"",""amount"":2}"	1
+1	e_food_tax	resource	없음	normal	🛂	검문소 통행료	검문소를 통과하려면 통조림 4개가 필요하다.\n대신 병뚜껑을 넉넉히 챙길 수 있다.	personal	1	(겁) + 통조림-4				통조림+2 / 병뚜껑+4	통조림+2 / 병뚜껑+4		1
+1	e_street_vendor	resource	없음	normal	🛒	노점 판매	외곽 거리의 노점에서 잡동사니를 팔아 병뚜껑을 모은다. \n실패시 아무것도 얻지 못한다.	personal	2	🎲7+		겁쟁이:1		통조림+2 / 병뚜껑+4	통조림+2 / 병뚜껑+4		1
+1	e_need_muscle	resource	없음	normal	🏔️	험한 길	험준한 산길. 겁쟁이의 신중함이 있어야 안전하게 통과할 수 있다.	personal	2	🎲8+		겁쟁이:1		통조림+3 / 병뚜껑+3	통조림+5		1
+1	e_dice_trap	resource	없음	normal	⚙️	함정 피하기	누군가 장치해 둔 함정이 있다. \n실패시 동료를 한 명 잃는다.	personal	1	🎲8+				통조림+2 / 병뚜껑+3	통조림+2 / 병뚜껑+3		1
+1	e_dice_ruins	resource	전체 이득	normal	🏚️	폐허 탐색	폐건물 더미를 뒤져 물자를 찾는다. \n실패시 생존자 1명이 다친다.	personal	2	🎲8+		겁쟁이:1		통조림+4 / 병뚜껑+2	통조림+4 / 병뚜껑+2	"{""type"":""gain_can_all"",""amount"":3}"	1
+1	e_dice_signal	resource	전체 이득	normal	📡	수상한 신호	미지의 신호를 수신했다.\n실패시 통조림 2개를 잃는다.	personal	1	🎲8+				통조림+4 / 병뚜껑+2	통조림+4 / 병뚜껑+2	"{""type"":""gain_cap_all"",""amount"":2}"	1
+2	e_need_numbers	resource	없음	normal	👥	인원 부족	흩어진 사람들을 안심시키려면 최소 2명이 필요하다. 분위기를 띄울 생존자가 있으면 합류가 훨씬 쉬워진다.	personal	1	생존자1 + (분)		분위기메이커:1		생존자+1	생존자+1 / 통조림+3		1
+3	e_dice_credibility	resource	없음	normal	🎖️	통제 구역 돌파	철저히 통제된 구역을 뚫는다. 파티 역량이 높을수록 유리하다.\n주사위 합 + 파티 총점으로 판정한다.\n실패시 통조림 2개를 잃는다.	personal	1	🎲14+				통조림+3 / 병뚜껑+2 / 점수+1	통조림+3 / 병뚜껑+2 / 점수+1		1
+3	e_necromancer	resource	없음	normal	🧟	강령 의식	4차원의 기묘한 의식으로 통조림 3개를 지불하고 떠난 생존자 1명을 내 파티에 합류시킨다.	personal	1	(4) + 통조림-3		4차원:1		생존자+1	생존자+1 / 통조림+4		1
+3	e_dice_elite_gate	resource	없음	normal	🏛️	정예 관문	유토피아로 향하는 마지막 방어선. 파티의 진가를 증명해야만 통과할 수 있다.\n주사위 합 + 파티 총점으로 판정한다.\n실패시 생존자 1명이 다친다.	personal	1	🎲20+				점수+2 / 통조림+4 / 병뚜껑+3	점수+2 / 통조림+4 / 병뚜껑+3		1
+3	e_dice_ambush	resource	없음	normal	🌙	군수창고 기습	야간을 틈타 버려진 군수창고를 급습한다.\n실패시 생존자 1명이 다친다.	personal	1	🎲13+				점수+2 / 통조림+3 / 병뚜껑+2	점수+2 / 통조림+3 / 병뚜껑+2		1
+3	e_dice_abandoned	resource	없음	normal	🏕️	버려진 기지	오래된 군사 기지를 발견했다. \n실패시 통조림 2개를 잃는다.	personal	1	🎲13+				생존자+1 / 병뚜껑+3	생존자+1 / 병뚜껑+3		1
+3	e_dice_gamble	resource	없음	normal	🎰	목숨을 건 도박	다 걸었다.\n실패시 통조림 4개를 잃는다.	personal	1	🎲13+				점수+2 / 통조림+5 / 병뚜껑+2	점수+2 / 통조림+5 / 병뚜껑+2		1
+2	e_global_recruit	luck	없음	normal	🧑	대규모 합류	근처 생존자 무리가 몰려온다. 받아들이면 모든 파티에 생존자 1명이 덱에서 자동 합류한다.	personal	1		반장:1						1
+2	e_t1_trade_offer	action_coop	상대 1명 협력	normal	🔁	고철 맞교환	상대 1명을 선택해 자원 교환을 제안한다.\n🥫 또는 🪙 중 하나를 2개 제공, 반대 자원 2개 수령.\n성사 시 양측 모두 +1.	personal	1	(반) + 통조림/병뚜껑-2	반장:1			병뚜껑+3 / exchange_arrow+ / 통조림+3	병뚜껑-4 / exchange_arrow / 통조림+5		1
+2	e_t1_supply_split	action_coop	상대 1명 협력	normal	🎁	구호품 나누기	구호품 상자를 발견했다. 상대 1명과 나누면 나는 통조림 4개, 상대는 통조림 2개를 얻는다.	personal	1	(반)				통조림+4	통조림+6 / 통조림+3		1
+2	e_t1_coin_split_run	action_coop	상대 1명 협력	normal	🛒	공동 폐품 운반	상대 1명과 생존자 1명씩 파견해 폐품을 운반한다. 파견한 두 파티가 병뚜껑을 나눠 가진다.	personal	1	생존자1 + 생존자1(상대)	용감이:1			병뚜껑+3 / 병뚜껑+2	병뚜껑+6 / 병뚜껑+4		1
+2	e_t2_joint_expedition	action_coop	상대 1명 협력	normal	🚚	합동 수송 작전	상대 파티에서 생존자 1명을 지원받을 수 있다. 지원받은 생존자는 비활성화되고 주사위 1개를 추가한다. 성공시 나는 병뚜껑 3개, 지원자는 병뚜껑 2개를 얻는다.	personal	1	🎲8+ + (반)				병뚜껑+3 / 병뚜껑+2	병뚜껑+7 / 병뚜껑+4		1
+2	e_dice_scavenge	action_attack	상대 1명 피해	normal	⚖️	공정한 약탈	상대 1명에게 약탈 대결을 신청한다.\n승낙하면 같은 수의 주사위를 굴려 이긴 쪽이 🪙2를 가져간다.\n거절한 상대는 🪙1을 지불한다.	personal	1	생존자1 + (용)				병뚜껑+2			1
+2	e_t1_raid	action_attack	상대 1명 피해	normal	🪓	식량 강탈	특정 파티를 지목해 식량을 빼앗는다.\n상대 플레이어를 선택하면 통조림 2개를 강탈한다.	personal	1	(용)	용감이:1			통조림+2			1
+2	e_t1_beg	action_attack	상대 1명 피해	normal	🙏	병뚜껑 갈취	특정 파티를 위협해 병뚜껑을 뜯어낸다.\n상대 플레이어를 선택하면 병뚜껑 1개를 강탈한다.	personal	1	(용)	용감이:2, 반장:1	용감이:1		병뚜껑+1			1
+2	e_send_troublemaker	action_attack	상대 1명 피해	normal	↗️	가짜 좌표 흘리기	4차원이 경로 정보를 비틀어 다른 파티에 골칫덩이를 떠넘긴다. 성공하면 통조림을 받는다.	personal	1	(반) + (반)-1(파견)	반장:1			통조림+2			1
+2	e_refugee_wave	action_attack	상대 1명 피해	normal	🚶	난민 행렬 유도	흩어진 난민 행렬을 다른 파티로 안내한다.\n내 생존자 2명을 원하는 파티로 보내고 🪙4를 얻는다.	personal	1	(반) + 생존자2(파견)	용감이:1	반장:1		병뚜껑+4			1
+2	e_t2_food_raid	action_attack	상대 1명 피해	normal	🍖	외곽 식량 강탈	용감이를 앞세워 외곽 파티의 식량을 빼앗는다.\n상대를 선택하면 통조림 2개를 강탈한다.	personal	1	(용)	반장:1			통조림+2			1
+2	e_t2_supply_cut	action_attack	상대 1명 피해	normal	⛔	보급로 차단	반장의 지휘로 외곽 파티의 보급선을 끊어낸다.\n상대를 선택하면 통조림 2개를 빼앗는다.	personal	1	(반)	반장:1	반장:1		통조림+2			1
+2	e_provoke	action_attack	상대 1명 피해	normal	😤	경로 교란	4차원 생존자의 비틀린 직관으로 다른 파티의 이동 경로를 꼬아놓는다. 병뚜껑 1개를 지불하고 상대 파티 생존자 2명의 순서를 바꾼다.	personal	1	(반) + 병뚜껑-1							1
+2	e_steal_grave	action_attack	상대 1명 피해	normal	⚰️	무덤 약탈	분위기메이커가 떠난 생존자를 설득해 다시 데려온다.	personal	1	(용)	반장:1	용감이:1		생존자+1			1
+2	e_border_raid	action_attack	상대 1명 피해	normal	🛡️	외곽 초소 급습	외곽 초소를 급습해 상대 파티의 핵심 인원을 흔든다. 병뚜껑 2개를 지불하면 상대 생존자 1명을 제거할 수 있다.	personal	1	(용) + 병뚜껑-2	용감이:1						1
+2	e_coerce	action_attack	상대 1명 피해	normal	😠	협박	용감이 생존자의 위압적인 태도로 상대 파티에서 생존자 1명을 이탈시킨다. 병뚜껑 1개를 소모한다.	personal	1	(용) + 병뚜껑-1	분위기메이커:1, 용감이:1	용감이:1					1
+2	e_poach	action_attack	상대 1명 피해	normal	🎭	인재 영입	분위기메이커 생존자의 매력으로 상대 파티의 생존자 1명을 설득해 영입한다.	personal	1	(분)				생존자+1			1
+3	e_raid	action_attack	상대 1명 피해	normal	⚡	습격	다른 파티를 습격해 생존자 1명을 데려온다.	personal	1	-4	4차원:2			생존자+1			1
+3	e_sabotage	action_attack	상대 1명 피해	normal	💣	방해 공작	다른 파티의 생존자 1명을 제거한다. 통조림 2개를 지불하면 가능.	personal	1	(4) + 통조림-2	4차원:1, 반장:1	4차원:1					1
+3	e_headhunt	action_attack	상대 1명 피해	normal	🎯	스카우트	분위기메이커가 다른 파티의 특정 생존자를 병뚜껑 3개로 스카우트한다.	personal	1	(4) + 병뚜껑-3				생존자+1			1
+3	e_infiltrate	action_attack	상대 1명 피해	normal	🕵️	침투 공작	용감이의 과감한 침투로 상대 파티에서 생존자 1명을 빼온다.	personal	1	-4				생존자+1			1
+3	e_t3_rich_cache	action_attack	상대 1명 피해	normal	🏦	소문난 병뚜껑 창고	4차원의 이상한 계산으로 가장 많은 병뚜껑을 가진 상대의 숨겨둔 창고를 턴다. 그 상대는 병뚜껑 2개를 잃고, 나는 그만큼 병뚜껑을 얻는다.	personal	1	-4				병뚜껑+2			1
+3	e_utopia	item	없음	clue	🌅	유토피아	마침내, 전설로만 전해지던 그 땅이 눈앞에 펼쳐졌다.\n운명이 이곳으로 이끈 것인지, 아니면 실낱 같은 희망이 기적을 불러온 것인지...\n파티의 전력을 모아 끝까지 돌파하라.	personal	3	🎲15+		4차원:2, 용감이:1		점수+5	점수+5		1

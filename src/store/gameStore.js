@@ -4,6 +4,8 @@ import { CLUE_CARDS, DISASTER_CARDS, EVENT_DECKS, EVENTS, EXPLORATION_TIER_CARDS
 import { LEADERS } from '../data/leaders.js'
 import { RULES } from '../data/rules.js'
 import { UTOPIA_CARDS } from '../data/utopias.js'
+import { KEY_CARD, TREASURE_CARDS } from '../data/treasures.js'
+import { PLACEMENT_EFFECT_TYPES, getActivePlacementEffectsForParty, getPlacementZoneForSlot, hasCompletedPlacementBonus } from '../data/placementBonuses.js'
 import { calcPartyScore } from '../logic/scoring.js'
 import {
   calcBotUpkeep,
@@ -52,7 +54,8 @@ function getSurvivorSearchTier(survivor) {
 }
 
 function isNormalSurvivor(survivor) {
-  return survivor?.type === '평범'
+  const normalizedName = String(survivor?.name ?? '').replace(/\s/g, '')
+  return survivor?.id?.startsWith('s_plain_') || normalizedName === '평범생존자' || survivor?.type === '평범'
 }
 
 function getNormalSurvivorCount(party = []) {
@@ -65,6 +68,17 @@ function buildEventDeck() {
     const copies = event.count ?? 1
     for (let i = 0; i < copies; i += 1) {
       deck.push({ ...event, uid: `${event.id}_${i}` })
+    }
+  })
+  return shuffle(deck)
+}
+
+function buildTreasureDeck() {
+  const deck = []
+  TREASURE_CARDS.forEach((card) => {
+    const copies = card.count ?? 1
+    for (let i = 0; i < copies; i += 1) {
+      deck.push({ ...card, uid: `${card.id}_${i}` })
     }
   })
   return shuffle(deck)
@@ -154,6 +168,18 @@ function buildSearchDecksByTierFromCards(cards = []) {
   return decksByTier
 }
 
+function returnSurvivorToSearchDeck(searchState = {}, survivor) {
+  if (!survivor) return searchState
+  const tier = getSurvivorSearchTier(survivor)
+  const decksByTier = {
+    1: [...(searchState.decksByTier?.[1] ?? [])],
+    2: [...(searchState.decksByTier?.[2] ?? [])],
+    3: [...(searchState.decksByTier?.[3] ?? [])],
+  }
+  decksByTier[tier] = shuffle([...decksByTier[tier], survivor])
+  return { ...searchState, decksByTier }
+}
+
 function buildExplorationState(playerCount) {
   const clueCopies = RULES.clues?.copiesPerTierByPlayerCount?.[playerCount] ?? playerCount
   const decksByTier = {
@@ -177,13 +203,26 @@ function buildExplorationState(playerCount) {
   const visibleByTier = { 1: [], 2: [], 3: [] }
 
   ;[1, 2, 3].forEach((tier) => {
-    for (let i = 0; i < getExplorationSlotCountForTier(tier); i += 1) {
-      visibleByTier[tier].push(decksByTier[tier].shift() ?? null)
+    const deck = decksByTier[tier]
+    const deferred = []
+    const slotCount = getExplorationSlotCountForTier(tier)
+    while (visibleByTier[tier].length < slotCount && deck.length > 0) {
+      const card = deck.shift()
+      if (card?.scope === 'disaster') {
+        deferred.push(card)
+      } else {
+        visibleByTier[tier].push(card)
+      }
     }
+    while (visibleByTier[tier].length < slotCount) {
+      visibleByTier[tier].push(null)
+    }
+    deck.push(...deferred)
   })
 
   return {
     decksByTier,
+    discardByTier: { 1: [], 2: [], 3: [] },
     clueDecksByTier: { 1: [], 2: [], 3: [] },
     disasterDecksByTier: { 1: [], 2: [], 3: [] },
     visibleByTier,
@@ -247,7 +286,7 @@ function buildVisibleByTierFromEventSlots(eventSlots = []) {
   eventSlots.forEach((event) => {
     if (!event) return
     const tier = event.tier ?? 1
-    if (visibleByTier[tier].length < (RULES.exploration?.slotCountByTier?.[tier] ?? 4)) {
+    if (visibleByTier[tier].length < (RULES.exploration?.eventSlotCountByTier?.[tier] ?? 4)) {
       visibleByTier[tier].push(event)
     }
   })
@@ -282,28 +321,52 @@ function buildUtopiaState() {
   return {
     revealed: false,
     claimed: false,
+    completedByPlayerIds: [],
     revealedForLeaderId: null,
     claimedByPlayerId: null,
+    claimedCard: null,
     cardsByLeaderId: Object.fromEntries(
       Object.values(UTOPIA_CARDS).map((card) => [card.leaderId, { ...card }])
     ),
   }
 }
 
-function getPartySlotCount(party = []) {
-  let count = 0
-  let lastStackGroupKey = null
 
-  for (const survivor of party) {
-    const stackGroupKey = survivor.stackGroupKey ?? null
-    if (stackGroupKey && stackGroupKey === lastStackGroupKey) continue
-    count += 1
-    lastStackGroupKey = stackGroupKey
-  }
-
-  return count
+function getSurvivorSlotIndex(survivor, fallbackIndex = 0) {
+  return Number.isInteger(survivor?.partySlotIndex) ? survivor.partySlotIndex : fallbackIndex
 }
 
+function getOccupiedPartySlotIndexes(party = []) {
+  const occupied = new Set()
+  party.forEach((survivor, index) => occupied.add(getSurvivorSlotIndex(survivor, index)))
+  return occupied
+}
+
+function getFirstEmptyPartySlotIndex(party = [], maxPartySize = RULES.maxPartySize) {
+  const occupied = getOccupiedPartySlotIndexes(party)
+  for (let index = 0; index < maxPartySize; index += 1) {
+    if (!occupied.has(index)) return index
+  }
+  return -1
+}
+
+function withPartySlotIndex(survivor, slotIndex) {
+  return { ...survivor, partySlotIndex: slotIndex }
+}
+
+function sortPartyBySlotIndex(party = []) {
+  return [...party]
+    .map((survivor, index) => ({ survivor, index }))
+    .sort((a, b) => {
+      const slotDiff = getSurvivorSlotIndex(a.survivor, a.index) - getSurvivorSlotIndex(b.survivor, b.index)
+      return slotDiff || a.index - b.index
+    })
+    .map(({ survivor }) => survivor)
+}
+
+function getPartySlotCount(party = []) {
+  return getOccupiedPartySlotIndexes(party).size
+}
 const ANIMAL_SURVIVOR_IDS = new Set([
   's_charge_2',
   's_coward_1',
@@ -322,6 +385,12 @@ function resolveStackHost(party = [], survivor) {
   const capybaraHost = party.find((entry) => entry.id === 's_mood_3')
   if (capybaraHost && ANIMAL_SURVIVOR_IDS.has(survivor.id)) {
     return { mode: 'capybara', host: capybaraHost }
+  }
+
+  // 유령 생존자 빙의: 파티에 생존자가 있으면 마지막 생존자 아래에 겹쳐 보관
+  if (survivor.id === 's_weird_7' && party.length > 0) {
+    const host = party[party.length - 1]
+    return { mode: 'ghost', host }
   }
 
   return null
@@ -347,17 +416,33 @@ function addSurvivorToParty(party = [], survivor, maxPartySize = RULES.maxPartyS
     const hostIndex = nextParty.findIndex((entry) => entry.uid === stackHost.host.uid)
     const host = nextParty[hostIndex]
     const stackGroupKey = host.stackGroupKey ?? host.uid
-    nextParty[hostIndex] = { ...host, stackGroupKey }
-    nextParty.splice(hostIndex + 1, 0, { ...survivor, stackGroupKey })
-    return { party: nextParty, added: true, stacked: true }
+    const hostSlotIndex = getSurvivorSlotIndex(host, hostIndex)
+    nextParty[hostIndex] = { ...host, stackGroupKey, partySlotIndex: hostSlotIndex }
+    nextParty.splice(hostIndex + 1, 0, { ...survivor, stackGroupKey, partySlotIndex: hostSlotIndex })
+    return { party: sortPartyBySlotIndex(nextParty), added: true, stacked: true }
   }
 
-  if (getPartySlotCount(nextParty) >= maxPartySize) {
+  const emptySlotIndex = getFirstEmptyPartySlotIndex(nextParty, maxPartySize)
+  if (emptySlotIndex < 0) {
     return { party: nextParty, added: false, stacked: false }
   }
 
-  nextParty.push(survivor)
-  return { party: nextParty, added: true, stacked: false }
+  nextParty.push(withPartySlotIndex(survivor, emptySlotIndex))
+
+  // 개 생존자: 고양이가 파티에 있으면 고양이 우측 슬롯으로 이동
+  if (survivor.id === 's_charge_2') {
+    const catIdx = nextParty.findIndex((e) => e.id === 's_coward_1')
+    if (catIdx >= 0) {
+      const dogIdx = nextParty.length - 1
+      if (dogIdx !== catIdx + 1) {
+        const dog = nextParty.splice(dogIdx, 1)[0]
+        const insertAt = nextParty.findIndex((e) => e.id === 's_coward_1') + 1
+        nextParty.splice(insertAt, 0, dog)
+      }
+    }
+  }
+
+  return { party: sortPartyBySlotIndex(nextParty), added: true, stacked: false }
 }
 
 function getContiguousPartyGroupBounds(party = [], index) {
@@ -388,46 +473,42 @@ function swapPartyGroups(party = [], fromIdx, toIdx) {
   if (!fromGroup || !toGroup) return [...party]
   if (fromGroup.start === toGroup.start && fromGroup.end === toGroup.end) return [...party]
 
-  if (!fromGroup.isStacked && !toGroup.isStacked) {
-    const nextParty = [...party]
-    ;[nextParty[fromIdx], nextParty[toIdx]] = [nextParty[toIdx], nextParty[fromIdx]]
-    return nextParty
-  }
+  const fromSlotIndex = getSurvivorSlotIndex(fromGroup.members[0], fromGroup.start)
+  const toSlotIndex = getSurvivorSlotIndex(toGroup.members[0], toGroup.start)
+  const fromUids = new Set(fromGroup.members.map((survivor) => survivor.uid))
+  const toUids = new Set(toGroup.members.map((survivor) => survivor.uid))
 
-  if (fromGroup.start < toGroup.start) {
-    return [
-      ...party.slice(0, fromGroup.start),
-      ...toGroup.members,
-      ...party.slice(fromGroup.end + 1, toGroup.start),
-      ...fromGroup.members,
-      ...party.slice(toGroup.end + 1),
-    ]
-  }
-
-  return [
-    ...party.slice(0, toGroup.start),
-    ...fromGroup.members,
-    ...party.slice(toGroup.end + 1, fromGroup.start),
-    ...toGroup.members,
-    ...party.slice(fromGroup.end + 1),
-  ]
+  return sortPartyBySlotIndex(party.map((survivor, index) => {
+    if (fromUids.has(survivor.uid)) return { ...survivor, partySlotIndex: toSlotIndex }
+    if (toUids.has(survivor.uid)) return { ...survivor, partySlotIndex: fromSlotIndex }
+    if (!Number.isInteger(survivor.partySlotIndex)) return { ...survivor, partySlotIndex: index }
+    return survivor
+  }))
+}
+function getPlacementEffectsByType(player, type) {
+  return getActivePlacementEffectsForParty(player, getEffectiveSurvivorType)
+    .filter(({ effect }) => effect.type === type)
 }
 
 function getPartyReorderCostReduction(player) {
-  return (player.party ?? []).reduce((sum, survivor, index) => {
-    let next = sum
-    if (survivor.type === '반장' && index <= 1) {
-      next += 1
-    }
-    if (survivor.partyPassive?.type === 'reduce_reorder_cost') {
-      next += survivor.partyPassive.amount ?? 0
-    }
-    return next
+  const placementReduction = getPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.REDUCE_REORDER_COST)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+  const passiveReduction = (player.party ?? []).reduce((sum, survivor) => {
+    if (survivor.partyPassive?.type === 'reduce_reorder_cost') return sum + (survivor.partyPassive.amount ?? 0)
+    return sum
   }, 0)
+  return placementReduction + passiveReduction
 }
 
-function hasCenterWeirdType(player) {
-  return player.party?.[2]?.type === '4차원'
+function getFrontChargeExplorationBonus(player) {
+  return getPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.EXPLORATION_TYPE_BONUS)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+}
+
+function getSearchDiscardCostForPlayer(player) {
+  const reduction = getPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.REDUCE_SEARCH_DISCARD_COST)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+  return Math.max(0, RULES.mercenaryDiscardCanCost - reduction)
 }
 
 function isAnimalSurvivor(survivor) {
@@ -503,15 +584,63 @@ function subtractCost(resources = {}, cost = {}) {
   }
 }
 
+function getResourceValue(resources = {}, resource = 'can') {
+  return resource === 'bottleCap' ? (resources.bottleCap ?? 0) : (resources.can ?? 0)
+}
+
+function addResourceToPlayer(player, resource = 'can', amount = 0) {
+  const key = resource === 'bottleCap' ? 'bottleCap' : 'can'
+  return {
+    ...player,
+    resources: {
+      ...player.resources,
+      [key]: (player.resources?.[key] ?? 0) + amount,
+    },
+  }
+}
+
+function transferResourceBetweenPlayers(fromPlayer, toPlayer, resource = 'can', amount = 0) {
+  const key = resource === 'bottleCap' ? 'bottleCap' : 'can'
+  const transferred = Math.min(fromPlayer.resources?.[key] ?? 0, amount)
+  return {
+    fromPlayer: {
+      ...fromPlayer,
+      resources: {
+        ...fromPlayer.resources,
+        [key]: (fromPlayer.resources?.[key] ?? 0) - transferred,
+      },
+    },
+    toPlayer: {
+      ...toPlayer,
+      resources: {
+        ...toPlayer.resources,
+        [key]: (toPlayer.resources?.[key] ?? 0) + transferred,
+      },
+    },
+    transferred,
+  }
+}
+
+function getResourceLabel(resource = 'can') {
+  return resource === 'bottleCap' ? '병뚜껑' : '통조림'
+}
+
+function getResourceIcon(resource = 'can') {
+  return resource === 'bottleCap' ? '🪙' : '🥫'
+}
+
 function getReactivationCostForSurvivor(player, survivor, survivorIndex) {
   const base = normalizeCost(survivor?.reactivationCost ?? RULES.economy.defaultReactivationCost)
-  if (survivor?.type === '겁쟁이' && survivorIndex >= 3) {
-    return {
-      ...base,
-      can: Math.max(0, base.can - 1),
-    }
+  const slotIndex = getSurvivorSlotIndex(survivor, survivorIndex)
+  const leaderId = player?.leaderId
+  const effectiveType = getEffectiveSurvivorType(survivor, slotIndex, leaderId)
+  const reduction = getPlacementZoneForSlot(leaderId, slotIndex)?.effects
+    .filter((effect) => effect.type === PLACEMENT_EFFECT_TYPES.REDUCE_REACTIVATION_COST && effect.survivorType === effectiveType)
+    .reduce((sum, effect) => sum + (effect.amount ?? 0), 0) ?? 0
+  return {
+    ...base,
+    can: Math.max(0, base.can - reduction),
   }
-  return base
 }
 
 function pruneSurvivorActivity(player) {
@@ -530,22 +659,71 @@ function getActivePartyMembers(player) {
   return (player?.party ?? []).filter((survivor) => isSurvivorActive(player, survivor))
 }
 
+function normalizeOpponentRequirements(requirement) {
+  if (!requirement) return []
+  return Array.isArray(requirement) ? requirement : [requirement]
+}
+
+function targetSatisfiesOpponentRequirement(targetPlayer, requirement) {
+  const requirements = normalizeOpponentRequirements(requirement)
+  if (requirements.length === 0) return true
+
+  return requirements.every((entry) => {
+    if (!entry) return true
+    if (entry.type === 'resource') {
+      return getResourceValue(targetPlayer?.resources, entry.resource ?? 'can') >= (entry.amount ?? 0)
+    }
+    if (entry.type === 'active_survivor') {
+      return getActivePartyMembers(targetPlayer).length >= (entry.amount ?? 1)
+    }
+    if (entry.type === 'survivor') {
+      return (targetPlayer?.party?.length ?? 0) >= (entry.amount ?? 1)
+    }
+    if (entry.type === 'survivor_type') {
+      const amount = entry.amount ?? 1
+      const matches = (targetPlayer?.party ?? []).filter((survivor, index) => {
+        const slotIndex = getSurvivorSlotIndex(survivor, index)
+        return getEffectiveSurvivorType(survivor, slotIndex, targetPlayer?.leaderId) === entry.survivorType
+      })
+      return matches.length >= amount
+    }
+    return true
+  })
+}
+
+function getOpponentRequirementLabel(requirement) {
+  const requirements = normalizeOpponentRequirements(requirement)
+  if (requirements.length === 0) return ''
+  return requirements.map((entry) => {
+    if (entry.type === 'resource') return `${entry.resource === 'bottleCap' ? '병뚜껑' : '통조림'} ${entry.amount ?? 0}개`
+    if (entry.type === 'active_survivor') return `활성 생존자 ${entry.amount ?? 1}명`
+    if (entry.type === 'survivor') return `생존자 ${entry.amount ?? 1}명`
+    if (entry.type === 'survivor_type') return `${entry.survivorType} ${entry.amount ?? 1}명`
+    return entry.type ?? '상대 조건'
+  }).join(', ')
+}
+
 function isRollDiceType(type) {
   return type === 'roll_dice' || type === 'roll_dice_score_bonus'
 }
 
-function getRequiredExplorationSurvivorCount(event) {
-  if (isRollDiceType(event?.resolution?.type)) return 1
-  const tier = event?.tier ?? 1
-  if (event?.assignment?.minSurvivors) return event.assignment.minSurvivors
-  return RULES.exploration?.tiers?.[tier]?.minAssigned ?? 1
+function getRequiredTypeSlotCount(event) {
+  const requiredPartyTypeCount = expandTypeRequirements(getRequiredSurvivorTypesForEvent(event)).length
+  const requiredAssignedTypeCount = getRequiredAssignedTypeForEvent(event) ? 1 : 0
+  return Math.max(requiredPartyTypeCount, requiredAssignedTypeCount)
 }
 
-function getMaxExplorationSurvivorCount(event) {
-  if (isRollDiceType(event?.resolution?.type)) return 5
+function getRequiredExplorationSurvivorCount(event) {
   const tier = event?.tier ?? 1
-  if (event?.assignment?.maxSurvivors) return event.assignment.maxSurvivors
-  return RULES.exploration?.tiers?.[tier]?.maxAssigned ?? getRequiredExplorationSurvivorCount(event)
+  const baseRequired = event?.assignment?.minSurvivors != null
+    ? event.assignment.minSurvivors
+    : (RULES.exploration?.tiers?.[tier]?.minAssigned ?? 1)
+  return Math.max(baseRequired, getRequiredTypeSlotCount(event))
+}
+
+function getMaxExplorationSurvivorCount(event, player = null) {
+  const activeCount = player ? getActivePartyMembers(player).length : RULES.party?.maxSize ?? 5
+  return Math.max(activeCount, getRequiredExplorationSurvivorCount(event))
 }
 
 function getRecommendedDiceAssignmentCount(event, activeCount) {
@@ -563,21 +741,220 @@ function getRequiredAssignedTypeForEvent(event) {
 function hasRequiredAssignedType(player, event, selectedUids = []) {
   const requiredType = getRequiredAssignedTypeForEvent(event)
   if (!requiredType) return true
+  const usedUids = new Set()
   return selectedUids
     .map((uid) => player?.party?.find((survivor) => survivor.uid === uid))
-    .some((survivor) => survivor?.type === requiredType)
+    .some((survivor) => {
+      if (!survivor) return false
+      const idx = player.party.findIndex((entry) => entry.uid === survivor.uid)
+      return canSurvivorActAsType(player, survivor, idx, requiredType, usedUids)
+    })
+}
+
+function getRequiredPartyTypesForEvent(event) {
+  return event?.requiredTypes
+    ?? (event?.requiredType ? [{ type: event.requiredType, count: 1 }] : [])
+}
+
+function isRequiredKeyEntry(entry) {
+  return entry?.type === 'key' || entry?.type === '열쇠'
+}
+
+function getRequiredKeyCountForEvent(event) {
+  return getRequiredPartyTypesForEvent(event)
+    .filter(isRequiredKeyEntry)
+    .reduce((sum, entry) => sum + (entry.count ?? 1), 0)
+}
+
+function getRequiredSurvivorTypesForEvent(event) {
+  return getRequiredPartyTypesForEvent(event).filter((entry) => !isRequiredKeyEntry(entry))
+}
+
+function expandTypeRequirements(entries = []) {
+  return entries.flatMap(({ type, count = 1 }) => Array.from({ length: count }, () => type))
+}
+
+function hasOnlyEffectiveSurvivorType(player, targetType) {
+  const party = player?.party ?? []
+  return party.length > 0 && party.every((survivor, index) => {
+    const slotIndex = getSurvivorSlotIndex(survivor, index)
+    return getEffectiveSurvivorType(survivor, slotIndex, player?.leaderId) === targetType
+  })
+}
+
+function canSurvivorActAsType(player, survivor, slotIndex, targetType, usedUids = new Set()) {
+  if (!survivor || usedUids.has(survivor.uid)) return false
+  const effectiveType = getEffectiveSurvivorType(survivor, slotIndex, player?.leaderId)
+  if (effectiveType === targetType) return true
+  if (!hasOnlyEffectiveSurvivorType(player, '용감이')) return false
+  return getPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.BRAVE_WILDCARD)
+    .some(({ survivor: wildcardSurvivor }) => wildcardSurvivor.uid === survivor.uid)
+}
+
+function canSatisfyTypeRequirementsWithSurvivors(player, requiredTypes = [], survivors = []) {
+  const usedUids = new Set()
+  const survivorTypes = requiredTypes.filter((entry) => !isRequiredKeyEntry(entry))
+  const sortedRequirements = expandTypeRequirements(survivorTypes).sort((a, b) => {
+    const exactA = survivors.filter((survivor) => getEffectiveSurvivorType(survivor, player.party.indexOf(survivor), player.leaderId) === a).length
+    const exactB = survivors.filter((survivor) => getEffectiveSurvivorType(survivor, player.party.indexOf(survivor), player.leaderId) === b).length
+    return exactA - exactB
+  })
+
+  return sortedRequirements.every((type) => {
+    const match = survivors.find((survivor) => {
+      const idx = player.party.findIndex((entry) => entry.uid === survivor.uid)
+      return canSurvivorActAsType(player, survivor, idx, type, usedUids)
+    })
+    if (!match) return false
+    usedUids.add(match.uid)
+    return true
+  })
+}
+
+function chooseTypeBonusMatches(player, requirements = [], assignedSurvivors = []) {
+  const requiredTypes = expandTypeRequirements(requirements)
+  const usedUids = new Set()
+  const matches = []
+
+  for (const type of requiredTypes) {
+    const candidates = assignedSurvivors
+      .filter((survivor) => {
+        const idx = player.party.findIndex((entry) => entry.uid === survivor.uid)
+        return canSurvivorActAsType(player, survivor, idx, type, usedUids)
+      })
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    const match = candidates[0]
+    if (!match) return []
+    usedUids.add(match.uid)
+    matches.push(match)
+  }
+
+  return matches
+}
+
+function hasRequiredPartyTypes(player, event) {
+  const requiredTypes = getRequiredSurvivorTypesForEvent(event)
+  const hasKeys = (player?.keyCards?.length ?? 0) >= getRequiredKeyCountForEvent(event)
+  if (!hasKeys) return false
+  if (requiredTypes.length === 0) return true
+  return canSatisfyTypeRequirementsWithSurvivors(player, requiredTypes, getActivePartyMembers(player))
+}
+
+function hasRequiredPartyTypesInSelection(player, event, selectedUids = []) {
+  const requiredTypes = getRequiredSurvivorTypesForEvent(event)
+  const hasKeys = (player?.keyCards?.length ?? 0) >= getRequiredKeyCountForEvent(event)
+  if (!hasKeys) return false
+  if (requiredTypes.length === 0) return true
+  const selectedSurvivors = selectedUids
+    .map((uid) => player?.party?.find((survivor) => survivor.uid === uid))
+    .filter(Boolean)
+  return canSatisfyTypeRequirementsWithSurvivors(player, requiredTypes, selectedSurvivors)
+}
+
+function normalizeRewardEntries(reward) {
+  if (!reward) return []
+  return Array.isArray(reward) ? reward : [reward]
+}
+
+function hasRewardType(event, types = []) {
+  const typeSet = new Set(types)
+  return normalizeRewardEntries(event?.reward).some((entry) => typeSet.has(entry?.type))
+}
+
+function hasRequiredKey(player, event) {
+  if (!event?.requiresKey && !event?.resolution?.requiresKey) return true
+  return (player?.keyCards?.length ?? 0) > 0
+}
+
+function isKeyUnlockEvent(event) {
+  return Boolean(
+    event &&
+    (event.requiresKey || event.resolution?.requiresKey) &&
+    isRollDiceType(event.resolution?.type) &&
+    hasRewardType(event, ['item', 'treasure'])
+  )
+}
+
+function canResolveWithKeyOnly(player, event) {
+  return isKeyUnlockEvent(event) && (player?.keyCards?.length ?? 0) > 0
+}
+
+function shouldClaimResolvedEvent(event) {
+  return event?.category === 'clue'
+    || event?.category === 'utopia'
+    || hasRewardType(event, ['key'])
+}
+
+function discardExplorationEvent(explorationState = {}, event) {
+  if (!event || event.category === 'clue' || event.category === 'utopia') return explorationState
+  const tier = event.tier ?? 1
+  const discardByTier = { ...(explorationState.discardByTier ?? {}) }
+  return {
+    ...explorationState,
+    discardByTier: {
+      ...discardByTier,
+      [tier]: [...(discardByTier[tier] ?? []), event],
+    },
+  }
+}
+
+function drawExplorationCardFromTier(explorationState = {}, tier = 1) {
+  const decksByTier = { ...(explorationState.decksByTier ?? {}) }
+  const discardByTier = { ...(explorationState.discardByTier ?? {}) }
+  let tierDeck = [...(decksByTier[tier] ?? [])]
+  let tierDiscard = [...(discardByTier[tier] ?? [])]
+
+  if (tierDeck.length === 0 && tierDiscard.length > 0) {
+    tierDeck = shuffle(tierDiscard)
+    tierDiscard = []
+  }
+
+  const card = tierDeck.shift() ?? null
+  return {
+    card,
+    explorationState: {
+      ...explorationState,
+      decksByTier: {
+        ...decksByTier,
+        [tier]: tierDeck,
+      },
+      discardByTier: {
+        ...discardByTier,
+        [tier]: tierDiscard,
+      },
+    },
+  }
+}
+
+// Compatibility name: resolved non-claim events now go to discard, not directly back into the deck.
+function returnResolvedEventToTierDeck(explorationState = {}, event) {
+  return shouldClaimResolvedEvent(event)
+    ? explorationState
+    : discardExplorationEvent(explorationState, event)
+}
+
+
+function getRequiredPartyTypesLabel(event) {
+  return getRequiredSurvivorTypesForEvent(event)
+    .map(({ type, count = 1 }) => `${type}${count > 1 ? ` ${count}명` : ''}`)
+    .join(', ')
+}
+
+
+function getRecommendedPartyBonusBreakdownForAssignment(event, assignedSurvivors = [], player = null) {
+  const requirements = event?.recommendedParty ?? []
+  const requiredTypeCount = expandTypeRequirements(requirements).length
+  const matches = chooseTypeBonusMatches(player, requirements, assignedSurvivors)
+  const fulfilled = requiredTypeCount > 0 && matches.length === requiredTypeCount
+  const typeScore = fulfilled
+    ? matches.reduce((scoreSum, survivor) => scoreSum + (survivor.score ?? 0), 0)
+    : 0
+  const placementBonus = fulfilled ? getFrontChargeExplorationBonus(player) : 0
+  return { typeScore, placementBonus, total: typeScore + placementBonus }
 }
 
 function getRecommendedPartyBonusForAssignment(event, assignedSurvivors = [], player = null) {
-  const requirements = event?.recommendedParty ?? []
-  if (requirements.length === 0) return 0
-  const matches = requirements.every(({ type, count = 1 }) => (
-    assignedSurvivors.filter((survivor) => survivor?.type === type).length >= count
-  ))
-  if (!matches) return 0
-  const base = event?.resolution?.recommendedPartyBonus ?? event?.check?.recommendedPartyBonus ?? event?.recommendedPartyBonus ?? 2
-  const moodMakerBoost = player?.party?.[2]?.type === '분위기메이커' ? 1 : 0
-  return base + moodMakerBoost
+  return getRecommendedPartyBonusBreakdownForAssignment(event, assignedSurvivors, player).total
 }
 
 function getAssignedSurvivorScore(assignedSurvivors = []) {
@@ -597,11 +974,24 @@ function createUtopiaEventFromCard(card) {
   }
 }
 
+function hasDuckUtopiaDiscoveryCondition(player) {
+  if (player?.leaderId !== 'duck') return false
+  if (getPartySlotCount(player.party ?? []) < 6) return false
+  return (player.party ?? []).every((survivor, index) => {
+    const slotIndex = getSurvivorSlotIndex(survivor, index)
+    return getEffectiveSurvivorType(survivor, slotIndex, player.leaderId) === '4차원'
+  })
+}
+
 function canAttemptRevealedUtopia(player, utopiaState) {
+  const duckDiscoveryReady = hasDuckUtopiaDiscoveryCondition(player)
+  const alreadyCompleted = (utopiaState?.completedByPlayerIds ?? []).includes(player?.id)
   return Boolean(
-    utopiaState?.revealed &&
-    !utopiaState?.claimed &&
-    (player?.claimedCluesByTier?.[3]?.length ?? 0) > 0
+    !alreadyCompleted &&
+    (
+      (utopiaState?.revealed && (player?.claimedCluesByTier?.[3]?.length ?? 0) > 0) ||
+      (!utopiaState?.revealed && duckDiscoveryReady)
+    )
   )
 }
 
@@ -679,7 +1069,6 @@ function createPlayer(id, leaderId, isBot = false) {
     leaderEmoji: leader.emoji,
     leaderColor: leader.color,
     type: leader.type,
-    specialWin: leader.specialWin,
     uniqueSkill: { ...(leader.uniqueSkill ?? {}) },
     passiveIncome: { ...(leader.passiveIncome ?? { can: 0, bottleCap: 0 }) },
     resources: { ...leader.initialResources },
@@ -690,14 +1079,16 @@ function createPlayer(id, leaderId, isBot = false) {
     graveyard: [],
     eventDiscard: [],
     scoreTokens: 0,
+    keyCards: [],
+    treasureCards: [],
     clueTokens: 0,
     claimedCluesByTier: { 1: [], 2: [], 3: [] },
     unlockedExplorationTier: 1,
     abandonedEvents: [],
     turnFlags: {
       doctorShieldUsed: false,
-      returnedSurvivorUsed: false,
       wizardSpellUsed: false,
+      leaderTurnEndSkillResolved: false,
     },
     maxPartySize: leader.maxPartySize ?? RULES.maxPartySize,
     score: 0,
@@ -711,7 +1102,21 @@ function applyGlobalEffectToState(state, effect, sourceEvent = null, logs = null
     return effect.effects.reduce((s, e) => applyGlobalEffectToState(s, e, sourceEvent, logs, dicePopups), state)
   }
 
-  const players = state.players.map((p) => {
+  // lose_*_others 효과: 현재 플레이어가 아닌 플레이어로부터 빼앗는 총량 사전 계산
+  let othersCanStolen = 0
+  let othersCapStolen = 0
+  if (effect.type === 'lose_can_others') {
+    state.players.forEach((p, i) => {
+      if (i !== state.currentPlayerIndex) othersCanStolen += Math.min(p.resources.can, effect.amount)
+    })
+  }
+  if (effect.type === 'lose_cap_others') {
+    state.players.forEach((p, i) => {
+      if (i !== state.currentPlayerIndex) othersCapStolen += Math.min(p.resources.bottleCap, effect.amount)
+    })
+  }
+
+  const players = state.players.map((p, playerIndex) => {
     let u = { ...p, resources: { ...p.resources }, party: [...p.party], graveyard: [...(p.graveyard ?? [])], turnFlags: { ...(p.turnFlags ?? {}) } }
     switch (effect.type) {
       case 'remove_all_n': {
@@ -781,14 +1186,40 @@ function applyGlobalEffectToState(state, effect, sourceEvent = null, logs = null
       case 'gain_can_all':
         u.resources.can += effect.amount
         break
+      case 'gain_cap_all':
+        u.resources.bottleCap += effect.amount
+        break
       case 'halve_can_all':
         u.resources.can = Math.floor(u.resources.can / 2)
+        break
+      case 'lose_can_others':
+        if (playerIndex !== state.currentPlayerIndex) {
+          u.resources.can = Math.max(0, u.resources.can - effect.amount)
+        }
+        break
+      case 'lose_cap_others':
+        if (playerIndex !== state.currentPlayerIndex) {
+          u.resources.bottleCap = Math.max(0, u.resources.bottleCap - effect.amount)
+        }
         break
       default:
         break
     }
     return clampPlayerResources(u)
   })
+
+  // lose_*_others: 빼앗은 자원을 현재 플레이어에게 추가
+  if (othersCanStolen > 0 || othersCapStolen > 0) {
+    const idx = state.currentPlayerIndex
+    players[idx] = clampPlayerResources({
+      ...players[idx],
+      resources: {
+        ...players[idx].resources,
+        can: players[idx].resources.can + othersCanStolen,
+        bottleCap: players[idx].resources.bottleCap + othersCapStolen,
+      },
+    })
+  }
 
   // add_survivors_all 인 경우 덱에서 사용한 만큼 제거
   let survivorDeck = state.survivorDeck
@@ -808,7 +1239,8 @@ function applyGlobalEffectToState(state, effect, sourceEvent = null, logs = null
 }
 
 // ────────────────────────────────────────────────────────────────────
-export const useGameStore = create((set, get) => ({
+// A separate instance per online room keeps the original rules as the single source of truth.
+export const createGameStore = ({ schedule = setTimeout, confirmAssignments = true } = {}) => create((set, get) => ({
   // ── 화면 ──────────────────────────────────────
   screen: 'setup',
 
@@ -829,7 +1261,7 @@ export const useGameStore = create((set, get) => ({
 
   // 턴 페이즈
   // 'action'            : 주변 탐색 확인 및 해결
-  // 'party_maintenance' : 파티 정비, 영입, 자원 교환
+  // 'party_maintenance' : 파티 정비, 영입, 식사 제공
   phase: 'action',
   turnStructure: {
     version: 'legacy',
@@ -840,6 +1272,7 @@ export const useGameStore = create((set, get) => ({
   // 다음 개편용 상태
   explorationState: {
     decksByTier: { 1: [], 2: [], 3: [] },
+    discardByTier: { 1: [], 2: [], 3: [] },
     clueDecksByTier: { 1: [], 2: [], 3: [] },
     disasterDecksByTier: { 1: [], 2: [], 3: [] },
     visibleByTier: { 1: [], 2: [], 3: [] },
@@ -855,8 +1288,10 @@ export const useGameStore = create((set, get) => ({
   utopiaState: {
     revealed: false,
     claimed: false,
+    completedByPlayerIds: [],
     revealedForLeaderId: null,
     claimedByPlayerId: null,
+    claimedCard: null,
     cardsByLeaderId: {},
   },
 
@@ -890,12 +1325,15 @@ export const useGameStore = create((set, get) => ({
 
   // 구매 단계
   survivorDeck: [],
+  treasureDeck: [],
   mercenaryPool: [],
   revealedUids: [],
   departedSurvivors: [],
   returnedMercenary: null,
   pendingTurnEndShortage: null,
   actionEffects: [],
+  pendingTreasureUse: null,
+  pendingTreasureReveal: null,
   diceRollModal: null, // { slotIndex, event, partyScore, recommendedBonus }
   survivorDiceQueue: [], // [{ icon, name, rolls, successOn, success, outcomeLabel, detail, extraRoll? }]
 
@@ -933,6 +1371,7 @@ export const useGameStore = create((set, get) => ({
     const mercenaryPool = flattenVisibleByTier(searchState.visibleByTier)
     const survivorDeck = flattenSearchDecksByTier(searchState.decksByTier)
     const utopiaState = buildUtopiaState()
+    const treasureDeck = buildTreasureDeck()
 
     set({
       screen: 'game',
@@ -949,6 +1388,7 @@ export const useGameStore = create((set, get) => ({
       finalStandings: [],
       finalReason: '',
       survivorDeck, mercenaryPool, revealedUids: mercenaryPool.filter(Boolean).map((sv) => sv.uid),
+      treasureDeck,
       departedSurvivors: [],
       returnedMercenary: null,
       pendingTurnEndShortage: null,
@@ -966,7 +1406,7 @@ export const useGameStore = create((set, get) => ({
 
     get().settleCurrentPlayerTurnStart()
 
-    if (players[0].isBot) setTimeout(() => get().runBotTurn(), RULES.botThinkDelay)
+    if (players[0].isBot) schedule(() => get().runBotTurn(), RULES.botThinkDelay)
   },
 
   // ── 이벤트 슬롯 공개 (legacy: 현재 주변 탐색 카드는 해금된 단계에서 기본 공개) ─────────────
@@ -1019,15 +1459,18 @@ export const useGameStore = create((set, get) => ({
       revealedSlots[slotIndex] = false
       const players = [...next.players]
       const p = { ...players[s.currentPlayerIndex] }
-      p.eventDiscard = [...p.eventDiscard, event]
+      if (shouldClaimResolvedEvent(event)) {
+        p.eventDiscard = [...p.eventDiscard, event]
+      }
       p.score = calcPlayerScore(p)
       players[s.currentPlayerIndex] = p
+      const returnedExplorationState = returnResolvedEventToTierDeck(next.explorationState, event)
       return {
         ...next,
         players,
         eventSlots,
         revealedSlots,
-        explorationState: syncExplorationStateWithEventSlots(next.explorationState, eventSlots),
+        explorationState: syncExplorationStateWithEventSlots(returnedExplorationState, eventSlots),
       }
     })
     defLogs.forEach((log) => get().addLog(log))
@@ -1044,28 +1487,18 @@ export const useGameStore = create((set, get) => ({
     const event = state.eventSlots[slotIndex]
     if (!event || !state.revealedSlots[slotIndex] || state.phase !== 'action' || state.interaction) return
     if (event.category === 'clue') return
-    const skipIsFree = hasCenterWeirdType(player)
-
     set((s) => {
       const players = [...s.players]
       const p = { ...players[s.currentPlayerIndex] }
-      if (!skipIsFree) {
-        p.abandonedEvents = [...p.abandonedEvents, event]
-      }
+      p.abandonedEvents = [...p.abandonedEvents, event]
       p.score = calcPlayerScore(p)
       players[s.currentPlayerIndex] = p
 
       const eventSlots = [...s.eventSlots]
       const revealedSlots = [...s.revealedSlots]
       const tier = getTierForEventSlotIndex(slotIndex)
-      const explorationState = {
-        ...s.explorationState,
-        decksByTier: {
-          ...s.explorationState.decksByTier,
-          [tier]: [...(s.explorationState.decksByTier?.[tier] ?? [])],
-        },
-      }
-      eventSlots[slotIndex] = explorationState.decksByTier[tier].shift() ?? null
+      const { card: replacement, explorationState } = drawExplorationCardFromTier(s.explorationState, tier)
+      eventSlots[slotIndex] = replacement
       revealedSlots[slotIndex] = Boolean(eventSlots[slotIndex])
 
       return {
@@ -1078,7 +1511,7 @@ export const useGameStore = create((set, get) => ({
     })
 
     get().addLog(
-      `${player.name} — ${event.emoji} ${event.name} 넘기기 (${skipIsFree ? '4차원 중앙 효과로 무료 (벌점 없음)' : '벌점 -1'})`,
+      `${player.name} — ${event.emoji} ${event.name} 넘기기 (벌점 -1)`,
     )
     if (slotIndex === 0) get()._triggerFirstSlotIfGlobal()
   },
@@ -1089,7 +1522,7 @@ export const useGameStore = create((set, get) => ({
     if (!interaction) return
     const { payload, requiredCount } = interaction
     const selected = payload.selectedMyUids ?? []
-    if (selected.length < requiredCount) return
+    if (selected.length < requiredCount || selected.length > (interaction.maxCount ?? requiredCount)) return
     if (interaction.kind === 'assign_utopia_party') {
       get()._continueAssignedUtopiaResolution(interaction)
     } else if (interaction.kind === 'assign_event_party') {
@@ -1112,21 +1545,60 @@ export const useGameStore = create((set, get) => ({
       return
     }
 
-    const requiredSurvivorCount = getRequiredExplorationSurvivorCount(event)
-    const maxSurvivorCount = getMaxExplorationSurvivorCount(event)
+    const keyUnlockOnly = canResolveWithKeyOnly(player, event)
+    const requiredSurvivorCount = keyUnlockOnly ? 1 : getRequiredExplorationSurvivorCount(event)
+    const maxSurvivorCount = keyUnlockOnly ? 1 : getMaxExplorationSurvivorCount(event, player)
     if (getActivePartyMembers(player).length < requiredSurvivorCount) {
       get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (활성 생존자 ${requiredSurvivorCount}명 필요)`)
       return
     }
     const requiredAssignedType = getRequiredAssignedTypeForEvent(event)
-    if (requiredAssignedType && !getActivePartyMembers(player).some((survivor) => survivor.type === requiredAssignedType)) {
+    if (!keyUnlockOnly && requiredAssignedType && !getActivePartyMembers(player).some((survivor) => {
+      const idx = player.party.findIndex((entry) => entry.uid === survivor.uid)
+      return canSurvivorActAsType(player, survivor, idx, requiredAssignedType)
+    })) {
       get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (활성 ${requiredAssignedType} 생존자 필요)`)
       return
     }
-    const requiredPartyType = event.requiredType
-    if (requiredPartyType && !player.party.some((survivor) => survivor.type === requiredPartyType)) {
-      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (파티에 ${requiredPartyType} 생존자 필요)`)
+    if (!keyUnlockOnly && !hasRequiredPartyTypes(player, event)) {
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (파티에 ${getRequiredPartyTypesLabel(event)} 생존자 필요)`)
       return
+    }
+    const opponents = players.filter((_, index) => index !== currentPlayerIndex)
+    if (event.opponentRequirement && !opponents.some((opponent) => targetSatisfiesOpponentRequirement(opponent, event.opponentRequirement))) {
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (상대 조건: ${getOpponentRequirementLabel(event.opponentRequirement)})`)
+      return
+    }
+    if (resolution.type === 'trade_offer' && !resolution.chooseResource) {
+      const giveAmount = resolution.give?.amount ?? 2
+      const receiveAmount = resolution.receive?.amount ?? 2
+      if (getResourceValue(player.resources, resolution.give?.resource ?? 'bottleCap') < giveAmount) {
+        get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (${getResourceLabel(resolution.give?.resource ?? 'bottleCap')} 부족)`)
+        return
+      }
+      if (!opponents.some((opponent) => getResourceValue(opponent.resources, resolution.receive?.resource ?? 'can') >= receiveAmount)) {
+        if (event.failPenalty) {
+          get()._markEventAsPenalty(slotIndex, event, '거래 거절')
+          return
+        }
+        get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (거래 가능한 상대 없음)`)
+        return
+      }
+    }
+    if (resolution.type === 'shared_distribution' && opponents.length === 0) {
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (나눌 상대 없음)`)
+      return
+    }
+    if ((resolution.type === 'support_roll_dice' || resolution.type === 'shared_dispatch_reward') && !opponents.some((opponent) => getActivePartyMembers(opponent).length > 0)) {
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (파견 가능한 상대 생존자 없음)`)
+      return
+    }
+    if (resolution.type === 'resource_duel') {
+      const resource = resolution.resource ?? 'bottleCap'
+      if (!opponents.some((opponent) => getResourceValue(opponent.resources, resource) > 0)) {
+        get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (대결할 자원을 가진 상대 없음)`)
+        return
+      }
     }
 
     if (resolution.type === 'pay_can' || resolution.type === 'pay_cap') {
@@ -1195,6 +1667,12 @@ export const useGameStore = create((set, get) => ({
       }
     }
 
+    if (requiredSurvivorCount <= 0) {
+      get()._beginAssignedEventResolution(slotIndex, event, 0, [])
+      return
+    }
+
+
     set({
       interaction: {
         kind: 'assign_event_party',
@@ -1225,9 +1703,22 @@ export const useGameStore = create((set, get) => ({
       return
     }
 
-    const utopiaCard = utopiaState.cardsByLeaderId?.[utopiaState.revealedForLeaderId]
+    const duckDiscoveryReady = !utopiaState.revealed && hasDuckUtopiaDiscoveryCondition(player)
+    const revealedForLeaderId = utopiaState.revealedForLeaderId ?? (duckDiscoveryReady ? 'duck' : null)
+    const utopiaCard = utopiaState.cardsByLeaderId?.[revealedForLeaderId]
     const event = createUtopiaEventFromCard(utopiaCard)
     if (!event) return
+
+    if (duckDiscoveryReady) {
+      set((s) => ({
+        utopiaState: {
+          ...s.utopiaState,
+          revealed: true,
+          revealedForLeaderId: 'duck',
+        },
+      }))
+      get().addLog(`🦆 오리신의 계시: 파티 6인 전원 4차원 달성 → 유토피아 발견`)
+    }
 
     const requiredCount = 1
     const maxCount = RULES.utopia?.maxAssigned ?? 5
@@ -1264,7 +1755,8 @@ export const useGameStore = create((set, get) => ({
     const assignedCount = selectedSurvivors.length
     if (!get()._assignActiveSurvivorsForAction(currentPlayerIndex, assignedCount, `${event.name} 최종 도전`, selectedUids)) return
 
-    const recommendedBonus = getRecommendedPartyBonusForAssignment(event, selectedSurvivors, player)
+    const bonusBreakdown = getRecommendedPartyBonusBreakdownForAssignment(event, selectedSurvivors, player)
+    const recommendedBonus = bonusBreakdown.total
     const partyScore = recommendedBonus
     set({
       interaction: null,
@@ -1274,6 +1766,9 @@ export const useGameStore = create((set, get) => ({
         event: { ...event, assignedSurvivorUids: selectedUids, resolution: { ...event.resolution, diceCount: assignedCount } },
         partyScore,
         recommendedBonus,
+        typeScoreBonus: bonusBreakdown.typeScore,
+        placementBonus: bonusBreakdown.placementBonus,
+        bonusLabel: '타입점수',
       },
     })
   },
@@ -1402,14 +1897,12 @@ export const useGameStore = create((set, get) => ({
       }
 
       if (mode === 'recruit_from_deck') {
-        const baseCost = chosen.recruitCost ?? 0
-        const moodGirlDiscount = player.party.some((sv) => sv.id === 's_mood_1') ? 1 : 0
-        const cost = Math.max(0, baseCost - moodGirlDiscount)
-        if (player.resources.bottleCap < cost) return {}
+        const { resource, amount: cost } = getRecruitCostInfoForPlayer(player, chosen)
+        if ((player.resources?.[resource] ?? 0) < cost) return {}
         if (!canRecruitSurvivor(player, chosen)) return {}
         const applied = addSurvivorToParty(player.party, chosen, player.maxPartySize)
         if (!applied.added) return {}
-        player.resources.bottleCap -= cost
+        player.resources[resource] -= cost
         player.party = applied.party
         player = setSurvivorActiveState(player, chosen, false)
         player.score = calcPlayerScore(player)
@@ -1440,6 +1933,8 @@ export const useGameStore = create((set, get) => ({
 
     get().addLog(`🤖 행복수치 계산 — ${chosen.emoji} ${chosen.name} 선택`)
     if (mode === 'recruit_from_deck') {
+      const actuallyAdded = get().players[get().currentPlayerIndex].party.some((sv) => sv.uid === chosen.uid)
+      if (!actuallyAdded) return
       get().addLog(`${get().players[get().currentPlayerIndex].name} → ${chosen.emoji} ${chosen.name} 추가 수색 영입`)
       get()._applyOnRecruitTriggers(chosen)
       if (get().players[get().currentPlayerIndex]?.isBot && get().interaction) {
@@ -1450,6 +1945,35 @@ export const useGameStore = create((set, get) => ({
         }
       }
     }
+  },
+
+  revealStoredTreasure(playerIndex, treasureUid) {
+    const state = get()
+    const player = state.players[playerIndex]
+    if (!player || playerIndex !== state.currentPlayerIndex || player.isBot) return
+    let revealedCard = null
+    set((s) => {
+      const players = [...s.players]
+      const current = {
+        ...players[playerIndex],
+        treasureCards: (players[playerIndex].treasureCards ?? []).map((card) => {
+          if (card.uid !== treasureUid) return card
+          revealedCard = { ...card, revealed: true, used: card.kind === 'item' || Boolean(card.effectText) }
+          return revealedCard
+        }),
+      }
+      current.score = calcPlayerScore(current)
+      players[playerIndex] = current
+      return { players }
+    })
+    if (revealedCard) {
+      set({ pendingTreasureReveal: { cardUid: revealedCard.uid, playerIndex } })
+      get().addLog(`${player.name} — ${revealedCard.kind === 'item' ? '🎒 아이템' : '💎 보물'} 공개: ${revealedCard.name}${revealedCard.score ? ` (★+${revealedCard.score})` : ''}`)
+    }
+  },
+
+  closeTreasureRevealPopup() {
+    set({ pendingTreasureReveal: null })
   },
 
   cancelRobotSearch() {
@@ -1503,7 +2027,7 @@ export const useGameStore = create((set, get) => ({
         const hasSlot = getPartySlotCount(current.party) < current.maxPartySize || canStackOnExistingSlot(current.party, survivor)
         return hasSlot &&
           canRecruitSurvivor(current, survivor) &&
-          (current.resources?.bottleCap ?? 0) >= (survivor.recruitCost ?? 0)
+          (current.resources?.[getRecruitCostInfoForPlayer(current, survivor).resource] ?? 0) >= getRecruitCostInfoForPlayer(current, survivor).amount
       })
       if (!hasRecruitableCandidate) {
         noRecruitableCandidate = true
@@ -1542,20 +2066,91 @@ export const useGameStore = create((set, get) => ({
     get().revealSearchSlot(tier, flatIndex - tierStartIndex)
   },
 
+  // ── 열쇠 해금 이벤트: 열쇠가 있으면 주사위 조건을 무시하고 즉시 해결 ─────
+  _resolveKeyUnlockEvent(slotIndex, event, player) {
+    let rewardLogs = []
+    let actionEffects = []
+
+    set((s) => {
+      const players = [...s.players]
+      const idx = s.currentPlayerIndex
+      let survivorDeck = [...s.survivorDeck]
+      let treasureDeck = [...(s.treasureDeck ?? [])]
+      let p = {
+        ...players[idx],
+        resources: { ...players[idx].resources },
+        party: [...players[idx].party],
+        keyCards: [...(players[idx].keyCards ?? [])],
+        treasureCards: [...(players[idx].treasureCards ?? [])],
+        eventDiscard: [...(players[idx].eventDiscard ?? [])],
+      }
+
+      const consumedKey = p.keyCards.shift()
+      if (!consumedKey) {
+        return { interaction: null }
+      }
+
+      rewardLogs.push('🗝️ 열쇠 사용: 주사위 조건을 무시하고 잠긴 보상을 획득')
+      if (event.reward) {
+        const applied = applyRewardToPlayer(p, event.reward, survivorDeck, treasureDeck)
+        p = applied.player
+        survivorDeck = applied.survivorDeck
+        treasureDeck = applied.treasureDeck
+        rewardLogs = [...rewardLogs, ...applied.logs]
+        actionEffects = [...actionEffects, ...(applied.actionEffects ?? [])]
+      }
+
+      if (shouldClaimResolvedEvent(event)) {
+        p.eventDiscard = [...(p.eventDiscard ?? []), event]
+      }
+      p.score = calcPlayerScore(p)
+      players[idx] = p
+
+      const eventSlots = [...s.eventSlots]
+      const revealedSlots = [...s.revealedSlots]
+      eventSlots[slotIndex] = null
+      revealedSlots[slotIndex] = false
+      const explorationState = returnResolvedEventToTierDeck(s.explorationState, event)
+
+      return {
+        players,
+        eventSlots,
+        revealedSlots,
+        interaction: null,
+        survivorDeck,
+        treasureDeck,
+        searchState: { ...s.searchState, decksByTier: buildSearchDecksByTierFromCards(survivorDeck) },
+        explorationState: syncExplorationStateWithEventSlots(explorationState, eventSlots),
+      }
+    })
+
+    get().addLog(`${player.name} — ${event.emoji} ${event.name} 열쇠로 해결!`)
+    rewardLogs.forEach((message) => get().addLog(message))
+    actionEffects.forEach((effect) => get().pushActionEffect(effect))
+  },
+
   // ── 자동 해결 ─────────────────────────────────
   _resolveAuto(slotIndex, event, player) {
     const resolution = event.resolution
     let success = false
     let penaltyApplied = false
     let rewardLogs = []
+    let actionEffects = []
     let revealedUtopiaForLeader = null
 
     set((s) => {
       let players = [...s.players]
       const idx = s.currentPlayerIndex
       let survivorDeck = [...s.survivorDeck]
+      let treasureDeck = [...(s.treasureDeck ?? [])]
       let utopiaState = { ...s.utopiaState }
-      let p = { ...players[idx], resources: { ...players[idx].resources }, party: [...players[idx].party] }
+      let p = {
+        ...players[idx],
+        resources: { ...players[idx].resources },
+        party: [...players[idx].party],
+        graveyard: [...(players[idx].graveyard ?? [])],
+        survivorActivity: { ...(players[idx].survivorActivity ?? {}) },
+      }
 
       switch (resolution.type) {
         case 'pay_can':
@@ -1570,10 +2165,34 @@ export const useGameStore = create((set, get) => ({
             success = true
           }
           break
+        case 'resource_delta': {
+          const applied = applyResourceDeltaResolution(p, resolution, rewardLogs)
+          p = applied.player
+          success = applied.success
+          break
+        }
+        case 'survivor_delta':
+        case 'survivor_type_delta': {
+          const applied = applySurvivorDeltaResolution(p, resolution, survivorDeck, rewardLogs)
+          p = applied.player
+          survivorDeck = applied.survivorDeck
+          success = applied.success
+          break
+        }
+        case 'deactivate_survivor':
+        case 'deactivate_survivor_type': {
+          const applied = applySurvivorDeactivateResolution(p, resolution, rewardLogs)
+          p = applied.player
+          success = applied.success
+          break
+        }
         case 'check_survivor_type':
           success = (event.assignedSurvivorUids ?? [])
             .map((uid) => p.party.find((sv) => sv.uid === uid))
-            .some((sv) => sv?.type === resolution.survivorType)
+            .some((sv) => {
+              const survivorIndex = p.party.findIndex((entry) => entry.uid === sv?.uid)
+              return canSurvivorActAsType(p, sv, survivorIndex, resolution.survivorType)
+            })
           if (!success && event.failPenalty) {
             p = applyPenaltyToPlayer(p, event.failPenalty, s.survivorDeck)
             penaltyApplied = true
@@ -1616,6 +2235,83 @@ export const useGameStore = create((set, get) => ({
           success = true
           break
         }
+        case 'rich_cap_raid': {
+          const amount = resolution.amount ?? 3
+          const richest = players
+            .map((entry, playerIndex) => ({ player: entry, playerIndex }))
+            .filter(({ playerIndex }) => playerIndex !== idx)
+            .sort((a, b) => (b.player.resources?.bottleCap ?? 0) - (a.player.resources?.bottleCap ?? 0))[0]
+          if (richest && (richest.player.resources?.bottleCap ?? 0) > 0) {
+            const transferred = Math.min(richest.player.resources.bottleCap, amount)
+            players[richest.playerIndex] = clampPlayerResources({
+              ...richest.player,
+              resources: {
+                ...richest.player.resources,
+                bottleCap: richest.player.resources.bottleCap - transferred,
+              },
+            })
+            p.resources.bottleCap += transferred
+            rewardLogs.push(`🏦 ${richest.player.name}의 병뚜껑 창고 급습: 🪙${transferred} 이동`)
+            success = true
+            penaltyApplied = true
+          }
+          break
+        }
+        case 'steal_can_from_all_others': {
+          const amount = resolution.amount ?? 1
+          let total = 0
+          players.forEach((target, playerIndex) => {
+            if (playerIndex === idx || target.eliminated) return
+            const stolen = Math.min(target.resources?.can ?? 0, amount)
+            if (stolen <= 0) return
+            players[playerIndex] = clampPlayerResources({
+              ...target,
+              resources: { ...target.resources, can: target.resources.can - stolen },
+            })
+            total += stolen
+          })
+          p.resources.can += total
+          success = true
+          rewardLogs.push(`🥫 모든 상대에게서 통조림 ${total}개 강탈`)
+          break
+        }
+        case 'steal_cap_from_all_others': {
+          const amount = resolution.amount ?? 1
+          let total = 0
+          players.forEach((target, playerIndex) => {
+            if (playerIndex === idx || target.eliminated) return
+            const stolen = Math.min(target.resources?.bottleCap ?? 0, amount)
+            if (stolen <= 0) return
+            players[playerIndex] = clampPlayerResources({
+              ...target,
+              resources: { ...target.resources, bottleCap: target.resources.bottleCap - stolen },
+            })
+            total += stolen
+          })
+          p.resources.bottleCap += total
+          success = true
+          rewardLogs.push(`🪙 모든 상대에게서 병뚜껑 ${total}개 강탈`)
+          break
+        }
+        case 'deactivate_type_all_others': {
+          const survivorType = resolution.survivorType
+          let total = 0
+          players.forEach((target, playerIndex) => {
+            if (playerIndex === idx || target.eliminated) return
+            let nextTarget = { ...target, party: [...(target.party ?? [])] }
+            nextTarget.party.forEach((survivor, survivorIndex) => {
+              const slotIndex = getSurvivorSlotIndex(survivor, survivorIndex)
+              if (getEffectiveSurvivorType(survivor, slotIndex, nextTarget.leaderId) !== survivorType) return
+              if (!isSurvivorActive(nextTarget, survivor)) return
+              nextTarget = setSurvivorActiveState(nextTarget, survivor, false)
+              total += 1
+            })
+            players[playerIndex] = nextTarget
+          })
+          success = true
+          rewardLogs.push(`🌀 모든 상대의 ${survivorType} 생존자 ${total}명 비활성화`)
+          break
+        }
         case 'roll_dice': {
           const diceCount = resolution.diceCount ?? 1
           const rolls = Array.from({ length: diceCount }, () => Math.ceil(Math.random() * 6))
@@ -1629,6 +2325,25 @@ export const useGameStore = create((set, get) => ({
           }
           break
         }
+        case 'complete':
+          if (event.globalEffect) {
+            const nextState = applyGlobalEffectToState(
+              { ...s, players, survivorDeck },
+              event.globalEffect,
+              event,
+              rewardLogs,
+              null
+            )
+            players = [...nextState.players]
+            survivorDeck = [...nextState.survivorDeck]
+            p = {
+              ...players[idx],
+              resources: { ...players[idx].resources },
+              party: [...players[idx].party],
+            }
+          }
+          success = true
+          break
         case 'reorder_my_party':
           // UI에서 드래그로 처리 — 이 경우 그냥 성공으로 처리
           success = true
@@ -1639,17 +2354,24 @@ export const useGameStore = create((set, get) => ({
 
       // 보상 지급
       if (success && event.reward && !penaltyApplied) {
-        const applied = applyRewardToPlayer(p, event.reward, survivorDeck)
+        const applied = applyRewardToPlayer(p, event.reward, survivorDeck, treasureDeck)
         p = applied.player
         survivorDeck = applied.survivorDeck
+        treasureDeck = applied.treasureDeck
         rewardLogs = applied.logs
+        actionEffects.push(...(applied.actionEffects ?? []))
       }
 
       p = clampPlayerResources(p)
 
-      if (success || !event.penalizeOnFail) {
-        p.eventDiscard = [...p.eventDiscard, event]
-        if (success && event.category === 'clue') {
+      let explorationState = s.explorationState
+      if (success) {
+        if (shouldClaimResolvedEvent(event)) {
+          p.eventDiscard = [...p.eventDiscard, event]
+        } else {
+          explorationState = returnResolvedEventToTierDeck(explorationState, event)
+        }
+        if (event.category === 'clue') {
           p = applyClueClaimProgress(p, event)
           if ((event.tier ?? 0) === 3 && !utopiaState.revealed) {
             utopiaState = {
@@ -1661,7 +2383,7 @@ export const useGameStore = create((set, get) => ({
           }
         }
       } else {
-        p.abandonedEvents = [...p.abandonedEvents, event]
+        explorationState = discardExplorationEvent(explorationState, event)
       }
       p.score = calcPlayerScore(p)
       players[idx] = p
@@ -1678,15 +2400,17 @@ export const useGameStore = create((set, get) => ({
         revealedSlots,
         interaction: null,
         survivorDeck,
+        treasureDeck,
         searchState: { ...s.searchState, decksByTier: buildSearchDecksByTierFromCards(survivorDeck) },
         utopiaState,
-        explorationState: syncExplorationStateWithEventSlots(s.explorationState, eventSlots),
+        explorationState: syncExplorationStateWithEventSlots(explorationState, eventSlots),
       }
     })
 
-    const result = success ? '해결!' : event.penalizeOnFail ? '실패, 벌점 추가' : '조건 미충족'
+    const result = success ? '해결!' : '실패'
     get().addLog(`${player.name} — ${event.emoji} ${event.name} ${result}`)
     rewardLogs.forEach((message) => get().addLog(message))
+    actionEffects.forEach((effect) => get().pushActionEffect(effect))
     if (revealedUtopiaForLeader) {
       const utopiaCard = get().utopiaState.cardsByLeaderId?.[revealedUtopiaForLeader]
       get().addLog(`🌅 유토피아 공개: ${utopiaCard?.name ?? '알 수 없는 유토피아'} (${player.name}이 3단계 단서를 먼저 확보)`)
@@ -1715,9 +2439,12 @@ export const useGameStore = create((set, get) => ({
       if (
         interaction.kind === 'assign_event_party' &&
         selected.length === effectiveMax &&
-        !hasRequiredAssignedType(currentPlayer, interaction.event, selected)
+        (
+          !hasRequiredAssignedType(currentPlayer, interaction.event, selected)
+          || !hasRequiredPartyTypesInSelection(currentPlayer, interaction.event, selected)
+        )
       ) {
-        const requiredType = getRequiredAssignedTypeForEvent(interaction.event)
+        const requiredType = getRequiredAssignedTypeForEvent(interaction.event) ?? getRequiredPartyTypesLabel(interaction.event)
         get().addLog(`${currentPlayer.name} — ${interaction.event.name}에는 ${requiredType} 생존자를 파견해야 합니다.`)
         return
       }
@@ -1726,7 +2453,7 @@ export const useGameStore = create((set, get) => ({
         set({ interaction: { ...interaction, payload: { ...interaction.payload, selectedMyUids: selected } } })
       }
 
-      if (selected.length === effectiveMax) {
+      if (selected.length === effectiveMax && (!confirmAssignments || currentPlayer.isBot)) {
         if (interaction.kind === 'assign_search_party') {
           get()._finalizeSearchAssignment(selected, interaction.payload.searchTarget)
         } else if (interaction.kind === 'assign_utopia_party') {
@@ -1763,8 +2490,9 @@ export const useGameStore = create((set, get) => ({
     const survivor = currentPlayer?.party.find((sv) => sv.uid === uid)
     if (!survivor) return
 
-    if (resolution.type === 'send_survivor_type' && survivor.type !== resolution.survivorType) {
-      return
+    if (resolution.type === 'send_survivor_type') {
+      const survivorIndex = currentPlayer?.party.findIndex((entry) => entry.uid === uid) ?? -1
+      if (!canSurvivorActAsType(currentPlayer, survivor, survivorIndex, resolution.survivorType)) return
     }
 
     // 단일 선택
@@ -1789,9 +2517,26 @@ export const useGameStore = create((set, get) => ({
   },
 
   // ── 인터랙션: 타 플레이어 선택 ───────────────
+  selectTradeResource(resource) {
+    const { interaction } = get()
+    if (!interaction || interaction.step !== 'select_trade_resource') return
+    set({
+      interaction: {
+        ...interaction,
+        step: 'select_target_player',
+        payload: { ...interaction.payload, tradeGiveResource: resource },
+      },
+    })
+  },
+
   selectTargetPlayer(playerIndex) {
     const { interaction } = get()
     if (!interaction) return
+    const targetPlayer = get().players?.[playerIndex]
+    if (interaction.event?.opponentRequirement && !targetSatisfiesOpponentRequirement(targetPlayer, interaction.event.opponentRequirement)) {
+      get().addLog(`${targetPlayer?.name ?? '대상'}은 상대 조건(${getOpponentRequirementLabel(interaction.event.opponentRequirement)})을 만족하지 않습니다.`)
+      return
+    }
     if (interaction.kind === 'leader_skill_zombie_steal' || interaction.kind === 'leader_skill_duck_absorb') {
       set({
         interaction: {
@@ -1857,11 +2602,17 @@ export const useGameStore = create((set, get) => ({
       get()._finalizeWizardSpell(interaction.payload?.targetPlayerIndex ?? null, uid)
       return
     }
-    if (interaction.event?.category === 'attack') {
+    if (interaction.event?.eventType === 'action_attack' || interaction.event?.category === 'attack') {
       const ti = interaction.payload?.targetPlayerIndex
       const targetPlayer = ti !== null && ti !== undefined ? get().players[ti] : null
       const survivor = targetPlayer?.party.find((entry) => entry.uid === uid)
       if (!canBeAttackTarget(targetPlayer, survivor)) return
+    }
+    if (interaction.event?.resolution?.type === 'support_roll_dice' || interaction.event?.resolution?.type === 'shared_dispatch_reward') {
+      const ti = interaction.payload?.targetPlayerIndex
+      const targetPlayer = ti !== null && ti !== undefined ? get().players[ti] : null
+      const survivor = targetPlayer?.party.find((entry) => entry.uid === uid)
+      if (!survivor || !isSurvivorActive(targetPlayer, survivor)) return
     }
     set({ interaction: { ...interaction, payload: { ...interaction.payload, targetSurvivorUid: uid } } })
     get()._finalizeInteraction()
@@ -1917,6 +2668,7 @@ export const useGameStore = create((set, get) => ({
     set((s) => {
       const players = [...s.players]
       let survivorDeck = [...s.survivorDeck]
+      let treasureDeck = [...(s.treasureDeck ?? [])]
       let departedSurvivors = [...s.departedSurvivors]
       let utopiaState = { ...s.utopiaState }
       let p = { ...players[currentPlayerIndex], resources: { ...players[currentPlayerIndex].resources }, party: [...players[currentPlayerIndex].party], graveyard: [...(players[currentPlayerIndex].graveyard ?? [])] }
@@ -2058,7 +2810,7 @@ export const useGameStore = create((set, get) => ({
               break
             }
             const removed = players[ti].party.find((s) => s.uid === uid)
-            if (removed?.id === 's_military_4') {
+            if (removed?.id === 's_weird_7') {
               success = true
               skipReward = true
               rewardLogs.push(`👻 ${removed.name} 효과: 공격으로 제거되지 않음`)
@@ -2222,20 +2974,240 @@ export const useGameStore = create((set, get) => ({
           }
           break
         }
+        case 'steal_can_from_player': {
+          const ti = payload.targetPlayerIndex
+          if (ti !== null && players[ti]) {
+            const stolen = Math.min(players[ti].resources.can, resolution.amount ?? 2)
+            players[ti] = clampPlayerResources({ ...players[ti], resources: { ...players[ti].resources, can: players[ti].resources.can - stolen } })
+            p.resources.can += stolen
+            success = true
+            actionEffects.push(createActionEffect({ type: 'steal', title: event.name, icon: event.emoji, targetName: players[ti].name, detail: `통조림 ${stolen}개 강탈` }))
+          }
+          break
+        }
+        case 'steal_cap_from_player': {
+          const ti = payload.targetPlayerIndex
+          if (ti !== null && players[ti]) {
+            const stolen = Math.min(players[ti].resources.bottleCap, resolution.amount ?? 1)
+            players[ti] = clampPlayerResources({ ...players[ti], resources: { ...players[ti].resources, bottleCap: players[ti].resources.bottleCap - stolen } })
+            p.resources.bottleCap += stolen
+            success = true
+            actionEffects.push(createActionEffect({ type: 'steal', title: event.name, icon: event.emoji, targetName: players[ti].name, detail: `병뚜껑 ${stolen}개 강탈` }))
+          }
+          break
+        }
+        case 'deactivate_from_party': {
+          const ti = payload.targetPlayerIndex
+          const uid = payload.targetSurvivorUid
+          if (ti !== null && players[ti] && uid) {
+            const blocked = tryBlockAttackEvent(players[ti], event)
+            if (blocked.log) rewardLogs.push(blocked.log)
+            if (blocked.roll !== null) dicePopups.push({ icon: blocked.icon, name: blocked.name, rolls: [blocked.roll], successOn: blocked.successOn, success: blocked.blocked, outcomeLabel: blocked.blocked ? '공격 방어 성공!' : '공격 방어 실패', detail: `${blocked.successOn}이하 성공` })
+            if (blocked.blocked) {
+              const updatedTarget = applyConsumedAttackBlocker(players[ti], blocked)
+              updatedTarget.score = calcPlayerScore(updatedTarget)
+              players[ti] = updatedTarget
+              success = true
+              skipReward = true
+              actionEffects.push(createActionEffect({ type: 'global', title: `${event.name} 방어`, icon: blocked.icon, targetName: players[ti].name, detail: blocked.message }))
+              break
+            }
+            const target = players[ti].party.find((survivor) => survivor.uid === uid)
+            if (target) {
+              players[ti] = setSurvivorActiveState(players[ti], target, false)
+              success = true
+              actionEffects.push(createActionEffect({ type: 'global', title: event.name, icon: event.emoji, targetName: players[ti].name, detail: `${target.emoji} ${target.name} 비활성화` }))
+            }
+          }
+          break
+        }
+        case 'return_survivor_to_deck': {
+          const ti = payload.targetPlayerIndex
+          const uid = payload.targetSurvivorUid
+          if (ti !== null && players[ti] && uid) {
+            const blocked = tryBlockAttackEvent(players[ti], event)
+            if (blocked.log) rewardLogs.push(blocked.log)
+            if (blocked.roll !== null) dicePopups.push({ icon: blocked.icon, name: blocked.name, rolls: [blocked.roll], successOn: blocked.successOn, success: blocked.blocked, outcomeLabel: blocked.blocked ? '공격 방어 성공!' : '공격 방어 실패', detail: `${blocked.successOn}이하 성공` })
+            if (blocked.blocked) {
+              const updatedTarget = applyConsumedAttackBlocker(players[ti], blocked)
+              updatedTarget.score = calcPlayerScore(updatedTarget)
+              players[ti] = updatedTarget
+              success = true
+              skipReward = true
+              actionEffects.push(createActionEffect({ type: 'global', title: `${event.name} 방어`, icon: blocked.icon, targetName: players[ti].name, detail: blocked.message }))
+              break
+            }
+            const returned = players[ti].party.find((survivor) => survivor.uid === uid)
+            if (returned) {
+              players[ti] = pruneSurvivorActivity({
+                ...players[ti],
+                party: players[ti].party.filter((survivor) => survivor.uid !== uid),
+              })
+              survivorDeck = shuffle([...survivorDeck, returned])
+              success = true
+              actionEffects.push(createActionEffect({ type: 'global', title: event.name, icon: event.emoji, targetName: players[ti].name, detail: `${returned.emoji} ${returned.name} 수색 덱으로 복귀` }))
+            }
+          }
+          break
+        }
+        case 'trade_offer': {
+          const ti = payload.targetPlayerIndex
+          if (ti !== null && players[ti]) {
+            const chosenGiveResource = payload.tradeGiveResource ?? resolution.give?.resource ?? 'can'
+            const chosenReceiveResource = chosenGiveResource === 'can' ? 'bottleCap' : 'can'
+            const give = { resource: chosenGiveResource, amount: resolution.give?.amount ?? 2 }
+            const receive = { resource: chosenReceiveResource, amount: resolution.receive?.amount ?? 2, bonus: resolution.receive?.bonus ?? 1 }
+            const targetGive = { resource: receive.resource, amount: receive.amount ?? 2 }
+            const targetReceive = { resource: give.resource, amount: (give.amount ?? 2) + (receive.bonus ?? 1) }
+            const currentReceiveAmount = (receive.amount ?? 2) + (receive.bonus ?? 1)
+
+            if (
+              getResourceValue(p.resources, give.resource) >= (give.amount ?? 0) &&
+              getResourceValue(players[ti].resources, targetGive.resource) >= targetGive.amount
+            ) {
+              let target = { ...players[ti], resources: { ...players[ti].resources } }
+              p = transferResourceBetweenPlayers(p, target, give.resource, give.amount).fromPlayer
+              target = transferResourceBetweenPlayers(target, p, targetGive.resource, targetGive.amount).fromPlayer
+              p = addResourceToPlayer(p, receive.resource, currentReceiveAmount)
+              target = addResourceToPlayer(target, targetReceive.resource, targetReceive.amount)
+              players[ti] = clampPlayerResources(target)
+              p = clampPlayerResources(p)
+              success = true
+              skipReward = true
+              rewardLogs.push(`🔁 거래 성사: ${p.name} ${getResourceIcon(receive.resource)}+${currentReceiveAmount}, ${players[ti].name} ${getResourceIcon(targetReceive.resource)}+${targetReceive.amount}`)
+            } else {
+              if (event.failPenalty) {
+                p = applyPenaltyToPlayer(p, event.failPenalty)
+              }
+              rewardLogs.push('⚠️ 거래 실패: 필요한 자원이 부족합니다.')
+            }
+          }
+          break
+        }
+        case 'shared_distribution': {
+          const ti = payload.targetPlayerIndex
+          if (ti !== null && players[ti]) {
+            const resource = resolution.resource ?? 'can'
+            const currentAmount = resolution.currentAmount ?? 3
+            const targetAmount = resolution.targetAmount ?? 1
+            p = addResourceToPlayer(p, resource, currentAmount)
+            players[ti] = clampPlayerResources(addResourceToPlayer(players[ti], resource, targetAmount))
+            success = true
+            skipReward = true
+            rewardLogs.push(`🎁 구호품 분배: ${p.name} ${getResourceIcon(resource)}+${currentAmount}, ${players[ti].name} ${getResourceIcon(resource)}+${targetAmount}`)
+          }
+          break
+        }
+        case 'shared_dispatch_reward': {
+          const ti = payload.targetPlayerIndex
+          const supportUid = payload.targetSurvivorUid
+          const targetPlayer = ti !== null && ti !== undefined ? players[ti] : null
+          const supporter = targetPlayer?.party.find((survivor) => survivor.uid === supportUid)
+          if (targetPlayer && supporter && isSurvivorActive(targetPlayer, supporter)) {
+            const resource = resolution.resource ?? 'bottleCap'
+            const currentAmount = resolution.currentAmount ?? 3
+            const targetAmount = resolution.targetAmount ?? 2
+            players[ti] = setSurvivorActiveState(targetPlayer, supporter, false)
+            p = addResourceToPlayer(p, resource, currentAmount)
+            players[ti] = clampPlayerResources(addResourceToPlayer(players[ti], resource, targetAmount))
+            success = true
+            skipReward = true
+            rewardLogs.push(`🛒 공동 파견: ${p.name} ${getResourceIcon(resource)}+${currentAmount}, ${players[ti].name} ${getResourceIcon(resource)}+${targetAmount}`)
+          }
+          break
+        }
+        case 'support_roll_dice': {
+          const ti = payload.targetPlayerIndex
+          const supportUid = payload.targetSurvivorUid
+          const supporter = ti !== null && players[ti]
+            ? players[ti].party.find((survivor) => survivor.uid === supportUid)
+            : null
+          if (ti !== null && players[ti] && supporter && isSurvivorActive(players[ti], supporter)) {
+            const assignedCount = event.assignedSurvivorUids?.length ?? 2
+            const rolls = Array.from({ length: assignedCount + 1 }, () => Math.ceil(Math.random() * 6))
+            const total = rolls.reduce((sum, roll) => sum + roll, 0)
+            success = total >= (resolution.target ?? 8)
+            players[ti] = setSurvivorActiveState(players[ti], supporter, false)
+            rewardLogs.push(`🤝 ${players[ti].name} 지원: ${supporter.emoji} ${supporter.name} 파견`)
+            rewardLogs.push(`🎲 [${rolls.join('+')}] = ${total} (목표 ${resolution.target ?? 8}: ${success ? '✅ 성공' : '❌ 실패'})`)
+            skipReward = true
+            if (success) {
+              const currentReward = resolution.currentReward ?? { type: 'cap', amount: 3 }
+              const supporterReward = resolution.supporterReward ?? { type: 'cap', amount: 2 }
+              if (currentReward.type === 'cap') p.resources.bottleCap += currentReward.amount
+              if (currentReward.type === 'can') p.resources.can += currentReward.amount
+              let target = { ...players[ti], resources: { ...players[ti].resources } }
+              if (supporterReward.type === 'cap') target.resources.bottleCap += supporterReward.amount
+              if (supporterReward.type === 'can') target.resources.can += supporterReward.amount
+              players[ti] = clampPlayerResources(target)
+              rewardLogs.push(`🚚 합동 보상: ${p.name} ${getResourceIcon(currentReward.type === 'cap' ? 'bottleCap' : 'can')}+${currentReward.amount}, ${players[ti].name} ${getResourceIcon(supporterReward.type === 'cap' ? 'bottleCap' : 'can')}+${supporterReward.amount}`)
+            }
+          }
+          break
+        }
+        case 'resource_duel': {
+          const ti = payload.targetPlayerIndex
+          if (ti !== null && players[ti]) {
+            const resource = resolution.resource ?? 'bottleCap'
+            const amount = resolution.amount ?? 2
+            const declineCost = resolution.declineCost ?? 1
+            const assignedCount = event.assignedSurvivorUids?.length ?? 2
+            const targetActive = getActivePartyMembers(players[ti])
+            const canAccept = targetActive.length >= assignedCount
+
+            skipReward = true
+            if (!canAccept) {
+              const transfer = transferResourceBetweenPlayers(players[ti], p, resource, declineCost)
+              players[ti] = clampPlayerResources(transfer.fromPlayer)
+              p = clampPlayerResources(transfer.toPlayer)
+              success = true
+              rewardLogs.push(`⚖️ ${players[ti].name} 대결 거절: ${getResourceIcon(resource)}${transfer.transferred} 지불`)
+              break
+            }
+
+            const supportTargets = targetActive.slice(0, assignedCount)
+            players[ti] = setMultipleSurvivorsActiveState(players[ti], supportTargets, false)
+            const attackerRolls = Array.from({ length: assignedCount }, () => Math.ceil(Math.random() * 6))
+            const defenderRolls = Array.from({ length: assignedCount }, () => Math.ceil(Math.random() * 6))
+            const attackerTotal = attackerRolls.reduce((sum, roll) => sum + roll, 0)
+            const defenderTotal = defenderRolls.reduce((sum, roll) => sum + roll, 0)
+            const attackerWins = attackerTotal > defenderTotal
+            if (attackerWins) {
+              const transfer = transferResourceBetweenPlayers(players[ti], p, resource, amount)
+              players[ti] = clampPlayerResources(transfer.fromPlayer)
+              p = clampPlayerResources(transfer.toPlayer)
+              rewardLogs.push(`⚖️ 대결 승리: ${p.name} 🎲[${attackerRolls.join('+')}] ${attackerTotal} > ${players[ti].name} 🎲[${defenderRolls.join('+')}] ${defenderTotal}, ${getResourceIcon(resource)}${transfer.transferred} 획득`)
+            } else {
+              const transfer = transferResourceBetweenPlayers(p, players[ti], resource, amount)
+              p = clampPlayerResources(transfer.fromPlayer)
+              players[ti] = clampPlayerResources(transfer.toPlayer)
+              rewardLogs.push(`⚖️ 대결 패배: ${p.name} 🎲[${attackerRolls.join('+')}] ${attackerTotal} <= ${players[ti].name} 🎲[${defenderRolls.join('+')}] ${defenderTotal}, ${getResourceIcon(resource)}${transfer.transferred} 상실`)
+            }
+            success = true
+          }
+          break
+        }
         default:
           break
       }
 
       if (success && event.reward && !skipReward) {
-        const applied = applyRewardToPlayer(p, event.reward, survivorDeck)
+        const applied = applyRewardToPlayer(p, event.reward, survivorDeck, treasureDeck)
         p = applied.player
         survivorDeck = applied.survivorDeck
+        treasureDeck = applied.treasureDeck
         rewardLogs = applied.logs
+        actionEffects.push(...(applied.actionEffects ?? []))
       }
       p = clampPlayerResources(p)
-      if (success || !event.penalizeOnFail) {
-        p.eventDiscard = [...p.eventDiscard, event]
-        if (success && event.category === 'clue') {
+      let explorationState = s.explorationState
+      if (success) {
+        if (shouldClaimResolvedEvent(event)) {
+          p.eventDiscard = [...p.eventDiscard, event]
+        } else {
+          explorationState = returnResolvedEventToTierDeck(explorationState, event)
+        }
+        if (event.category === 'clue') {
           p = applyClueClaimProgress(p, event)
           if ((event.tier ?? 0) === 3 && !utopiaState.revealed) {
             utopiaState = {
@@ -2246,7 +3218,7 @@ export const useGameStore = create((set, get) => ({
           }
         }
       } else {
-        p.abandonedEvents = [...p.abandonedEvents, event]
+        explorationState = discardExplorationEvent(explorationState, event)
       }
       p.score = calcPlayerScore(p)
       players[currentPlayerIndex] = p
@@ -2262,10 +3234,11 @@ export const useGameStore = create((set, get) => ({
         revealedSlots,
         interaction: null,
         survivorDeck,
+        treasureDeck,
         searchState: { ...s.searchState, decksByTier: buildSearchDecksByTierFromCards(survivorDeck) },
         departedSurvivors,
         utopiaState,
-        explorationState: syncExplorationStateWithEventSlots(s.explorationState, eventSlots),
+        explorationState: syncExplorationStateWithEventSlots(explorationState, eventSlots),
       }
     })
 
@@ -2354,35 +3327,128 @@ export const useGameStore = create((set, get) => ({
     get()._triggerFirstSlotIfGlobal()
   },
 
-  // ── 자원 교환 ─────────────────────────────────
-  exchangeCapToCan() {
-    set((s) => {
-      if (s.phase !== 'party_maintenance' || s.interaction) return {}
-      const idx = s.currentPlayerIndex
-      const p = { ...s.players[idx], resources: { ...s.players[idx].resources } }
-      if (p.resources.bottleCap < 1) return {}
-      p.resources.bottleCap -= 1
-      p.resources.can += RULES.capToCanRate
-      const players = [...s.players]
-      players[idx] = clampPlayerResources(p)
-      return { players }
-    })
-    get().addLog(`🪙→🥫 병뚜껑 1 → 통조림 ${RULES.capToCanRate}`)
+  startTreasureCardEffect(cardUid) {
+    const { players, currentPlayerIndex, phase, interaction } = get()
+    if (phase !== 'action' || interaction) return
+    const player = players[currentPlayerIndex]
+    const card = (player.treasureCards ?? []).find((c) => c.uid === cardUid)
+    if (!card || card.used || !card.effectId) return
+    set({ pendingTreasureUse: { cardUid, playerIndex: currentPlayerIndex } })
   },
 
-  exchangeCanToCap() {
+  cancelTreasureCardEffect() {
+    set({ pendingTreasureUse: null })
+  },
+
+  confirmTreasureCardUse() {
+    const pending = get().pendingTreasureUse
+    if (!pending) return
+    set({ pendingTreasureUse: null })
+    get()._executeTreasureCardEffect(pending.cardUid)
+  },
+
+  _executeTreasureCardEffect(cardUid) {
+    const { players, currentPlayerIndex, phase, interaction } = get()
+    if (phase !== 'action' || interaction) return
+    const player = players[currentPlayerIndex]
+    const card = (player.treasureCards ?? []).find((c) => c.uid === cardUid)
+    if (!card || card.used) return
+    if (card.kind === 'reaction') return
+
+    if (card.effectId === 'stim_pack') {
+      const hasResting = getActivePartyMembers(player).length < player.party.length
+      if (!hasResting) {
+        get().addLog(`${player.name} — 비상약: 비활성 생존자가 없습니다.`)
+        return
+      }
+      set({ interaction: { kind: 'use_stim_pack', cardUid } })
+      get().addLog(`${player.name} — 비상약 사용: 활성화할 생존자를 선택하세요.`)
+      return
+    }
+
+    if (card.effectId === 'survival_backpack') {
+      set((s) => {
+        const players = [...s.players]
+        let current = {
+          ...players[s.currentPlayerIndex],
+          resources: { ...players[s.currentPlayerIndex].resources },
+          treasureCards: [...(players[s.currentPlayerIndex].treasureCards ?? [])],
+        }
+        current.resources.can = (current.resources.can ?? 0) + 4
+        current.resources.bottleCap = (current.resources.bottleCap ?? 0) + 2
+        current.treasureCards = current.treasureCards.map((c) =>
+          c.uid === cardUid ? { ...c, used: true, revealed: true } : c
+        )
+        current = clampPlayerResources(current)
+        players[s.currentPlayerIndex] = current
+        return { players }
+      })
+      get().addLog(`${player.name} — 생존배낭 사용: 🥫+4 🪙+2`)
+      get().pushActionEffect(createActionEffect({ type: 'resource_gain', title: '생존배낭', icon: '🎒', targetName: player.name, detail: '🥫+4 🪙+2' }))
+      return
+    }
+
+    if (['auto_solve_event', 'survivor_substitute', 'attack_shield'].includes(card.effectId)) {
+      set((s) => {
+        const players = [...s.players]
+        const current = {
+          ...players[s.currentPlayerIndex],
+          treasureCards: [...(players[s.currentPlayerIndex].treasureCards ?? [])].map((c) =>
+            c.uid === cardUid ? { ...c, revealed: true } : c
+          ),
+        }
+        players[s.currentPlayerIndex] = current
+        return { players }
+      })
+      get().addLog(`${player.name} — ${card.name} 공개: ${card.description}`)
+      get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: card.name, icon: '💎', targetName: player.name, detail: card.description }))
+      return
+    }
+
+    if (card.effectId === 'military_cache') {
+      set((s) => {
+        const players = [...s.players]
+        let current = {
+          ...players[s.currentPlayerIndex],
+          resources: { ...players[s.currentPlayerIndex].resources },
+          treasureCards: [...(players[s.currentPlayerIndex].treasureCards ?? [])],
+        }
+        current.resources.can = (current.resources.can ?? 0) + 5
+        current.resources.bottleCap = (current.resources.bottleCap ?? 0) + 3
+        current.treasureCards = current.treasureCards.map((c) =>
+          c.uid === cardUid ? { ...c, used: true, revealed: true } : c
+        )
+        current = clampPlayerResources(current)
+        players[s.currentPlayerIndex] = current
+        return { players }
+      })
+      get().addLog(`${player.name} — 전쟁의 유산 사용: 🥫+5 🪙+3`)
+    }
+  },
+
+  confirmTreasureCardEffect(survivorUid) {
+    const { players, currentPlayerIndex, interaction } = get()
+    if (interaction?.kind !== 'use_stim_pack') return
+    const { cardUid } = interaction
+    const player = players[currentPlayerIndex]
+    const survivor = player.party.find((s) => s.uid === survivorUid)
+    if (!survivor || isSurvivorActive(player, survivor)) return
+
     set((s) => {
-      if (s.phase !== 'party_maintenance' || s.interaction) return {}
-      const idx = s.currentPlayerIndex
-      const p = { ...s.players[idx], resources: { ...s.players[idx].resources } }
-      if (p.resources.can < RULES.canToCapRate) return {}
-      p.resources.can -= RULES.canToCapRate
-      p.resources.bottleCap += 1
       const players = [...s.players]
-      players[idx] = clampPlayerResources(p)
-      return { players }
+      let current = {
+        ...players[s.currentPlayerIndex],
+        treasureCards: [...(players[s.currentPlayerIndex].treasureCards ?? [])],
+        survivorActivity: { ...(players[s.currentPlayerIndex].survivorActivity ?? {}) },
+      }
+      current = setSurvivorActiveState(current, survivorUid, true)
+      current.treasureCards = current.treasureCards.map((c) =>
+        c.uid === cardUid ? { ...c, used: true, revealed: true } : c
+      )
+      players[s.currentPlayerIndex] = current
+      return { players, interaction: null }
     })
-    get().addLog(`🥫→🪙 통조림 ${RULES.canToCapRate} → 병뚜껑 1`)
+    get().addLog(`${player.name} — 비상약: ${survivor.emoji} ${survivor.name} 즉시 활성화`)
   },
 
   reactivateSurvivor(uid) {
@@ -2415,10 +3481,12 @@ export const useGameStore = create((set, get) => ({
     const costText = []
     if (cost.can > 0) costText.push(`🥫-${cost.can}`)
     if (cost.bottleCap > 0) costText.push(`🪙-${cost.bottleCap}`)
-    get().addLog(`${player.name} — ${survivor.emoji} ${survivor.name} 재활성화${costText.length ? ` (${costText.join(' ')})` : ''}`)
+    get().addLog(`${player.name} — ${survivor.emoji} ${survivor.name} 식사 제공${costText.length ? ` (${costText.join(' ')})` : ''}`)
   },
 
   _assignActiveSurvivorsForAction(playerIndex, count, reasonLabel, selectedUids = null) {
+    if (count <= 0) return true
+
     const { players } = get()
     const player = players[playerIndex]
     const activeSurvivors = getActivePartyMembers(player)
@@ -2442,6 +3510,22 @@ export const useGameStore = create((set, get) => ({
     })
 
     get().addLog(`${player.name} — ${reasonLabel}: ${assigned.map((sv) => `${sv.emoji} ${sv.name}`).join(', ')} 파견 (비활성화)`)
+
+    // 오리교도(s_weird_1): 덕 리더 + 1번 슬롯(index 0) → 활성화(파견)시 통조림 +1
+    if (player.leaderId === 'duck') {
+      const duckIdx = player.party.findIndex((sv) => sv.id === 's_weird_1')
+      if (duckIdx === 0 && assigned.some((sv) => sv.id === 's_weird_1')) {
+        set((s) => {
+          const players = [...s.players]
+          const p = { ...players[playerIndex], resources: { ...players[playerIndex].resources } }
+          p.resources.can = (p.resources.can ?? 0) + 1
+          players[playerIndex] = clampPlayerResources(p)
+          return { players }
+        })
+        get().addLog(`${player.name} — 🦆 오리교도 생존자 파견: 통조림 +1`)
+      }
+    }
+
     return true
   },
 
@@ -2458,28 +3542,77 @@ export const useGameStore = create((set, get) => ({
       set({ interaction: null })
       return
     }
-
+    if (!hasRequiredPartyTypesInSelection(player, event, selectedUids)) {
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 도전 불가 (${getRequiredPartyTypesLabel(event)} 생존자 파견 필요)`)
+      set({ interaction: null })
+      return
+    }
     const assignedCount = selectedSurvivors.length
-    if (!get()._assignActiveSurvivorsForAction(currentPlayerIndex, assignedCount, `${event.name} 도전`, selectedUids)) return
-
     const resolution = event.resolution
-    const diceCount = Math.min(assignedCount, 5)
+    const diceCount = isRollDiceType(resolution.type)
+      ? Math.min(assignedCount > 0 ? assignedCount : (resolution.diceCount ?? 1), 6)
+      : assignedCount
+
+    if (resolution.diceGate) {
+      const rolls = Array.from({ length: diceCount }, () => Math.ceil(Math.random() * 6))
+      const total = rolls.reduce((sum, r) => sum + r, 0)
+      const bonus = getRecommendedPartyBonusBreakdownForAssignment(event, selectedSurvivors, player).total
+      const totalWithBonus = total + bonus
+      if (totalWithBonus < resolution.diceGate.target) {
+        set((s) => {
+          const players = [...s.players]
+          let p = { ...players[currentPlayerIndex], resources: { ...players[currentPlayerIndex].resources } }
+          if (event.failPenalty) p = applyPenaltyToPlayer(p, event.failPenalty, s.survivorDeck)
+          players[currentPlayerIndex] = p
+          return { players, interaction: null }
+        })
+        get().addLog(`${player.name} — ${event.emoji} ${event.name} 실패 🎲[${rolls.join('+')}]=${totalWithBonus} (목표 ${resolution.diceGate.target})`)
+        return
+      }
+      get().addLog(`${player.name} — ${event.emoji} ${event.name} 성공 🎲[${rolls.join('+')}]=${totalWithBonus}`)
+    }
+
+    if (!get()._assignActiveSurvivorsForAction(currentPlayerIndex, assignedCount, `${event.name} 도전`, selectedUids)) return
     const assignedEvent = isRollDiceType(resolution.type)
       ? { ...event, assignedSurvivorUids: selectedUids, resolution: { ...resolution, diceCount } }
       : { ...event, assignedSurvivorUids: selectedUids }
 
+    if (canResolveWithKeyOnly(player, event)) {
+      get()._resolveKeyUnlockEvent(slotIndex, assignedEvent, player)
+      return
+    }
+
     if (isRollDiceType(resolution.type)) {
-      const recommendedBonus = getRecommendedPartyBonusForAssignment(event, selectedSurvivors, player)
+      const bonusBreakdown = getRecommendedPartyBonusBreakdownForAssignment(event, selectedSurvivors, player)
+      const recommendedBonus = bonusBreakdown.total
       const isScoreBonus = resolution.type === 'roll_dice_score_bonus'
       const partyScore = isScoreBonus
         ? calcPartyScore(player.party, player.leaderId ?? '').total
         : recommendedBonus
-      const bonusLabel = isScoreBonus ? '파티점수' : '추천'
-      set({ diceRollModal: { slotIndex, event: assignedEvent, partyScore, recommendedBonus, bonusLabel, playerIndex: currentPlayerIndex }, interaction: null })
+      const bonusLabel = isScoreBonus ? '파티점수' : '타입점수'
+      set({ diceRollModal: { slotIndex, event: assignedEvent, partyScore, recommendedBonus, typeScoreBonus: bonusBreakdown.typeScore, placementBonus: bonusBreakdown.placementBonus, bonusLabel, playerIndex: currentPlayerIndex }, interaction: null })
       return
     }
 
-    const autoTypes = ['pay_can', 'pay_cap', 'check_survivor_type', 'check_survivors_n', 'remove_random', 'global_effect']
+    if (resolution.type === 'support_roll_dice' || resolution.type === 'resource_duel' || resolution.type === 'shared_dispatch_reward') {
+      set({
+        interaction: {
+          slotIndex,
+          event: assignedEvent,
+          step: 'select_target_player',
+          payload: {
+            selectedMyUids: [],
+            targetPlayerIndex: null,
+            targetSurvivorUid: null,
+            swapA: null,
+            swapB: null,
+          },
+        },
+      })
+      return
+    }
+
+    const autoTypes = ['complete', 'pay_can', 'pay_cap', 'resource_delta', 'survivor_delta', 'survivor_type_delta', 'deactivate_survivor', 'deactivate_survivor_type', 'check_survivor_type', 'check_survivors_n', 'remove_random', 'global_effect', 'rich_cap_raid', 'steal_can_from_all_others', 'steal_cap_from_all_others', 'deactivate_type_all_others']
     if (autoTypes.includes(resolution.type)) {
       get()._resolveAuto(slotIndex, assignedEvent, player)
       return
@@ -2505,7 +3638,7 @@ export const useGameStore = create((set, get) => ({
   _finalizeSearchAssignment() {},
 
   // ── 생존자 영입 ───────────────────────────────
-  recruitSurvivor(survivorUid) {
+  recruitSurvivor(survivorUid, paymentResource = null) {
     const { players, currentPlayerIndex, mercenaryPool, survivorDeck, revealedUids, interaction } = get()
     const player = players[currentPlayerIndex]
     if (get().phase !== 'party_maintenance' || interaction) return
@@ -2522,10 +3655,12 @@ export const useGameStore = create((set, get) => ({
       get().addLog(`${player.name} — ${survivor.emoji} ${survivor.name} 영입 불가 (양아치 햄스터 제약)`)
       return
     }
-    const baseCost = survivor.recruitCost ?? 0
-    const moodGirlDiscount = player.party.some((sv) => sv.id === 's_mood_1') ? 1 : 0
-    const cost = Math.max(0, baseCost - moodGirlDiscount)
-    if (player.resources.bottleCap < cost) return
+    const { resource: recruitResource, amount: cost } = getRecruitCostInfoForPlayer(player, survivor, paymentResource)
+    if ((player.resources?.[recruitResource] ?? 0) < cost) return
+    if (!canAddSurvivorToParty(player.party, survivor)) {
+      get().addLog(`${player.name} — ${survivor.emoji} ${survivor.name} 합류 불가 (파티 조건 미충족)`)
+      return
+    }
 
     const newPool = [...mercenaryPool]
     newPool[slotIndex] = null
@@ -2533,7 +3668,8 @@ export const useGameStore = create((set, get) => ({
     set((s) => {
       const players = [...s.players]
       const p = { ...players[currentPlayerIndex] }
-      p.resources = { ...p.resources, bottleCap: p.resources.bottleCap - cost }
+      p.resources = { ...p.resources }
+      p.resources[recruitResource] = (p.resources[recruitResource] ?? 0) - cost
       const applied = addSurvivorToParty(p.party, survivor, p.maxPartySize)
       if (!applied.added) return {}
       p.party = applied.party
@@ -2560,7 +3696,8 @@ export const useGameStore = create((set, get) => ({
         searchState: nextSearchState,
       }
     })
-    get().addLog(`${player.name} → ${survivor.emoji} ${survivor.name} 영입 (🪙-${cost})`)
+    const icon = recruitResource === 'can' ? '🥫' : '🪙'
+    get().addLog(`${player.name} → ${survivor.emoji} ${survivor.name} 영입 (${icon}-${cost})`)
     get()._applyOnRecruitTriggers(survivor)
     if (get().players[get().currentPlayerIndex]?.isBot && get().interaction) {
       let guard = 0
@@ -2571,6 +3708,94 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  reserveIdolFan(survivorUid) {
+    const { players, currentPlayerIndex, mercenaryPool, interaction } = get()
+    const player = players[currentPlayerIndex]
+    if (get().phase !== 'party_maintenance' || interaction || !player || player.leaderId !== 'idol') return
+    if ((player.leaderFans?.length ?? 0) >= 3) {
+      get().addLog(`${player.name} — 예비 팬클럽은 최대 3명까지 보유할 수 있습니다.`)
+      return
+    }
+
+    const slotIndex = mercenaryPool.findIndex((survivor) => survivor?.uid === survivorUid)
+    const survivor = slotIndex >= 0 ? mercenaryPool[slotIndex] : null
+    if (!survivor) return
+    const tier = getTierForSearchSlotIndex(slotIndex)
+    if (!canAccessExplorationTier(player, tier)) return
+
+    const newPool = [...mercenaryPool]
+    newPool[slotIndex] = null
+
+    set((s) => {
+      const players = [...s.players]
+      const p = {
+        ...players[s.currentPlayerIndex],
+        leaderFans: [...(players[s.currentPlayerIndex].leaderFans ?? [])],
+      }
+      if (p.leaderFans.length >= 3) return {}
+      p.leaderFans.push({ ...survivor, leaderFan: true, reservedFanclub: true })
+      p.score = calcPlayerScore(p)
+      players[s.currentPlayerIndex] = p
+
+      const decksByTier = {
+        1: [...(s.searchState.decksByTier?.[1] ?? [])],
+        2: [...(s.searchState.decksByTier?.[2] ?? [])],
+        3: [...(s.searchState.decksByTier?.[3] ?? [])],
+      }
+      const replacement = decksByTier[tier].shift() ?? null
+      newPool[slotIndex] = replacement
+      const nextSearchState = syncSearchStateWithMercenaryPool({ ...s.searchState, decksByTier }, newPool)
+      return {
+        players,
+        mercenaryPool: newPool,
+        survivorDeck: flattenSearchDecksByTier(decksByTier),
+        revealedUids: [
+          ...s.revealedUids.filter((uid) => uid !== survivorUid),
+          ...(replacement ? [replacement.uid] : []),
+        ],
+        searchState: nextSearchState,
+      }
+    })
+
+    get().addLog(`${player.name} → ${survivor.emoji} ${survivor.name} 예비 팬클럽 킵 (최대 3명)`)
+  },
+
+  activateIdolFan(fanUid) {
+    const { players, currentPlayerIndex, phase, interaction } = get()
+    const player = players[currentPlayerIndex]
+    if (phase !== 'party_maintenance' || interaction || !player || player.leaderId !== 'idol') return
+    const fan = (player.leaderFans ?? []).find((entry) => entry.uid === fanUid)
+    if (!fan) return
+    const cost = Math.max(0, fan.recruitCost ?? 0)
+    if ((player.resources?.bottleCap ?? 0) < cost) return
+    if (getPartySlotCount(player.party) >= player.maxPartySize && !canStackOnExistingSlot(player.party, fan)) return
+    if (!canRecruitSurvivor(player, fan) || !canAddSurvivorToParty(player.party, fan)) return
+
+    set((s) => {
+      const players = [...s.players]
+      const current = {
+        ...players[s.currentPlayerIndex],
+        resources: { ...players[s.currentPlayerIndex].resources },
+        party: [...players[s.currentPlayerIndex].party],
+        leaderFans: [...(players[s.currentPlayerIndex].leaderFans ?? [])],
+      }
+      const storedFan = current.leaderFans.find((entry) => entry.uid === fanUid)
+      if (!storedFan) return {}
+      const applied = addSurvivorToParty(current.party, storedFan, current.maxPartySize)
+      if (!applied.added) return {}
+      current.resources.bottleCap -= cost
+      current.leaderFans = current.leaderFans.filter((entry) => entry.uid !== fanUid)
+      current.party = applied.party
+      const withInactiveRecruit = setSurvivorActiveState(current, storedFan, false)
+      current.survivorActivity = withInactiveRecruit.survivorActivity
+      current.score = calcPlayerScore(current)
+      players[s.currentPlayerIndex] = clampPlayerResources(current)
+      return { players }
+    })
+
+    get().addLog(`${player.name} → ${fan.emoji} ${fan.name} 예비 팬클럽 활성화 (🪙-${cost})`)
+  },
+
   recruitReturnedSurvivor() {
     const { players, currentPlayerIndex, returnedMercenary, interaction } = get()
     const player = players[currentPlayerIndex]
@@ -2578,6 +3803,7 @@ export const useGameStore = create((set, get) => ({
     if (returnedMercenary.availableToPlayerIndex !== currentPlayerIndex) return
     if (!canRecruitSurvivor(player, returnedMercenary.survivor)) return
     if (getPartySlotCount(player.party) >= player.maxPartySize && !canStackOnExistingSlot(player.party, returnedMercenary.survivor)) return
+    if (!canAddSurvivorToParty(player.party, returnedMercenary.survivor)) return
 
     set((s) => {
       const players = [...s.players]
@@ -2606,14 +3832,19 @@ export const useGameStore = create((set, get) => ({
   returnPartySurvivorToMercenary(uid) {
     const { players, currentPlayerIndex, returnedMercenary, phase, interaction } = get()
     const player = players[currentPlayerIndex]
-    if (phase !== 'party_maintenance' || interaction || returnedMercenary) return
-    if (player.turnFlags?.returnedSurvivorUsed) return
+    if (phase !== 'party_maintenance' || interaction) return
     const survivor = player.party.find((entry) => entry.uid === uid)
     if (!survivor) return
     const nextPlayerIndex = (currentPlayerIndex + 1) % players.length
 
     set((s) => {
       const players = [...s.players]
+      let searchState = { ...s.searchState }
+      let survivorDeck = s.survivorDeck
+      if (s.returnedMercenary?.survivor) {
+        searchState = returnSurvivorToSearchDeck(searchState, s.returnedMercenary.survivor)
+        survivorDeck = flattenSearchDecksByTier(searchState.decksByTier)
+      }
       const p = {
         ...players[s.currentPlayerIndex],
         party: [...players[s.currentPlayerIndex].party],
@@ -2622,12 +3853,13 @@ export const useGameStore = create((set, get) => ({
       }
       p.party = p.party.filter((entry) => entry.uid !== uid)
       p.survivorActivity = pruneSurvivorActivity(p).survivorActivity
-      p.turnFlags.returnedSurvivorUsed = true
       p.resources = { ...p.resources, can: (p.resources.can ?? 0) + 1 }
       p.score = calcPlayerScore(p)
       players[s.currentPlayerIndex] = clampPlayerResources(p)
       return {
         players,
+        survivorDeck,
+        searchState,
         returnedMercenary: {
           survivor,
           tier: getSurvivorSearchTier(survivor),
@@ -2637,6 +3869,9 @@ export const useGameStore = create((set, get) => ({
       }
     })
 
+    if (returnedMercenary) {
+      get().addLog(`🚶 이전 떠난 생존자 제안 만료: ${returnedMercenary.survivor.emoji} ${returnedMercenary.survivor.name} → 수색 덱 복귀`)
+    }
     get().addLog(`${player.name} — ${survivor.emoji} ${survivor.name} 떠나보냄 (+🥫1 / ${players[nextPlayerIndex].name} 무료 영입 가능)`)
   },
 
@@ -2644,8 +3879,9 @@ export const useGameStore = create((set, get) => ({
     const { players, currentPlayerIndex, mercenaryPool, revealedUids, interaction } = get()
     const player = players[currentPlayerIndex]
     if (get().phase !== 'party_maintenance' || interaction) return
-    if (player.resources.can < RULES.mercenaryDiscardCanCost) return
-    const index = mercenaryPool.findIndex((s) => s.uid === uid)
+    const discardCost = getSearchDiscardCostForPlayer(player)
+    if (player.resources.can < discardCost) return
+    const index = mercenaryPool.findIndex((s) => s?.uid === uid)
     if (index < 0 || !revealedUids.includes(uid)) return
     const tier = getTierForSearchSlotIndex(index)
     if (!canAccessExplorationTier(player, tier)) return
@@ -2653,7 +3889,7 @@ export const useGameStore = create((set, get) => ({
     set((s) => {
       const players = [...s.players]
       const p = { ...players[s.currentPlayerIndex], resources: { ...players[s.currentPlayerIndex].resources } }
-      p.resources.can -= RULES.mercenaryDiscardCanCost
+      p.resources.can -= discardCost
       players[s.currentPlayerIndex] = clampPlayerResources(p)
 
       const decksByTier = {
@@ -2663,9 +3899,8 @@ export const useGameStore = create((set, get) => ({
       }
       const discardedCard = s.mercenaryPool[index]
       if (discardedCard) decksByTier[tier] = shuffle([...decksByTier[tier], discardedCard])
-      const replacement = decksByTier[tier].shift() ?? null
       const newPool = [...s.mercenaryPool]
-      newPool[index] = replacement
+      newPool[index] = null
       const nextSearchState = syncSearchStateWithMercenaryPool(
         {
           ...s.searchState,
@@ -2678,21 +3913,14 @@ export const useGameStore = create((set, get) => ({
         players,
         mercenaryPool: newPool,
         survivorDeck: flattenSearchDecksByTier(nextSearchState.decksByTier),
-        revealedUids: [
-          ...s.revealedUids.filter((revealedUid) => revealedUid !== uid),
-          ...(replacement ? [replacement.uid] : []),
-        ],
+        revealedUids: s.revealedUids.filter((revealedUid) => revealedUid !== uid),
         searchState: nextSearchState,
       }
     })
 
     const discarded = mercenaryPool[index]
     const replacement = get().mercenaryPool[index]
-    if (replacement) {
-      get().addLog(`${player.name} — ${discarded.emoji} ${discarded.name} 덱으로 반환 후 교체 (🥫-${RULES.mercenaryDiscardCanCost})`)
-    } else {
-      get().addLog(`${player.name} — ${discarded.emoji} ${discarded.name} 덱으로 반환, 새 카드 없음 (🥫-${RULES.mercenaryDiscardCanCost})`)
-    }
+    get().addLog(`${player.name} — ${discarded.emoji} ${discarded.name} 덱으로 반환 (🥫-${discardCost}${discardCost < RULES.mercenaryDiscardCanCost ? ' 분위기메이커 -1 적용' : ''})`)
   },
 
   // ── 파티 순서 변경 ────────────────────────────
@@ -2740,8 +3968,8 @@ export const useGameStore = create((set, get) => ({
       currentPlayerRef.turnFlags = {
         ...(currentPlayerRef.turnFlags ?? {}),
         doctorShieldUsed: false,
-        returnedSurvivorUsed: false,
         wizardSpellUsed: false,
+        leaderTurnEndSkillResolved: false,
       }
       const startCan = currentPlayerRef.resources.can
       const startCap = currentPlayerRef.resources.bottleCap
@@ -2750,6 +3978,11 @@ export const useGameStore = create((set, get) => ({
         const turnStartResources = getTurnStartResourcesForSurvivor(survivor, survivorIndex)
         currentPlayerRef.resources.can += turnStartResources.can
         currentPlayerRef.resources.bottleCap = Math.max(0, currentPlayerRef.resources.bottleCap + turnStartResources.bottleCap)
+
+        // 고양이(s_coward_1): 샤이 리더 + 5번 슬롯(index 4) → 턴 시작 통조림 +1
+        if (survivor.id === 's_coward_1' && survivorIndex === 4 && currentPlayerRef.leaderId === 'shy') {
+          currentPlayerRef.resources.can += 1
+        }
       })
 
       const clampedCurrentPlayer = clampPlayerResources(currentPlayerRef)
@@ -2895,138 +4128,123 @@ export const useGameStore = create((set, get) => ({
     const { currentPlayerIndex } = state
     const player = state.players[currentPlayerIndex]
     if (!player) return
+    if (player.turnFlags?.leaderTurnEndSkillResolved) return
 
-    if (player.leaderId === 'idol') {
-      const roll = rollD6()
-      let detail = '팬 변화 없음'
+    if (player.leaderId === 'zombie') {
       set((s) => {
         const players = [...s.players]
         const current = {
           ...players[s.currentPlayerIndex],
-          leaderFans: [...(players[s.currentPlayerIndex].leaderFans ?? [])],
+          turnFlags: {
+            ...(players[s.currentPlayerIndex]?.turnFlags ?? {}),
+            leaderTurnEndSkillResolved: true,
+          },
         }
-        const decksByTier = {
-          1: [...(s.searchState.decksByTier?.[1] ?? [])],
-          2: [...(s.searchState.decksByTier?.[2] ?? [])],
-          3: [...(s.searchState.decksByTier?.[3] ?? [])],
-        }
-
-        if (roll >= 4) {
-          const fan = decksByTier[1].shift() ?? null
-          if (fan) {
-            current.leaderFans.push({ ...fan, leaderFan: true })
-            detail = `${fan.emoji} ${fan.name} 팬 획득`
-          } else {
-            detail = '1단계 생존자 덱이 비어 팬을 얻지 못함'
-          }
-        } else if (current.leaderFans.length > 0) {
-          const fan = current.leaderFans.pop()
-          const tier = fan.searchTier ?? fan.tier ?? 1
-          decksByTier[tier] = shuffle([...decksByTier[tier], { ...fan, leaderFan: undefined }])
-          detail = `${fan.emoji} ${fan.name} 팬 이탈`
-        }
-
-        current.score = calcPlayerScore(current)
         players[s.currentPlayerIndex] = current
-        return {
-          players,
-          survivorDeck: flattenSearchDecksByTier(decksByTier),
-          searchState: { ...s.searchState, decksByTier },
-        }
+        return { players }
       })
-      get().addLog(`🎤 콘서트: 🎲${roll} → ${detail}`)
-      get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: '콘서트', icon: '🎤', targetName: player.name, detail: `🎲${roll} · ${detail}` }))
-      return
-    }
-
-    if (player.leaderId === 'shy') {
-      const roll = rollD6()
-      if (roll >= 3) {
-        set((s) => {
-          const players = [...s.players]
-          const current = { ...players[s.currentPlayerIndex], resources: { ...players[s.currentPlayerIndex].resources } }
-          current.resources.can += 3
-          players[s.currentPlayerIndex] = clampPlayerResources(current)
-          return { players }
-        })
-      }
-      const detail = roll >= 3 ? '통조림 +3' : '아무 일도 없음'
-      get().addLog(`😶 울기: 🎲${roll} → ${detail}`)
-      get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: '울기', icon: '😶', targetName: player.name, detail: `🎲${roll} · ${detail}` }))
-      return
-    }
-
-    if (player.leaderId === 'zombie') {
-      const roll = rollD6()
-      let detail = '아무 일도 없음'
-      if (roll >= 5) {
-        if (player.isBot) {
-          detail = get()._applyLeaderStealOrLoss({
-            leaderId: 'zombie',
-            shouldSteal: true,
-            shouldLoseOwn: false,
-            cost: null,
-            icon: '🧟',
-            title: '자신감있는 좀비행동',
-          }) || '흡수할 대상 없음'
-        } else if (findBestLeaderStealTarget(state.players, currentPlayerIndex)) {
-          detail = '흡수할 생존자 선택 필요'
-          get()._startLeaderStealSelection({
-            kind: 'leader_skill_zombie_steal',
-            title: '자신감있는 좀비행동',
-            icon: '🧟',
-            roll,
-            cost: null,
-          })
-        } else {
-          detail = '흡수할 대상 없음'
-        }
-      } else if (roll <= 2) {
-        detail = get()._applyLeaderStealOrLoss({
-          leaderId: 'zombie',
-          shouldSteal: false,
-          shouldLoseOwn: true,
-          cost: null,
-          icon: '🧟',
-          title: '자신감있는 좀비행동',
-        }) || '이탈할 생존자 없음'
-      }
-      get().addLog(`🧟 자신감있는 좀비행동: 🎲${roll} → ${detail}`)
-      get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: '자신감있는 좀비행동', icon: '🧟', targetName: player.name, detail: `🎲${roll} · ${detail}` }))
-      return
-    }
-
-    if (player.leaderId === 'duck') {
-      const canUseDuckMiracle = canAffordCost(player.resources, { bottleCap: 6 }) && findBestLeaderStealTarget(state.players, currentPlayerIndex)
-      if (canUseDuckMiracle) {
-        if (player.isBot) {
-          const result = get()._applyLeaderStealOrLoss({
-            leaderId: 'duck',
-            shouldSteal: true,
-            shouldLoseOwn: false,
-            cost: { bottleCap: 6 },
-            icon: '🦆',
-            title: '오리의 기적',
-          })
-          if (result) {
-            get().addLog(`🦆 오리의 기적 → ${result}`)
-            get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: '오리의 기적', icon: '🦆', targetName: player.name, detail: result }))
-          }
-        } else {
-          get()._startLeaderStealSelection({
-            kind: 'leader_skill_duck_absorb',
-            title: '오리의 기적',
-            icon: '🦆',
-            roll: null,
-            cost: { bottleCap: 6 },
-          })
-          get().addLog(`🦆 오리의 기적: 흡수할 생존자를 선택하세요. 취소하면 사용하지 않습니다.`)
-        }
-      }
+      set({
+        interaction: {
+          kind: 'leader_skill_zombie_confirm',
+          step: 'confirm',
+          event: {
+            name: '자신감있는 좀비행동',
+            emoji: '🧟',
+            category: 'leader_skill',
+            resolution: { type: 'leader_dice' },
+          },
+          payload: {},
+        },
+      })
+      if (!player.isBot) get().addLog(`🧟 자신감있는 좀비행동: 사용할지 선택하세요.`)
     }
   },
 
-  _startLeaderStealSelection({ kind, title, icon, roll = null, cost = null }) {
+  useZombieLeaderSkill() {
+    const state = get()
+    const { interaction, players, currentPlayerIndex } = state
+    const player = players[currentPlayerIndex]
+    if (!player || player.leaderId !== 'zombie' || interaction?.kind !== 'leader_skill_zombie_confirm') return
+
+    set((s) => {
+      const players = [...s.players]
+      const current = {
+        ...players[s.currentPlayerIndex],
+        turnFlags: {
+          ...(players[s.currentPlayerIndex]?.turnFlags ?? {}),
+          leaderTurnEndSkillResolved: true,
+        },
+      }
+      players[s.currentPlayerIndex] = current
+      return { players }
+    })
+
+    const roll = rollD6()
+    let detail = '아무 일도 없음'
+    let shouldResume = true
+
+    if (roll === 6) {
+      if (player.isBot) {
+        detail = get()._applyLeaderStealOrLoss({
+          leaderId: 'zombie',
+          shouldSteal: true,
+          shouldLoseOwn: false,
+          cost: null,
+          icon: '🧟',
+          title: '자신감있는 좀비행동',
+          requiredType: '용감이',
+        }) || '흡수할 용감이 없음'
+        set({ interaction: null })
+      } else if (findBestLeaderStealTarget(state.players, currentPlayerIndex, '용감이')) {
+        detail = '흡수할 용감이 선택 필요'
+        shouldResume = false
+        get()._startLeaderStealSelection({
+          kind: 'leader_skill_zombie_steal',
+          title: '자신감있는 좀비행동',
+          icon: '🧟',
+          roll,
+          cost: null,
+          requiredType: '용감이',
+        })
+      } else {
+        detail = '흡수할 용감이 없음'
+        set({ interaction: null })
+      }
+    } else if (roll === 1) {
+      detail = get()._applyLeaderStealOrLoss({
+        leaderId: 'zombie',
+        shouldSteal: false,
+        shouldLoseOwn: true,
+        cost: null,
+        icon: '🧟',
+        title: '자신감있는 좀비행동',
+        requiredType: '용감이',
+      }) || '이탈할 용감이 없음'
+      set({ interaction: null })
+    } else {
+      set({ interaction: null })
+    }
+
+    set((s) => ({
+      survivorDiceQueue: [
+        ...s.survivorDiceQueue,
+        {
+          icon: '🧟',
+          name: '자신감있는 좀비행동',
+          rolls: [roll],
+          successOn: null,
+          success: roll !== 1,
+          outcomeLabel: roll === 6 ? '상대 용감이 흡수 가능' : roll === 1 ? '내 용감이 1인 제거' : '아무 일도 없음',
+          detail: '🎲6: 상대 용감이 흡수 / 🎲1: 내 용감이 제거',
+        },
+      ],
+    }))
+    get().addLog(`🧟 자신감있는 좀비행동: 🎲${roll} → ${detail}`)
+    get().pushActionEffect(createActionEffect({ type: 'leader_skill', title: '자신감있는 좀비행동', icon: '🧟', targetName: player.name, detail: `🎲${roll} · ${detail}` }))
+    if (shouldResume && get().pendingTurnEndShortage !== null) get()._resumeEndTurnFlow()
+  },
+
+  _startLeaderStealSelection({ kind, title, icon, roll = null, cost = null, requiredType = null }) {
     set({
       interaction: {
         kind,
@@ -3044,6 +4262,7 @@ export const useGameStore = create((set, get) => ({
           cost,
           title,
           icon,
+          requiredType,
         },
       },
     })
@@ -3053,7 +4272,7 @@ export const useGameStore = create((set, get) => ({
     const state = get()
     const { interaction, currentPlayerIndex } = state
     if (!interaction || (interaction.kind !== 'leader_skill_zombie_steal' && interaction.kind !== 'leader_skill_duck_absorb')) return
-    const { cost, title, icon, roll } = interaction.payload ?? {}
+    const { cost, title, icon, roll, requiredType } = interaction.payload ?? {}
     let detail = ''
 
     set((s) => {
@@ -3074,6 +4293,12 @@ export const useGameStore = create((set, get) => ({
       }
       if (!targetPlayer || !survivor) {
         detail = '대상 없음'
+        return { interaction: null }
+      }
+      const targetSlotIndex = getSurvivorSlotIndex(survivor, targetPlayer.party.findIndex((entry) => entry.uid === survivor.uid))
+      const targetType = getEffectiveSurvivorType(survivor, targetSlotIndex, targetPlayer.leaderId)
+      if (requiredType && targetType !== requiredType) {
+        detail = `${requiredType} 생존자만 선택 가능`
         return { interaction: null }
       }
 
@@ -3112,7 +4337,7 @@ export const useGameStore = create((set, get) => ({
     if (get().pendingTurnEndShortage !== null) get()._resumeEndTurnFlow()
   },
 
-  _applyLeaderStealOrLoss({ leaderId, shouldSteal, shouldLoseOwn, cost, icon, title }) {
+  _applyLeaderStealOrLoss({ leaderId, shouldSteal, shouldLoseOwn, cost, icon, title, requiredType = null }) {
     let detail = ''
     set((s) => {
       const players = s.players.map((entry) => ({
@@ -3130,7 +4355,7 @@ export const useGameStore = create((set, get) => ({
       }
 
       if (shouldSteal) {
-        const target = findBestLeaderStealTarget(players, s.currentPlayerIndex)
+        const target = findBestLeaderStealTarget(players, s.currentPlayerIndex, requiredType)
         if (!target) {
           detail = '흡수할 대상 없음'
           return {}
@@ -3160,7 +4385,7 @@ export const useGameStore = create((set, get) => ({
       }
 
       if (shouldLoseOwn) {
-        const victim = findWeakestSurvivor(current.party)
+        const victim = findWeakestSurvivor(current.party, requiredType, current)
         if (!victim) {
           detail = '이탈할 생존자 없음'
           return {}
@@ -3406,12 +4631,18 @@ export const useGameStore = create((set, get) => ({
     if (postTurnState.interaction) {
       set({ pendingTurnEndShortage: shortage })
       if (postTurnState.players[postTurnState.currentPlayerIndex]?.isBot) {
+        const resolvingPlayerIndex = postTurnState.currentPlayerIndex
         let guard = 0
         while (get().interaction && guard < 8) {
           get()._botHandleInteraction()
           guard += 1
         }
-        if (!get().interaction) {
+        const afterInteractionState = get()
+        if (
+          !afterInteractionState.interaction &&
+          afterInteractionState.currentPlayerIndex === resolvingPlayerIndex &&
+          afterInteractionState.pendingTurnEndShortage !== null
+        ) {
           get()._resumeEndTurnFlow()
         }
       }
@@ -3473,7 +4704,8 @@ export const useGameStore = create((set, get) => ({
       players[s.currentPlayerIndex] = current
 
       if (returnedMercenary?.availableToPlayerIndex === s.currentPlayerIndex) {
-        departedSurvivors = [...departedSurvivors, returnedMercenary.survivor]
+        searchState = returnSurvivorToSearchDeck(searchState, returnedMercenary.survivor)
+        survivorDeck = flattenSearchDecksByTier(searchState.decksByTier)
         expiredReturnedSurvivor = returnedMercenary.survivor
         returnedMercenary = null
       }
@@ -3488,17 +4720,10 @@ export const useGameStore = create((set, get) => ({
       for (let i = 0; i < eventSlots.length; i += 1) {
         if (eventSlots[i] === null) {
           const tier = getTierForEventSlotIndex(i)
-          const nextTierDeck = [...(explorationState.decksByTier?.[tier] ?? [])]
-          const nextCard = nextTierDeck.shift() ?? null
-          explorationState = {
-            ...explorationState,
-            decksByTier: {
-              ...explorationState.decksByTier,
-              [tier]: nextTierDeck,
-            },
-          }
-          eventSlots[i] = nextCard
-          revealedSlots[i] = Boolean(nextCard)
+          const drawn = drawExplorationCardFromTier(explorationState, tier)
+          explorationState = drawn.explorationState
+          eventSlots[i] = drawn.card
+          revealedSlots[i] = Boolean(drawn.card)
         }
       }
 
@@ -3548,7 +4773,7 @@ export const useGameStore = create((set, get) => ({
     }
 
     if (expiredReturnedSurvivor) {
-      get().addLog(`📦 되돌려진 생존자 정리: ${expiredReturnedSurvivor.emoji} ${expiredReturnedSurvivor.name} 떠난 생존자 더미로 이동`)
+      get().addLog(`📦 되돌려진 생존자 정리: ${expiredReturnedSurvivor.emoji} ${expiredReturnedSurvivor.name} 수색 덱으로 복귀`)
     }
 
     const { players, currentPlayerIndex } = get()
@@ -3556,7 +4781,7 @@ export const useGameStore = create((set, get) => ({
     get().settleCurrentPlayerTurnStart()
 
     if (players[currentPlayerIndex].isBot) {
-      setTimeout(() => get().runBotTurn(), RULES.botThinkDelay)
+      schedule(() => get().runBotTurn(), RULES.botThinkDelay)
     }
   },
 
@@ -3577,58 +4802,19 @@ export const useGameStore = create((set, get) => ({
       return true
     }
 
+    const clearStaleBotInteraction = (reason = '처리 가능한 행동 없음') => {
+      const fresh = get()
+      if (!fresh.interaction || !fresh.players[fresh.currentPlayerIndex]?.isBot) return false
+      const eventName = fresh.interaction.event?.name
+      set({ interaction: null })
+      get().addLog(`${player.name} — ${eventName ? `${eventName} ` : ''}선택 취소 (${reason})`)
+      return true
+    }
+
     if (phase === 'action') {
-      // 글로벌/재난 이벤트는 봇이 무조건 즉시 수락
-      get().eventSlots.forEach((event, i) => {
-        if (!event) return
-        const fresh = get()
-        if (!fresh.revealedSlots[i]) return
-        if (!canAccessExplorationTier(fresh.players[currentPlayerIndex], event.tier ?? getTierForEventSlotIndex(i))) return
-        if (event.scope !== 'personal') {
-          get().acceptGlobalEvent(i)
-        }
-      })
+      let didEventAction = false
 
-      // 이벤트 확인 및 선택적 해결
-      get().eventSlots.forEach((event, i) => {
-        if (!event) return
-        const fresh = get()
-        const freshPlayer = fresh.players[currentPlayerIndex]
-        if (!canAccessExplorationTier(freshPlayer, event.tier ?? getTierForEventSlotIndex(i))) return
-
-        const ev = get().eventSlots[i]
-        if (!ev || ev.scope !== 'personal') return
-        if (get().interaction) return
-        if (!canAccessExplorationTier(get().players[currentPlayerIndex], ev.tier ?? getTierForEventSlotIndex(i))) return
-
-        const fp = get().players[currentPlayerIndex]
-        const canAttempt = canBotAttemptEvent(ev, fp)
-
-        // 유토피아 단서는 점수와 무관하게 적극적으로 해결 (교체 불가)
-        const isUtopiaEvent = ev.category === 'clue'
-        let decision = evaluateEvent(ev, get().players[currentPlayerIndex], get())
-        if (isUtopiaEvent) {
-          const cluePlayer = get().players[currentPlayerIndex]
-          const recommendedBonus = getRecommendedPartyBonusForAssignment(ev, getActivePartyMembers(cluePlayer), cluePlayer)
-          const partyScore = calcPartyScore(cluePlayer.party, cluePlayer.leaderId ?? '').total
-          const diceCount = ev.resolution?.diceCount ?? 1
-          const maxPossible = partyScore + recommendedBonus + (diceCount * 6)
-          const hasReasonableShot = maxPossible >= (ev.resolution?.target ?? 0)
-          decision = {
-            resolve: canAttempt && hasReasonableShot,
-            replace: false,
-          }
-        } else if (!canAttempt) {
-          decision = {
-            resolve: false,
-            replace: false,
-          }
-        }
-        const { resolve, replace } = decision
-        if (resolve) {
-          get().startEventResolution(i)
-          confirmBotDiceModalIfOpen()
-        }
+      const resolveBotInteraction = () => {
         let guard = 0
         while (get().interaction && guard < 8) {
           const before = `${get().interaction.step}:${JSON.stringify(get().interaction.payload)}`
@@ -3638,41 +4824,115 @@ export const useGameStore = create((set, get) => ({
           if (before === after) break
           guard += 1
         }
+        if (get().interaction) clearStaleBotInteraction('자동 선택 불가')
         confirmBotDiceModalIfOpen()
+      }
 
-        if (!resolve && replace) {
-          get().replaceEventSlot(i)
-        }
-      })
+      const tryUtopiaFirst = () => {
+        const botPlayer = get().players[currentPlayerIndex]
+        if (!canAttemptRevealedUtopia(botPlayer, get().utopiaState)) return false
+        if (getActivePartyMembers(botPlayer).length < 1) return false
+        get().startUtopiaResolution()
+        resolveBotInteraction()
+        return true
+      }
 
-      const afterExplorationPlayer = get().players[currentPlayerIndex]
-      const utopiaState = get().utopiaState
-      if (
-        !get().interaction &&
-        canAttemptRevealedUtopia(afterExplorationPlayer, utopiaState)
-      ) {
-        if (getActivePartyMembers(afterExplorationPlayer).length >= 1) {
-          get().startUtopiaResolution()
-          let guard = 0
-          while (get().interaction && guard < 8) {
-            const before = `${get().interaction.step}:${JSON.stringify(get().interaction.payload)}`
-            get()._botHandleInteraction()
-            const afterInteraction = get().interaction
-            const after = afterInteraction ? `${afterInteraction.step}:${JSON.stringify(afterInteraction.payload)}` : 'done'
-            if (before === after) break
-            guard += 1
-          }
+      // 유토피아가 공개되어 있고 도전권이 있으면 일반 루틴보다 먼저 승리 트리거를 노린다.
+      didEventAction = tryUtopiaFirst()
+
+      if (!didEventAction && !get().interaction) {
+        const botPlayer = get().players[currentPlayerIndex]
+        const candidates = get().eventSlots
+          .map((event, i) => ({ event, index: i }))
+          .filter(({ event, index }) => {
+            if (!event) return false
+            if (!get().revealedSlots[index]) return false
+            if (!canAccessExplorationTier(botPlayer, event.tier ?? getTierForEventSlotIndex(index))) return false
+            if (event.scope !== 'personal') return false
+            if (event.resolution?.type === 'global_effect') return false
+            return true
+          })
+          .map(({ event, index }) => {
+            const freshPlayer = get().players[currentPlayerIndex]
+            const canAttempt = canBotAttemptEvent(event, freshPlayer)
+            let decision = evaluateEvent(event, freshPlayer, get())
+
+            if (event.category === 'clue') {
+              const active = getActivePartyMembers(freshPlayer)
+              const diceCount = getRecommendedDiceAssignmentCount(event, active.length)
+              const bonusCandidates = [...active]
+                .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+                .slice(0, diceCount)
+              const recommendedBonus = getRecommendedPartyBonusForAssignment(event, bonusCandidates, freshPlayer)
+              const maxPossible = recommendedBonus + (diceCount * 6)
+              const hasReasonableShot = maxPossible >= (event.resolution?.target ?? 0)
+              const tier = event.tier ?? 1
+              const alreadyClaimedTier = (freshPlayer.claimedCluesByTier?.[tier]?.length ?? 0) > 0
+              decision = {
+                resolve: canAttempt && hasReasonableShot,
+                replace: false,
+                score: (canAttempt && hasReasonableShot ? 100 : -100) + tier * 12 - (alreadyClaimedTier ? 8 : 0),
+                reason: canAttempt && hasReasonableShot ? 'utopia progress priority' : 'clue not currently solvable',
+              }
+            } else if (!canAttempt) {
+              decision = { resolve: false, replace: false, score: -Infinity, reason: 'cannot attempt' }
+            }
+
+            const strategicBias = event.category === 'clue'
+              ? 1000 + (event.tier ?? 1) * 100
+              : Math.max(0, decision.score ?? 0)
+            return { event, index, decision, strategicScore: strategicBias + (decision.score ?? 0) }
+          })
+          .sort((a, b) => b.strategicScore - a.strategicScore)
+
+        const choice = candidates.find(({ decision }) => decision.resolve)
+        if (choice) {
+          didEventAction = true
+          get().startEventResolution(choice.index)
           confirmBotDiceModalIfOpen()
+          resolveBotInteraction()
+        } else {
+          const replaceChoice = candidates.find(({ decision, event }) => decision.replace && event.category !== 'clue')
+          if (replaceChoice) {
+            didEventAction = true
+            get().replaceEventSlot(replaceChoice.index)
+          }
         }
       }
 
+      if (!didEventAction && !get().interaction) {
+        const fallbackIndex = get().eventSlots.findIndex((event, i) => {
+          if (!event || !get().revealedSlots[i]) return false
+          const fallbackPlayer = get().players[currentPlayerIndex]
+          if (!canAccessExplorationTier(fallbackPlayer, event.tier ?? getTierForEventSlotIndex(i))) return false
+          if (event.scope !== 'personal') return true
+          return event.resolution?.type === 'global_effect' && canBotAttemptEvent(event, fallbackPlayer)
+        })
+
+        if (fallbackIndex >= 0) {
+          const event = get().eventSlots[fallbackIndex]
+          didEventAction = true
+          if (event.scope !== 'personal') {
+            get().acceptGlobalEvent(fallbackIndex)
+          } else {
+            get().startEventResolution(fallbackIndex)
+            resolveBotInteraction()
+          }
+        }
+      }
+
+      if (!didEventAction && !get().interaction) {
+        tryUtopiaFirst()
+      }
+
       confirmBotDiceModalIfOpen()
+      if (get().interaction) clearStaleBotInteraction('행동 단계 종료')
       get().endActionPhase()
     }
 
     if (get().gameEnded) return
 
-    // 파티 정비 단계: 가능한 한 비활성 생존자를 우선 재활성화
+    // 파티 정비 단계: 가능한 한 비활성 생존자에게 우선 식사 제공
     let refreshGuard = 0
     while (refreshGuard++ < 8) {
       const refreshed = get().players[currentPlayerIndex]
@@ -3716,12 +4976,6 @@ export const useGameStore = create((set, get) => ({
         } else if (action.type === 'REORDER') {
           get().swapPartyMembers(currentPlayerIndex, action.from, action.to)
           acted = true
-        } else if (action.type === 'EXCHANGE_CAP_TO_CAN') {
-          get().exchangeCapToCan()
-          acted = true
-        } else if (action.type === 'EXCHANGE_CAN_TO_CAP') {
-          get().exchangeCanToCap()
-          acted = true
         }
       }
       return acted
@@ -3752,7 +5006,8 @@ export const useGameStore = create((set, get) => ({
     // 봇 턴 중 쌓인 생존자 주사위 팝업은 자동 소모
     set(() => ({ survivorDiceQueue: [] }))
 
-    setTimeout(() => get().endTurn(), RULES.botThinkDelay)
+    if (get().interaction) clearStaleBotInteraction('턴 종료')
+    schedule(() => get().endTurn(), RULES.botThinkDelay)
   },
 
   // ── 봇 인터랙션 자동 처리 ─────────────────────
@@ -3771,11 +5026,17 @@ export const useGameStore = create((set, get) => ({
         ((a.score ?? 0) * 2 - (a.recruitCost ?? 0) * 0.2)
       )).find((survivor) => {
         if (!recruitMode) return true
-        const cost = survivor.recruitCost ?? 0
+        const { resource, amount: cost } = getRecruitCostInfoForPlayer(botPlayer, survivor)
         const hasSlot = getPartySlotCount(botPlayer.party) < botPlayer.maxPartySize || canStackOnExistingSlot(botPlayer.party, survivor)
-        return hasSlot && canRecruitSurvivor(botPlayer, survivor) && (botPlayer.resources?.bottleCap ?? 0) >= cost
+        return hasSlot && canRecruitSurvivor(botPlayer, survivor) && (botPlayer.resources?.[resource] ?? 0) >= cost
       })
       if (choice) get().selectLeaderSearchCandidate(choice.uid)
+      return
+    }
+
+    // ── 비 지도자 스킬 사용 확인 ─────────────────
+    if (interaction.kind === 'leader_skill_zombie_confirm') {
+      get().useZombieLeaderSkill()
       return
     }
 
@@ -3857,10 +5118,26 @@ export const useGameStore = create((set, get) => ({
       }
 
       const requiredType = getRequiredAssignedTypeForEvent(interaction.event)
+      const requiredPartyTypes = getRequiredPartyTypesForEvent(interaction.event)
       const recommended = interaction.event?.recommendedParty ?? []
       const selected = []
+      const selectedUidSet = () => new Set(selected.map((entry) => entry.uid))
+      const findTypeMatch = (type) => active
+        .filter((survivor) => !selected.some((entry) => entry.uid === survivor.uid))
+        .filter((survivor) => {
+          const idx = botPlayer.party.findIndex((entry) => entry.uid === survivor.uid)
+          return canSurvivorActAsType(botPlayer, survivor, idx, type, selectedUidSet())
+        })
+        .sort((a, b) => {
+          const aIdx = botPlayer.party.findIndex((entry) => entry.uid === a.uid)
+          const bIdx = botPlayer.party.findIndex((entry) => entry.uid === b.uid)
+          const aExact = getEffectiveSurvivorType(a, aIdx, botPlayer.leaderId) === type ? 1 : 0
+          const bExact = getEffectiveSurvivorType(b, bIdx, botPlayer.leaderId) === type ? 1 : 0
+          return (bExact - aExact) || ((b.score ?? 0) - (a.score ?? 0))
+        })[0]
+
       if (requiredType) {
-        const requiredSurvivor = active.find((survivor) => survivor.type === requiredType)
+        const requiredSurvivor = findTypeMatch(requiredType)
         if (requiredSurvivor) selected.push(requiredSurvivor)
         if (!requiredSurvivor) {
           get().addLog(`${botPlayer.name} — ${interaction.event?.emoji ?? ''} ${interaction.event?.name ?? '이벤트'} 도전 취소 (활성 ${requiredType} 생존자 부족)`)
@@ -3868,13 +5145,22 @@ export const useGameStore = create((set, get) => ({
           return
         }
       }
+      requiredPartyTypes.forEach(({ type, count = 1 }) => {
+        for (let i = 0; i < count; i += 1) {
+          const match = findTypeMatch(type)
+          if (match && selected.length < desiredCount) selected.push(match)
+        }
+      })
+      if (!hasRequiredPartyTypesInSelection(botPlayer, interaction.event, selected.map((survivor) => survivor.uid))) {
+        get().addLog(`${botPlayer.name} — ${interaction.event?.emoji ?? ''} ${interaction.event?.name ?? '이벤트'} 도전 취소 (활성 ${getRequiredPartyTypesLabel(interaction.event)} 생존자 부족)`)
+        set({ interaction: null })
+        return
+      }
       recommended.forEach(({ type, count = 1 }) => {
-        active
-          .filter((survivor) => survivor.type === type && !selected.some((entry) => entry.uid === survivor.uid))
-          .slice(0, count)
-          .forEach((survivor) => {
-            if (selected.length < desiredCount) selected.push(survivor)
-          })
+        for (let i = 0; i < count; i += 1) {
+          const match = findTypeMatch(type)
+          if (match && selected.length < desiredCount) selected.push(match)
+        }
       })
       active.forEach((survivor) => {
         if (selected.length >= desiredCount) return
@@ -3901,17 +5187,30 @@ export const useGameStore = create((set, get) => ({
     }
 
     if (interaction.kind === 'assign_utopia_party' && interaction.step === 'select_my_survivor') {
-      const active = getActivePartyMembers(players[currentPlayerIndex])
+      const botPlayer = players[currentPlayerIndex]
+      const active = getActivePartyMembers(botPlayer)
       const recommended = interaction.event?.recommendedParty ?? []
       const selected = []
       const desiredCount = getRecommendedDiceAssignmentCount(interaction.event, active.length)
+      const selectedUidSet = () => new Set(selected.map((entry) => entry.uid))
+      const findTypeMatch = (type) => active
+        .filter((survivor) => !selected.some((entry) => entry.uid === survivor.uid))
+        .filter((survivor) => {
+          const idx = botPlayer.party.findIndex((entry) => entry.uid === survivor.uid)
+          return canSurvivorActAsType(botPlayer, survivor, idx, type, selectedUidSet())
+        })
+        .sort((a, b) => {
+          const aIdx = botPlayer.party.findIndex((entry) => entry.uid === a.uid)
+          const bIdx = botPlayer.party.findIndex((entry) => entry.uid === b.uid)
+          const aExact = getEffectiveSurvivorType(a, aIdx, botPlayer.leaderId) === type ? 1 : 0
+          const bExact = getEffectiveSurvivorType(b, bIdx, botPlayer.leaderId) === type ? 1 : 0
+          return (bExact - aExact) || ((b.score ?? 0) - (a.score ?? 0))
+        })[0]
       recommended.forEach(({ type, count = 1 }) => {
-        active
-          .filter((survivor) => survivor.type === type && !selected.some((entry) => entry.uid === survivor.uid))
-          .slice(0, count)
-          .forEach((survivor) => {
-            if (selected.length < desiredCount) selected.push(survivor)
-          })
+        for (let i = 0; i < count; i += 1) {
+          const match = findTypeMatch(type)
+          if (match && selected.length < desiredCount) selected.push(match)
+        }
       })
       active.forEach((survivor) => {
         if (selected.length >= desiredCount) return
@@ -3930,8 +5229,23 @@ export const useGameStore = create((set, get) => ({
       const player = players[currentPlayerIndex]
       const amount = resolution.amount ?? 1
       const picks = chooseBotSacrifice(player, amount, resolution.survivorType)
+      if (picks.length < amount) {
+        get().addLog(`${player.name} — ${interaction.event?.emoji ?? ''} ${interaction.event?.name ?? '이벤트'} 진행 취소 (파견할 ${resolution.survivorType ?? '생존자'} 부족)`)
+        set({ interaction: null })
+        return
+      }
       picks.forEach((uid) => get().selectMySurvivor(uid))
       // 선택 후 target 선택이 필요하면 처리됨
+      return
+    }
+
+    // select_trade_resource (chooseResource 교환 자원 선택)
+    if (interaction.step === 'select_trade_resource') {
+      const currentPlayer = players[currentPlayerIndex]
+      const canAmount = currentPlayer.resources?.can ?? 0
+      const capAmount = currentPlayer.resources?.bottleCap ?? 0
+      const giveResource = canAmount >= capAmount ? 'can' : 'bottleCap'
+      get().selectTradeResource(giveResource)
       return
     }
 
@@ -3940,7 +5254,12 @@ export const useGameStore = create((set, get) => ({
       const others = players
         .map((p, i) => ({ p, i }))
         .filter(({ i }) => i !== currentPlayerIndex && !players[i].eliminated)
-      if (others.length === 0) return
+        .filter(({ p }) => targetSatisfiesOpponentRequirement(p, interaction.event?.opponentRequirement))
+      if (others.length === 0) {
+        get().addLog(`${players[currentPlayerIndex]?.name ?? '봇'} — ${interaction.event?.name ?? '이벤트'} 진행 취소 (상대 조건을 만족하는 대상 없음)`)
+        set({ interaction: null })
+        return
+      }
 
       const currentPlayer = players[currentPlayerIndex]
       let target = null
@@ -3965,7 +5284,7 @@ export const useGameStore = create((set, get) => ({
           .map(({ p, i }) => ({ i, best: findBestTake(currentPlayer, getAttackTargetableSurvivors(p)) }))
           .filter((entry) => entry.best)
           .sort((a, b) => (b.best?.score ?? b.best?.recruitCost ?? 0) - (a.best?.score ?? a.best?.recruitCost ?? 0))[0]
-      } else if (resolution.type === 'remove_from_party' || resolution.type === 'reorder_other_party') {
+      } else if (resolution.type === 'remove_from_party' || resolution.type === 'reorder_other_party' || resolution.type === 'deactivate_from_party' || resolution.type === 'return_survivor_to_deck') {
         const human = others.find(({ i, p }) => i === 0 && getAttackTargetableSurvivors(p).length > 0)
         target = human ?? others
           .filter(({ p }) => getAttackTargetableSurvivors(p).length > 0)
@@ -3975,6 +5294,32 @@ export const useGameStore = create((set, get) => ({
             const cs = calcPartyScore(cur.p.party, cur.p.leaderId).total
             return cs > bs ? cur : best
           }, null)
+      } else if (resolution.type === 'steal_can_from_player') {
+        target = others.reduce((best, cur) => {
+          if (!best) return cur
+          return cur.p.resources.can > best.p.resources.can ? cur : best
+        }, null)
+      } else if (resolution.type === 'steal_cap_from_player') {
+        target = others.reduce((best, cur) => {
+          if (!best) return cur
+          return cur.p.resources.bottleCap > best.p.resources.bottleCap ? cur : best
+        }, null)
+      } else if (resolution.type === 'trade_offer') {
+        const chosenGive = interaction.payload?.tradeGiveResource ?? resolution.give?.resource ?? 'can'
+        const receiveResource = chosenGive === 'can' ? 'bottleCap' : 'can'
+        const resourceKey = receiveResource === 'bottleCap' ? 'bottleCap' : 'can'
+        target = others.find(({ p }) => (p.resources?.[resourceKey] ?? 0) >= (resolution.receive?.amount ?? 2)) ?? null
+      } else if (resolution.type === 'shared_distribution') {
+        target = others
+          .sort((a, b) => (a.p.resources?.can ?? 0) - (b.p.resources?.can ?? 0))[0] ?? null
+      } else if (resolution.type === 'shared_dispatch_reward') {
+        target = others.find(({ p }) => getActivePartyMembers(p).length > 0) ?? null
+      } else if (resolution.type === 'support_roll_dice') {
+        target = others.find(({ p }) => getActivePartyMembers(p).length > 0) ?? null
+      } else if (resolution.type === 'resource_duel') {
+        target = others
+          .filter(({ p }) => (p.resources?.bottleCap ?? 0) > 0)
+          .sort((a, b) => (b.p.resources?.bottleCap ?? 0) - (a.p.resources?.bottleCap ?? 0))[0] ?? others[0]
       } else {
         target = others.reduce((best, cur) => {
           const bs = best ? calcPartyScore(best.p.party, best.p.leaderId).total : -Infinity
@@ -3993,9 +5338,15 @@ export const useGameStore = create((set, get) => ({
       if (ti === null) return
       const targetPlayer = players[ti]
 
-      if (resolution.type === 'remove_from_party') {
-        // 점수 가장 높은 생존자 제거
+      if (resolution.type === 'remove_from_party' || resolution.type === 'return_survivor_to_deck') {
+        // 점수 가장 높은 생존자를 제거/덱 복귀 대상으로 선택
         const victim = [...getAttackTargetableSurvivors(targetPlayer)].sort((a, b) => b.score - a.score)[0]
+        if (victim) get().selectTargetSurvivor(victim.uid)
+      } else if (resolution.type === 'deactivate_from_party') {
+        const victim = [...getAttackTargetableSurvivors(targetPlayer)]
+          .filter((survivor) => isSurvivorActive(targetPlayer, survivor))
+          .sort((a, b) => b.score - a.score)[0]
+          ?? [...getAttackTargetableSurvivors(targetPlayer)].sort((a, b) => b.score - a.score)[0]
         if (victim) get().selectTargetSurvivor(victim.uid)
       } else if (resolution.type === 'take_from_party') {
         // 내 파티 시너지가 가장 높아지는 생존자 탈취
@@ -4008,6 +5359,10 @@ export const useGameStore = create((set, get) => ({
           const best = [...grave].sort((a, b) => b.score - a.score)[0]
           get().selectTargetSurvivor(best.uid)
         }
+      } else if (resolution.type === 'support_roll_dice' || resolution.type === 'shared_dispatch_reward') {
+        const supporter = getActivePartyMembers(targetPlayer)
+          .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))[0]
+        if (supporter) get().selectTargetSurvivor(supporter.uid)
       }
       return
     }
@@ -4056,6 +5411,46 @@ export const useGameStore = create((set, get) => ({
 
   dismissActionEffect(id) {
     set((s) => ({ actionEffects: s.actionEffects.filter((effect) => effect.id !== id) }))
+  },
+
+  // 다른 생존자에게 랜덤 추가 영입 효과를 붙일 때 재사용하는 공용 처리입니다.
+  _recruitRandomSurvivorFromDeckForCurrentPlayer(sourceSurvivor) {
+    const { currentPlayerIndex } = get()
+    const player = get().players[currentPlayerIndex]
+    const deck = get().survivorDeck
+    if (deck.length === 0 || getPartySlotCount(player.party) >= player.maxPartySize) return false
+
+    let picked = null
+    set((s) => {
+      const ps = [...s.players]
+      let p = {
+        ...ps[s.currentPlayerIndex],
+        party: [...ps[s.currentPlayerIndex].party],
+        survivorActivity: { ...(ps[s.currentPlayerIndex].survivorActivity ?? {}) },
+      }
+      const newDeck = [...s.survivorDeck]
+      const randIdx = Math.floor(Math.random() * newDeck.length)
+      const [candidate] = newDeck.splice(randIdx, 1)
+      const applied = addSurvivorToParty(p.party, candidate, p.maxPartySize)
+      if (!applied.added) return {}
+      picked = candidate
+      p.party = applied.party
+      p = setSurvivorActiveState(p, candidate, false)
+      p.score = calcPlayerScore(p)
+      ps[s.currentPlayerIndex] = clampPlayerResources(p)
+      return {
+        players: ps,
+        survivorDeck: newDeck,
+        searchState: {
+          ...s.searchState,
+          decksByTier: buildSearchDecksByTierFromCards(newDeck),
+        },
+      }
+    })
+
+    if (!picked) return false
+    get().addLog(`${sourceSurvivor.emoji} ${sourceSurvivor.name} 효과: 덱에서 ${picked.emoji} ${picked.name} 추가 합류`)
+    return true
   },
 
   // ── 영입 트리거 처리 ─────────────────────────
@@ -4154,32 +5549,25 @@ export const useGameStore = create((set, get) => ({
         get().addLog(`${survivor.emoji} ${survivor.name} 효과: 다른 파티의 평범 생존자 1명을 데려올 수 있습니다.`)
       }
 
+      // 고양이 생존자: 파티에 햄스터가 있으면 햄스터 퇴장
+      if (survivor.id === 's_coward_1') {
+        const hamster = get().players[currentPlayerIndex].party.find((sv) => sv.id === 's_charge_4')
+        if (hamster) {
+          set((s) => {
+            const ps = [...s.players]
+            const p = { ...ps[s.currentPlayerIndex], party: [...ps[s.currentPlayerIndex].party], graveyard: [...(ps[s.currentPlayerIndex].graveyard ?? [])] }
+            p.party = p.party.filter((sv) => sv.uid !== hamster.uid)
+            p.graveyard = [...p.graveyard, hamster]
+            p.score = calcPlayerScore(p)
+            ps[s.currentPlayerIndex] = clampPlayerResources(p)
+            return { players: ps }
+          })
+          get().addLog(`🐾 ${hamster.name} 효과: 고양이 합류로 인해 파티를 떠납니다`)
+        }
+      }
+
       if (trigger.effect === 'recruit_random_from_deck') {
-        const player = get().players[currentPlayerIndex]
-        const deck = get().survivorDeck
-        if (deck.length === 0 || getPartySlotCount(player.party) >= player.maxPartySize) return
-        const randIdx = Math.floor(Math.random() * deck.length)
-        set((s) => {
-          const ps = [...s.players]
-          let p = { ...ps[s.currentPlayerIndex], party: [...ps[s.currentPlayerIndex].party], survivorActivity: { ...(ps[s.currentPlayerIndex].survivorActivity ?? {}) } }
-          const newDeck = [...s.survivorDeck]
-          const [picked] = newDeck.splice(randIdx, 1)
-          const applied = addSurvivorToParty(p.party, picked, p.maxPartySize)
-          if (!applied.added) return {}
-          p.party = applied.party
-          p = setSurvivorActiveState(p, picked, false)
-          p.score = calcPlayerScore(p)
-          ps[s.currentPlayerIndex] = clampPlayerResources(p)
-          return {
-            players: ps,
-            survivorDeck: newDeck,
-            searchState: {
-              ...s.searchState,
-              decksByTier: buildSearchDecksByTierFromCards(newDeck),
-            },
-          }
-        })
-        get().addLog(`🦆 ${survivor.emoji} ${survivor.name} 효과: 덱에서 랜덤 생존자 추가 합류`)
+        get()._recruitRandomSurvivorFromDeckForCurrentPlayer(survivor)
       }
 
       if (trigger.effect === 'give_cap_all') {
@@ -4319,7 +5707,7 @@ export const useGameStore = create((set, get) => ({
       return { players }
     })
 
-    get().addLog(`🎬 ${slasher.name} 은(는) 평범/겁쟁이와 인접할 수 없어 파티를 떠남`)
+    get().addLog(`🎬 ${slasher.name} 은(는) 겁쟁이와 인접할 수 없어 파티를 떠남`)
     get().pushActionEffect(createActionEffect({
       type: 'destroy',
       title: slasher.name,
@@ -4333,7 +5721,7 @@ export const useGameStore = create((set, get) => ({
   confirmDiceRoll(rolls) {
     const { diceRollModal, players, currentPlayerIndex } = get()
     if (!diceRollModal) return
-    const { slotIndex, event, partyScore = 0, recommendedBonus = 0, kind, bonusLabel = '추천' } = diceRollModal
+    const { slotIndex, event, partyScore = 0, recommendedBonus = 0, typeScoreBonus = partyScore, placementBonus = 0, kind, bonusLabel = '타입점수' } = diceRollModal
     set({ diceRollModal: null })
 
     const player = players[currentPlayerIndex]
@@ -4344,53 +5732,71 @@ export const useGameStore = create((set, get) => ({
     const success = total >= resolution.target
     let finalSuccess = success
 
-    let rewardLogs = [`🎲 [${rolls.join('+')}]+${bonusLabel}${partyScore} = ${total} (목표 ${resolution.target}: ${success ? '✅ 성공' : '❌ 실패'})`]
+    const bonusDetail = bonusLabel === '타입점수' && placementBonus > 0 ? `${bonusLabel}${typeScoreBonus}+배치${placementBonus}` : `${bonusLabel}${partyScore}`
+    let rewardLogs = [`🎲 [${rolls.join('+')}]+${bonusDetail} = ${total} (목표 ${resolution.target}: ${success ? '✅ 성공' : '❌ 실패'})`]
+    let rewardActionEffects = []
     let revealedUtopiaForLeader = null
 
     if (kind === 'utopia') {
+      const completedByPlayerIds = get().utopiaState.completedByPlayerIds ?? []
+      const isFirstCompleter = completedByPlayerIds.length === 0
+      const utopiaScoreAmount = isFirstCompleter ? 7 : 5
+
       set((s) => {
         const players = [...s.players]
         const idx = s.currentPlayerIndex
         let survivorDeck = [...s.survivorDeck]
+        let treasureDeck = [...(s.treasureDeck ?? [])]
         let p = {
           ...players[idx],
           resources: { ...players[idx].resources },
           party: [...players[idx].party],
         }
 
-        if (success && event.reward) {
-          const applied = applyRewardToPlayer(p, event.reward, survivorDeck)
+        if (success) {
+          const applied = applyRewardToPlayer(p, { type: 'score', amount: utopiaScoreAmount }, survivorDeck, treasureDeck)
           p = applied.player
           survivorDeck = applied.survivorDeck
+          treasureDeck = applied.treasureDeck
           rewardLogs = [...rewardLogs, ...applied.logs]
+          rewardActionEffects = [...rewardActionEffects, ...(applied.actionEffects ?? [])]
         }
 
         p.score = calcPlayerScore(p)
         players[idx] = p
 
+        const newCompletedByPlayerIds = success
+          ? [...completedByPlayerIds, p.id]
+          : completedByPlayerIds
+
         return {
           players,
           survivorDeck,
+          treasureDeck,
           searchState: { ...s.searchState, decksByTier: buildSearchDecksByTierFromCards(survivorDeck) },
           interaction: null,
           utopiaState: success
             ? {
               ...s.utopiaState,
-              claimed: true,
-              claimedByPlayerId: p.id,
-              claimedCard: event,
+              claimed: isFirstCompleter ? true : s.utopiaState.claimed,
+              completedByPlayerIds: newCompletedByPlayerIds,
+              claimedByPlayerId: isFirstCompleter ? p.id : s.utopiaState.claimedByPlayerId,
+              claimedCard: isFirstCompleter ? event : s.utopiaState.claimedCard,
             }
             : s.utopiaState,
-          finalRoundActive: success ? true : s.finalRoundActive,
-          finalRoundTriggerPlayerIndex: success ? idx : s.finalRoundTriggerPlayerIndex,
+          finalRoundActive: success && isFirstCompleter ? true : s.finalRoundActive,
+          finalRoundTriggerPlayerIndex: success && isFirstCompleter ? idx : s.finalRoundTriggerPlayerIndex,
         }
       })
 
       get().addLog(`${player.name} — ${event.emoji} ${event.name} ${success ? '획득!' : '실패'}`)
       rewardLogs.forEach((msg) => get().addLog(msg))
+      rewardActionEffects.forEach((effect) => get().pushActionEffect(effect))
       if (success) {
-        get().addLog(`🏁 유토피아 도달: 최종 라운드 시작`)
-        get().addLog(`⏳ ${player.name}의 다음 차례가 오기 직전에 게임이 종료됩니다.`)
+        get().addLog(isFirstCompleter
+          ? `🏆 ${player.name} 유토피아 최초 도달! +${utopiaScoreAmount}점 — 최종 라운드 시작`
+          : `🏅 ${player.name} 유토피아 도달! +${utopiaScoreAmount}점`
+        )
       }
       return
     }
@@ -4399,6 +5805,7 @@ export const useGameStore = create((set, get) => ({
       const players = [...s.players]
       const idx = s.currentPlayerIndex
       let survivorDeck = [...s.survivorDeck]
+      let treasureDeck = [...(s.treasureDeck ?? [])]
       let utopiaState = { ...s.utopiaState }
       let p = { ...players[idx], resources: { ...players[idx].resources }, party: [...players[idx].party], graveyard: [...(players[idx].graveyard ?? [])], turnFlags: { ...(players[idx].turnFlags ?? {}) } }
 
@@ -4407,10 +5814,12 @@ export const useGameStore = create((set, get) => ({
       }
 
       if (success && event.reward) {
-        const applied = applyRewardToPlayer(p, event.reward, survivorDeck)
+        const applied = applyRewardToPlayer(p, event.reward, survivorDeck, treasureDeck)
         p = applied.player
         survivorDeck = applied.survivorDeck
+        treasureDeck = applied.treasureDeck
         rewardLogs = [...rewardLogs, ...applied.logs]
+        rewardActionEffects = [...rewardActionEffects, ...(applied.actionEffects ?? [])]
       }
 
       // s_charge_1 이세계 탈출: 이벤트 실패 시 1회 재시도
@@ -4419,7 +5828,7 @@ export const useGameStore = create((set, get) => ({
         const reRolls = Array.from({ length: resolution?.diceCount ?? 1 }, () => Math.ceil(Math.random() * 6))
         const reTotal = reRolls.reduce((a, b) => a + b, 0) + partyScore
         finalSuccess = reTotal >= (resolution?.target ?? 99)
-        rewardLogs = [...rewardLogs, `⚔️ 용사 재시도: 🎲[${reRolls.join('+')}]+${bonusLabel}${partyScore}=${reTotal} → ${finalSuccess ? '✅ 성공' : '❌ 실패, 파티 이탈'}`]
+        rewardLogs = [...rewardLogs, `⚔️ 용사 재시도: 🎲[${reRolls.join('+')}]+${bonusDetail}=${reTotal} → ${finalSuccess ? '✅ 성공' : '❌ 실패, 파티 이탈'}`]
         if (finalSuccess) {
           // 실패 패널티 취소
           if (event.failPenalty) {
@@ -4428,10 +5837,12 @@ export const useGameStore = create((set, get) => ({
           }
           // 보상 적용
           if (event.reward) {
-            const applied = applyRewardToPlayer(p, event.reward, survivorDeck)
+            const applied = applyRewardToPlayer(p, event.reward, survivorDeck, treasureDeck)
             p = applied.player
             survivorDeck = applied.survivorDeck
+            treasureDeck = applied.treasureDeck
             rewardLogs = [...rewardLogs, ...applied.logs]
+            rewardActionEffects = [...rewardActionEffects, ...(applied.actionEffects ?? [])]
           }
         } else {
           // 재시도도 실패: 용사 파티 이탈
@@ -4443,18 +5854,17 @@ export const useGameStore = create((set, get) => ({
         }
       }
 
-      // s_charge_4 볼주머니: 이벤트 성공 시 통조림 +1
-      if (finalSuccess && p.party.some((sv) => sv.id === 's_charge_4')) {
-        p.resources.can += 1
-        rewardLogs = [...rewardLogs, `🐾 햄스터 볼주머니: 이벤트 성공 통조림 +1`]
-      }
-
       p = clampPlayerResources(p)
 
       const shouldKeepClueOnFailInner = event.category === 'clue' && !finalSuccess
-      if (finalSuccess || !event.penalizeOnFail) {
-        p.eventDiscard = [...p.eventDiscard, event]
-        if (finalSuccess && event.category === 'clue') {
+      let explorationState = s.explorationState
+      if (finalSuccess) {
+        if (shouldClaimResolvedEvent(event)) {
+          p.eventDiscard = [...p.eventDiscard, event]
+        } else {
+          explorationState = returnResolvedEventToTierDeck(explorationState, event)
+        }
+        if (event.category === 'clue') {
           p = applyClueClaimProgress(p, event)
           if ((event.tier ?? 0) === 3 && !utopiaState.revealed) {
             utopiaState = {
@@ -4466,7 +5876,7 @@ export const useGameStore = create((set, get) => ({
           }
         }
       } else if (!shouldKeepClueOnFailInner) {
-        p.abandonedEvents = [...p.abandonedEvents, event]
+        explorationState = discardExplorationEvent(explorationState, event)
       }
       p.score = calcPlayerScore(p)
       players[idx] = p
@@ -4484,15 +5894,17 @@ export const useGameStore = create((set, get) => ({
         revealedSlots,
         interaction: null,
         survivorDeck,
+        treasureDeck,
         searchState: { ...s.searchState, decksByTier: buildSearchDecksByTierFromCards(survivorDeck) },
         utopiaState,
-        explorationState: syncExplorationStateWithEventSlots(s.explorationState, eventSlots),
+        explorationState: syncExplorationStateWithEventSlots(explorationState, eventSlots),
       }
     })
 
     const shouldKeepClueOnFail = event.category === 'clue' && !finalSuccess
     get().addLog(`${player.name} — ${event.emoji} ${event.name} ${finalSuccess ? '해결!' : '실패'}`)
     rewardLogs.forEach((msg) => get().addLog(msg))
+    rewardActionEffects.forEach((effect) => get().pushActionEffect(effect))
     if (revealedUtopiaForLeader) {
       const utopiaCard = get().utopiaState.cardsByLeaderId?.[revealedUtopiaForLeader]
       get().addLog(`🌅 유토피아 공개: ${utopiaCard?.name ?? '알 수 없는 유토피아'} (${player.name}이 3단계 단서를 먼저 확보)`)
@@ -4583,6 +5995,7 @@ export const useGameStore = create((set, get) => ({
       },
       explorationState: {
         decksByTier: { 1: [], 2: [], 3: [] },
+        discardByTier: { 1: [], 2: [], 3: [] },
         clueDecksByTier: { 1: [], 2: [], 3: [] },
         disasterDecksByTier: { 1: [], 2: [], 3: [] },
         visibleByTier: { 1: [], 2: [], 3: [] },
@@ -4598,14 +6011,17 @@ export const useGameStore = create((set, get) => ({
       utopiaState: {
         revealed: false,
         claimed: false,
+        completedByPlayerIds: [],
         revealedForLeaderId: null,
         claimedByPlayerId: null,
+        claimedCard: null,
         cardsByLeaderId: {},
       },
       eventDeck: [],
       eventSlots: Array(getLegacyExplorationSlotCount()).fill(null),
       revealedSlots: Array(getLegacyExplorationSlotCount()).fill(false),
       survivorDeck: [],
+      treasureDeck: [],
       mercenaryPool: [],
       revealedUids: [],
       departedSurvivors: [],
@@ -4621,6 +6037,8 @@ export const useGameStore = create((set, get) => ({
   },
 }))
 
+export const useGameStore = createGameStore()
+
 // ── 헬퍼 ──────────────────────────────────────────────────────────────
 function getFirstStep(resolution) {
   switch (resolution.type) {
@@ -4632,7 +6050,20 @@ function getFirstStep(resolution) {
       return 'select_swap_a'
     case 'take_from_party':
     case 'remove_from_party':
+    case 'deactivate_from_party':
+    case 'return_survivor_to_deck':
+    case 'steal_can_from_player':
+    case 'steal_cap_from_player':
+    case 'shared_distribution':
+    case 'shared_dispatch_reward':
+    case 'resource_duel':
       return 'select_target_player'
+    case 'trade_offer':
+      return resolution.chooseResource ? 'select_trade_resource' : 'select_target_player'
+    case 'support_roll_dice':
+      return 'select_target_player'
+    case 'rich_cap_raid':
+      return null
     case 'reorder_other_party':
       return 'select_target_player'
     case 'revive_from_grave':
@@ -4650,7 +6081,12 @@ function getNextStep(resolution, currentStep) {
     reorder_my_party:    { select_swap_a: 'select_swap_b' },
     take_from_party:     { select_target_player: 'select_target_survivor' },
     remove_from_party:   { select_target_player: 'select_target_survivor' },
+    deactivate_from_party: { select_target_player: 'select_target_survivor' },
+    return_survivor_to_deck: { select_target_player: 'select_target_survivor' },
+    support_roll_dice:   { select_target_player: 'select_target_survivor' },
+    shared_dispatch_reward: { select_target_player: 'select_target_survivor' },
     reorder_other_party: { select_target_player: 'select_swap_a', select_swap_a: 'select_swap_b' },
+    trade_offer:         { select_trade_resource: 'select_target_player' },
   }
   return flow[resolution.type]?.[currentStep] ?? null
 }
@@ -4667,9 +6103,30 @@ function applyPenaltyToPlayer(p, penalty) {
   return clampPlayerResources(p)
 }
 
-function isCatDogConflict(a, b) {
-  const ids = [a?.id, b?.id]
-  return ids.includes('s_coward_1') && ids.includes('s_charge_2')
+// survivor(new) 가 party에 합류할 때 기존 entry와 충돌하는지 (단방향)
+function isJoinConflict(existingParty, newSurvivor) {
+  // 고양이: 개가 가장 우측(마지막 슬롯)에 있으면 인접 배치 불가
+  if (newSurvivor.id === 's_coward_1') {
+    const lastSlot = existingParty[existingParty.length - 1]
+    if (lastSlot?.id === 's_charge_2') return true
+  }
+  // 햄스터: 고양이가 이미 있으면 합류 불가
+  if (newSurvivor.id === 's_charge_4' && existingParty.some((e) => e.id === 's_coward_1')) return true
+  // 오리교도: 동물 생존자가 이미 있으면 합류 불가
+  if (newSurvivor.id === 's_weird_1' && existingParty.some((e) => ANIMAL_SURVIVOR_IDS.has(e.id))) return true
+  return false
+}
+
+function isExperimentMoodAdjacency(a, b) {
+  if (a?.id === 's_coward_3') return b?.type === '분위기메이커'
+  if (b?.id === 's_coward_3') return a?.type === '분위기메이커'
+  return false
+}
+
+function isHighschoolGeoAdjacency(last, newSurvivor) {
+  // 여고생이 합류할 때 마지막 자리가 지리선생이면 불가
+  if (newSurvivor.id === 's_mood_1' && last?.id === 's_military_5') return true
+  return false
 }
 
 function isSlasherAdjacencyConflict(a, b) {
@@ -4677,14 +6134,16 @@ function isSlasherAdjacencyConflict(a, b) {
   const rightIsSlasher = b?.id === 's_military_3'
   if (!leftIsSlasher && !rightIsSlasher) return false
   const other = leftIsSlasher ? b : a
-  return other?.type === '겁쟁이' || other?.type === '평범'
+  return other?.type === '겁쟁이'
 }
 
 function canAddSurvivorToParty(party, survivor) {
   if (!survivor) return false
-  if (party.some((entry) => isCatDogConflict(entry, survivor))) return false
+  if (isJoinConflict(party, survivor)) return false
   const last = party[party.length - 1]
   if (last && isSlasherAdjacencyConflict(last, survivor)) return false
+  if (last && isExperimentMoodAdjacency(last, survivor)) return false
+  if (last && isHighschoolGeoAdjacency(last, survivor)) return false
   return true
 }
 
@@ -4699,7 +6158,7 @@ function getAttackTargetableSurvivors(player) {
 }
 
 function canRecruitSurvivor(player, survivor) {
-  if (survivor.type !== '평범') return true
+  if (!isNormalSurvivor(survivor)) return true
   return !player.party.some((entry) => entry.id === 's_military_2')
 }
 
@@ -4709,32 +6168,18 @@ function hasDoctorShieldAvailable(player) {
     && (player.resources?.can ?? 0) >= 3
 }
 
+function getEffectiveSurvivorType(survivor, index, leaderId) {
+  // 겁쟁이 좀비: 좀비 리더 + 1번 슬롯(index 0) → 용감이 타입으로 취급
+  if (survivor.id === 's_coward_6' && index === 0 && leaderId === 'zombie') return '용감이'
+  return survivor.type
+}
+
 function preventSingleSurvivorLoss(player, target, { reason }) {
   let nextPlayer = {
     ...player,
     party: [...player.party],
     graveyard: [...(player.graveyard ?? [])],
     turnFlags: { ...(player.turnFlags ?? {}) },
-  }
-
-  if (reason === 'attack_damage' && target?.id === 's_military_4') {
-    return {
-      player: nextPlayer,
-      prevented: true,
-      message: `${target.name} 효과: 공격으로 제거되지 않음`,
-    }
-  }
-
-  if (reason === 'attack_damage' && (target?.id === 's_coward_1' || target?.id === 's_coward_6')) {
-    const idx = nextPlayer.party.findIndex((sv) => sv.uid === target.uid)
-    if (idx >= 0 && idx < nextPlayer.party.length - 1) {
-      nextPlayer.party = [...nextPlayer.party.filter((sv) => sv.uid !== target.uid), target]
-    }
-    return { player: nextPlayer, prevented: true, message: `${target.emoji ?? ''} ${target.name} 효과: 제거되지 않고 파티 맨 뒤로 밀려남` }
-  }
-
-  if (reason === 'disaster_damage' && target?.id === 's_coward_3') {
-    return { player: nextPlayer, prevented: true, canGain: 0, message: `🧪 ${target.name} 효과: 재난 면역` }
   }
 
   if (reason === 'disaster_damage' && target?.id === 's_coward_5') {
@@ -4752,7 +6197,7 @@ function preventSingleSurvivorLoss(player, target, { reason }) {
     }
   }
 
-  if ((reason === 'attack_damage' || reason === 'disaster_damage') && (target?.type === '겁쟁이' || target?.type === '평범')) {
+  if ((reason === 'attack_damage' || reason === 'disaster_damage') && target?.type === '겁쟁이') {
     const slasher = nextPlayer.party.find((survivor) => survivor.id === 's_military_3' && survivor.uid !== target?.uid)
     if (slasher) {
       nextPlayer.party = nextPlayer.party.filter((survivor) => survivor.uid !== slasher.uid)
@@ -4765,6 +6210,17 @@ function preventSingleSurvivorLoss(player, target, { reason }) {
     }
   }
 
+  // 유령 빙의 호스트가 제거될 때 → 유령은 파티에 독립 잔류 (stackGroupKey 해제)
+  const ghostIdx = target
+    ? nextPlayer.party.findIndex((sv) => sv.id === 's_weird_7' && sv.stackGroupKey && sv.stackGroupKey === target.stackGroupKey && sv.uid !== target.uid)
+    : -1
+  if (ghostIdx >= 0) {
+    const ghost = nextPlayer.party[ghostIdx]
+    nextPlayer.party = nextPlayer.party.map((sv) =>
+      sv.uid === ghost.uid ? { ...sv, stackGroupKey: undefined } : sv
+    )
+  }
+
   if (target) {
     nextPlayer.party = nextPlayer.party.filter((survivor) => survivor.uid !== target.uid)
     nextPlayer.graveyard = [...nextPlayer.graveyard, target]
@@ -4774,11 +6230,25 @@ function preventSingleSurvivorLoss(player, target, { reason }) {
 }
 
 function tryBlockAttackEvent(targetPlayer, event) {
-  if (!isAttackEvent(event)) return { blocked: false, log: null, roll: null, successOn: null, icon: null, name: null, consumedUid: null }
+  const noBlock = { blocked: false, log: null, roll: null, successOn: null, icon: null, name: null, consumedUid: null, consumedTreasureUid: null }
+  if (!isAttackEvent(event)) return noBlock
 
-  // successOn: 이하이면 방어 성공 (1~6). 6 = 항상 성공 (자동)
+  // 방탄조끼: 행동 단계에 미리 공개된 카드 → 자동 방어
+  const shieldCard = (targetPlayer.treasureCards ?? []).find((c) => c.effectId === 'attack_shield' && c.revealed && !c.used)
+  if (shieldCard) {
+    const log = `🛡️ ${shieldCard.name}: 공격 방어`
+    return { blocked: true, icon: '🛡️', name: shieldCard.name, message: log, log, roll: null, successOn: null, consumedUid: null, consumedTreasureUid: shieldCard.uid }
+  }
+
+  // 반응 카드 (reaction): 미공개 상태로 보유 중이어도 공격 시 자동 발동
+  const reactionCard = (targetPlayer.treasureCards ?? []).find((c) => c.kind === 'reaction' && !c.used)
+  if (reactionCard) {
+    const log = `⚡ ${reactionCard.name}: 즉시 공개 → 공격 방어`
+    return { blocked: true, icon: '⚡', name: reactionCard.name, message: log, log, roll: null, successOn: null, consumedUid: null, consumedTreasureUid: reactionCard.uid }
+  }
+
+  // 생존자 기반 방어 (successOn: 이하이면 방어 성공, 6 = 자동)
   const blockers = []
-
   for (let index = 0; index < targetPlayer.party.length; index += 1) {
     const survivor = targetPlayer.party[index]
     const blocker = blockers.find((entry) => entry.match(survivor, index))
@@ -4792,24 +6262,33 @@ function tryBlockAttackEvent(targetPlayer, event) {
     const log = `${blocker.icon} ${blocker.name} ${rollText} → ${resultText}`
 
     if (success) {
-      return {
-        blocked: true,
-        icon: blocker.icon,
-        name: blocker.name,
-        message: log,
-        log,
-        roll,
-        successOn: auto ? null : blocker.successOn,
-        consumedUid: blocker.consumedOnSuccess ? survivor.uid : null,
-      }
+      return { blocked: true, icon: blocker.icon, name: blocker.name, message: log, log, roll, successOn: auto ? null : blocker.successOn, consumedUid: blocker.consumedOnSuccess ? survivor.uid : null, consumedTreasureUid: null }
     }
-    return { blocked: false, icon: blocker.icon, name: blocker.name, log, roll, successOn: auto ? null : blocker.successOn, consumedUid: null }
+    return { blocked: false, icon: blocker.icon, name: blocker.name, log, roll, successOn: auto ? null : blocker.successOn, consumedUid: null, consumedTreasureUid: null }
   }
 
-  return { blocked: false, log: null, roll: null, successOn: null, icon: null, name: null, consumedUid: null }
+  return noBlock
 }
 
 function getDisasterDefenseResult(player) {
+  if (player?.leaderId === 'duck') {
+    const roll = rollD6()
+    if (roll === 6) {
+      return {
+        prevented: 99,
+        sacrificedUid: null,
+        log: `🦆 간절한 기도: 🎲6 → 재난 무효화`,
+        dicePopup: { icon: '🦆', name: '간절한 기도', rolls: [roll], successOn: 6, success: true, outcomeLabel: '재난 무효화', detail: '🎲6: 재난 무효화' },
+      }
+    }
+    return {
+      prevented: 0,
+      sacrificedUid: null,
+      log: `🦆 간절한 기도: 🎲${roll} → 실패`,
+      dicePopup: { icon: '🦆', name: '간절한 기도', rolls: [roll], successOn: 6, success: false, outcomeLabel: '재난 적용', detail: '🎲6: 재난 무효화' },
+    }
+  }
+
   const veteran = player.party.find((survivor) => survivor.id === 's_military_1')
   if (veteran) {
     // 숙련된 생존자: 자동으로 최저 점수 파티원을 희생시켜 재난 방어 (주사위 없음)
@@ -4829,30 +6308,150 @@ function getDisasterDefenseResult(player) {
 }
 
 function isAttackEvent(event) {
-  return event?.category === 'attack'
+  return event?.eventType === 'action_attack' || event?.category === 'attack'
 }
 
 function applyConsumedAttackBlocker(player, blockResult) {
-  if (!blockResult?.consumedUid) return player
-  const blocker = player.party.find((survivor) => survivor.uid === blockResult.consumedUid)
-  if (!blocker) return player
-  return {
-    ...player,
-    party: player.party.filter((survivor) => survivor.uid !== blockResult.consumedUid),
-    graveyard: [...(player.graveyard ?? []), blocker],
+  let result = { ...player }
+  if (blockResult?.consumedUid) {
+    const blocker = result.party.find((survivor) => survivor.uid === blockResult.consumedUid)
+    if (blocker) {
+      result = {
+        ...result,
+        party: result.party.filter((sv) => sv.uid !== blockResult.consumedUid),
+        graveyard: [...(result.graveyard ?? []), blocker],
+      }
+    }
   }
+  if (blockResult?.consumedTreasureUid) {
+    result = {
+      ...result,
+      treasureCards: (result.treasureCards ?? []).map((c) =>
+        c.uid === blockResult.consumedTreasureUid ? { ...c, used: true, revealed: true } : c
+      ),
+    }
+  }
+  return result
 }
 
-function applyRewardToPlayer(player, reward, sourceDeck = []) {
+function drawTreasureReward(treasureDeck = [], kind = 'treasure') {
+  const deck = [...treasureDeck]
+  const index = deck.findIndex((card) => card.kind === kind)
+  if (index < 0) return { card: null, treasureDeck: deck }
+  const [card] = deck.splice(index, 1)
+  return { card, treasureDeck: deck }
+}
+
+function applyResourceDeltaResolution(player, resolution, logs = []) {
+  const resource = resolution.resource === 'cap' ? 'bottleCap' : resolution.resource
+  const amount = Number(resolution.amount) || 0
+  const current = player.resources?.[resource] ?? 0
+  if (amount < 0 && current < Math.abs(amount)) {
+    return { player, success: false }
+  }
+
+  const icon = resource === 'bottleCap' ? '🪙' : '🥫'
+  const nextPlayer = clampPlayerResources({
+    ...player,
+    resources: {
+      ...player.resources,
+      [resource]: Math.max(0, current + amount),
+    },
+  })
+  logs.push(`${icon}${amount > 0 ? '+' : ''}${amount}`)
+  return { player: nextPlayer, success: true }
+}
+
+function drawSurvivorForResolution(deck = [], survivorType = null) {
+  const index = survivorType
+    ? deck.findIndex((survivor) => survivor.type === survivorType)
+    : 0
+  if (index < 0) return { survivor: null, survivorDeck: deck }
+  const nextDeck = [...deck]
+  const [survivor] = nextDeck.splice(index, 1)
+  return { survivor, survivorDeck: nextDeck }
+}
+
+function applySurvivorDeltaResolution(player, resolution, sourceDeck = [], logs = []) {
+  const amount = Number(resolution.amount) || 0
+  const survivorType = resolution.type === 'survivor_type_delta' ? resolution.survivorType : null
+  const count = Math.abs(amount)
+  let nextPlayer = {
+    ...player,
+    party: [...(player.party ?? [])],
+    graveyard: [...(player.graveyard ?? [])],
+    survivorActivity: { ...(player.survivorActivity ?? {}) },
+  }
+  let survivorDeck = [...sourceDeck]
+  const stagedLogs = []
+
+  if (count === 0) return { player: nextPlayer, survivorDeck, success: true }
+
+  if (amount > 0) {
+    for (let i = 0; i < count; i += 1) {
+      const drawn = drawSurvivorForResolution(survivorDeck, survivorType)
+      if (!drawn.survivor) return { player, survivorDeck: sourceDeck, success: false }
+      const applied = addSurvivorToParty(nextPlayer.party, drawn.survivor, nextPlayer.maxPartySize)
+      if (!applied.added) return { player, survivorDeck: sourceDeck, success: false }
+      survivorDeck = drawn.survivorDeck
+      nextPlayer = {
+        ...nextPlayer,
+        party: applied.party,
+        survivorActivity: {
+          ...(nextPlayer.survivorActivity ?? {}),
+          [drawn.survivor.uid]: false,
+        },
+      }
+      stagedLogs.push(`🤝 ${survivorType ? `${survivorType} ` : ''}생존자 획득: ${drawn.survivor.emoji} ${drawn.survivor.name}`)
+    }
+  } else {
+    for (let i = 0; i < count; i += 1) {
+      const target = findWeakestSurvivor(nextPlayer.party, survivorType, nextPlayer)
+      if (!target) return { player, survivorDeck: sourceDeck, success: false }
+      const prevention = preventSingleSurvivorLoss(nextPlayer, target, { reason: 'event_damage' })
+      nextPlayer = prevention.player
+      stagedLogs.push(prevention.prevented
+        ? `🛡️ ${prevention.message}`
+        : `💀 ${survivorType ? `${survivorType} ` : ''}생존자 제거: ${target.emoji} ${target.name}`)
+    }
+  }
+
+  logs.push(...stagedLogs)
+  return { player: clampPlayerResources(nextPlayer), survivorDeck, success: true }
+}
+
+function applySurvivorDeactivateResolution(player, resolution, logs = []) {
+  const survivorType = resolution.type === 'deactivate_survivor_type' ? resolution.survivorType : null
+  const amount = Math.max(1, Number(resolution.amount) || 1)
+  const candidates = (player.party ?? [])
+    .filter((survivor, index) => {
+      if (!isSurvivorActive(player, survivor)) return false
+      if (!survivorType) return true
+      return getEffectiveSurvivorType(survivor, getSurvivorSlotIndex(survivor, index), player.leaderId) === survivorType
+    })
+    .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
+  if (candidates.length < amount) return { player, success: false }
+
+  const targets = candidates.slice(0, amount)
+  const nextPlayer = targets.reduce((acc, target) => setSurvivorActiveState(acc, target, false), player)
+  logs.push(`💤 ${survivorType ? `${survivorType} ` : ''}생존자 ${amount}명 비활성화: ${targets.map((target) => `${target.emoji} ${target.name}`).join(', ')}`)
+  return { player: nextPlayer, success: true }
+}
+
+function applyRewardToPlayer(player, reward, sourceDeck = [], sourceTreasureDeck = []) {
   const rewards = Array.isArray(reward) ? reward : [reward]
   const nextPlayer = {
     ...player,
     resources: { ...player.resources },
     party: [...player.party],
+    keyCards: [...(player.keyCards ?? [])],
+    treasureCards: [...(player.treasureCards ?? [])],
     survivorActivity: { ...(player.survivorActivity ?? {}) },
   }
   let survivorDeck = [...sourceDeck]
+  let treasureDeck = [...sourceTreasureDeck]
   const logs = []
+  const actionEffects = []
 
   rewards.forEach((entry) => {
     if (!entry) return
@@ -4860,6 +6459,44 @@ function applyRewardToPlayer(player, reward, sourceDeck = []) {
     if (entry.type === 'cap') nextPlayer.resources.bottleCap += entry.amount
     if (entry.type === 'can') nextPlayer.resources.can += entry.amount
     if (entry.type === 'score') nextPlayer.scoreTokens = (nextPlayer.scoreTokens ?? 0) + entry.amount
+    if (entry.type === 'key') {
+      const amount = entry.amount ?? 1
+      for (let i = 0; i < amount; i += 1) {
+        const key = { ...KEY_CARD, uid: `key_${Date.now()}_${Math.random().toString(36).slice(2, 8)}` }
+        nextPlayer.keyCards.push(key)
+      }
+      logs.push(`🗝️ 열쇠 보상: 열쇠 ${amount}장 획득`)
+    }
+    if (entry.type === 'item' || entry.type === 'treasure') {
+      const amount = entry.amount ?? 1
+      let acquired = 0
+      for (let i = 0; i < amount; i += 1) {
+        const drawn = drawTreasureReward(treasureDeck, entry.type)
+        if (!drawn.card) break
+        treasureDeck = drawn.treasureDeck
+        nextPlayer.treasureCards.push({
+          ...drawn.card,
+          revealed: false,
+          used: false,
+          acquiredKind: entry.type,
+        })
+        actionEffects.push(createActionEffect({
+          type: entry.type === 'item' ? 'resource_gain' : 'leader_skill',
+          title: entry.type === 'item' ? '아이템 획득' : '보물 획득',
+          icon: entry.type === 'item' ? '🎒' : '💎',
+          targetName: nextPlayer.name,
+          detail: `${drawn.card.name} · ${drawn.card.description ?? ''}`,
+        }))
+        logs.push(`${entry.type === 'item' ? '🎒 아이템 확인' : '💎 보물 확인'}: ${drawn.card.name}`)
+        acquired += 1
+      }
+      if (acquired > 0) {
+        logs.push(`${entry.type === 'item' ? '🎒 아이템' : '💎 보물'} 보상: ${acquired}장 뒤집어 획득`)
+      }
+      if (acquired < amount) {
+        logs.push(`⚠️ ${entry.type === 'item' ? '아이템' : '보물'} 덱이 부족해 ${amount - acquired}장 획득하지 못함`)
+      }
+    }
     if (entry.type === 'survivor') {
       let remaining = entry.amount ?? 1
       while (remaining > 0 && survivorDeck.length > 0) {
@@ -4878,28 +6515,53 @@ function applyRewardToPlayer(player, reward, sourceDeck = []) {
     }
 
     if (entry.bonus) {
-      const bonusApplied = applyRewardToPlayer(nextPlayer, entry.bonus, survivorDeck)
+      const bonusApplied = applyRewardToPlayer(nextPlayer, entry.bonus, survivorDeck, treasureDeck)
       nextPlayer.resources = bonusApplied.player.resources
       nextPlayer.party = bonusApplied.player.party
       nextPlayer.scoreTokens = bonusApplied.player.scoreTokens
+      nextPlayer.keyCards = bonusApplied.player.keyCards
+      nextPlayer.treasureCards = bonusApplied.player.treasureCards
       survivorDeck = bonusApplied.survivorDeck
+      treasureDeck = bonusApplied.treasureDeck
       logs.push(...bonusApplied.logs)
+      actionEffects.push(...(bonusApplied.actionEffects ?? []))
     }
   })
 
-  return { player: clampPlayerResources(nextPlayer), survivorDeck, logs }
+  return { player: clampPlayerResources(nextPlayer), survivorDeck, treasureDeck, logs, actionEffects }
 }
 
-function findWeakestSurvivor(party = []) {
-  return [...party].sort((a, b) => (a.score ?? 0) - (b.score ?? 0))[0] ?? null
+function findWeakestSurvivor(party = [], requiredType = null, ownerPlayer = null) {
+  const candidates = requiredType
+    ? party.filter((survivor, index) => getEffectiveSurvivorType(survivor, getSurvivorSlotIndex(survivor, index), ownerPlayer?.leaderId) === requiredType)
+    : party
+  return [...candidates].sort((a, b) => (a.score ?? 0) - (b.score ?? 0))[0] ?? null
 }
 
-function findBestLeaderStealTarget(players = [], currentPlayerIndex = 0) {
+function getRecruitCostInfoForPlayer(player, survivor, preferredResource = null) {
+  const baseCost = survivor?.recruitCost ?? 0
+  const moodGirlDiscount = (player?.party ?? []).some((entry) => entry.id === 's_mood_1') ? 1 : 0
+  const amount = Math.max(0, baseCost - moodGirlDiscount)
+  let resource = 'bottleCap'
+  if (player?.leaderId === 'shy') {
+    if (preferredResource === 'can' || preferredResource === 'bottleCap') {
+      resource = preferredResource
+    } else if ((player.resources?.bottleCap ?? 0) < amount && (player.resources?.can ?? 0) >= amount) {
+      resource = 'can'
+    }
+  }
+  return { resource, amount }
+}
+
+function findBestLeaderStealTarget(players = [], currentPlayerIndex = 0, requiredType = null) {
   const current = players[currentPlayerIndex]
   const candidates = []
   players.forEach((player, playerIndex) => {
     if (playerIndex === currentPlayerIndex) return
-    ;(player.party ?? []).forEach((survivor) => {
+    ;(player.party ?? []).forEach((survivor, index) => {
+      const slotIndex = getSurvivorSlotIndex(survivor, index)
+      const effectiveType = getEffectiveSurvivorType(survivor, slotIndex, player.leaderId)
+      if (requiredType && effectiveType !== requiredType) return
       if (addSurvivorToParty(current.party ?? [], survivor, current.maxPartySize).added) {
         candidates.push({ playerIndex, survivor })
       }
@@ -4912,58 +6574,45 @@ function getScoringSurvivorCount(player) {
   return (player.party?.length ?? 0) + (player.leaderFans?.length ?? 0)
 }
 
+function getTreasureScore(player) {
+  return (player.treasureCards ?? []).reduce((sum, card) => sum + (card.score ?? 0), 0)
+}
+
 function getTotalResolvedClues(players) {
   return players.reduce((sum, player) => sum + (player.clueTokens ?? 0), 0)
 }
 
-function calcLeaderEndBonus(player, players) {
-  const canCount = player.resources?.can ?? 0
-  const maxCanCount = Math.max(...players.map((entry) => entry.resources?.can ?? 0), 0)
-  const isStrictMostCan =
-    canCount > 0 &&
-    canCount === maxCanCount &&
-    players.filter((entry) => (entry.resources?.can ?? 0) === maxCanCount).length === 1
-  const allCharge = player.party.length > 0 && player.party.every((survivor) => survivor.type === '용감이')
-  const requiredRobotTypes = ['반장', '분위기메이커', '용감이', '4차원', '겁쟁이']
-  const partyTypes = new Set(player.party.map((survivor) => survivor.type))
-  const hasAllRobotTypes = requiredRobotTypes.every((type) => partyTypes.has(type))
-  const weirdCount = player.party.filter((survivor) => survivor.type === '4차원').length
-  const maxSurvivorCount = Math.max(...players.map((entry) => getScoringSurvivorCount(entry)), 0)
-  const isStrictMostSurvivors =
-    getScoringSurvivorCount(player) > 0 &&
-    getScoringSurvivorCount(player) === maxSurvivorCount &&
-    players.filter((entry) => getScoringSurvivorCount(entry) === maxSurvivorCount).length === 1
-
-  const achievedByLeader = {
-    shy: isStrictMostCan,
-    zombie: allCharge,
-    robot: hasAllRobotTypes,
-    duck: weirdCount >= 3,
-    idol: isStrictMostSurvivors,
-  }
-  const achieved = achievedByLeader[player.leaderId] ?? false
+function calcLeaderEndBonus(player) {
+  const achieved = hasCompletedPlacementBonus(player, getEffectiveSurvivorType)
 
   return {
     score: achieved ? 3 : 0,
     achieved,
-    label: player.specialWin?.name ?? '지도자 종료 조건',
-    description: player.specialWin?.description ?? '미정',
+    label: '배치 보너스 완성',
+    description: '모든 배치 보너스 활성화',
   }
 }
 
 function calcFinalScoreBreakdown(player, players) {
   const party = calcPartyScore(player.party, player.leaderId)
-  const leader = calcLeaderEndBonus(player, players)
+  const leader = calcLeaderEndBonus(player)
   const eventScore = player.scoreTokens ?? 0
+  const treasureScore = getTreasureScore(player)
   const abandonedPenalty = player.abandonedEvents?.length ?? 0
+  const leaderData = LEADERS.find((l) => l.id === player.leaderId)
 
   return {
     playerId: player.id,
     name: player.name,
-    total: party.baseTotal + party.bonusTotal + eventScore + leader.score - abandonedPenalty,
+    leaderId: player.leaderId,
+    leaderName: leaderData?.name ?? player.leaderId,
+    leaderEmoji: leaderData?.emoji ?? '👤',
+    party: player.party ?? [],
+    total: party.baseTotal + party.bonusTotal + eventScore + treasureScore + leader.score - abandonedPenalty,
     partyScore: party.baseTotal,
     partyBonusScore: party.bonusTotal,
     eventScore,
+    treasureScore,
     abandonedPenalty,
     leaderEndScore: leader.score,
     leaderEndAchieved: leader.achieved,
@@ -4976,7 +6625,8 @@ function calcFinalScoreBreakdown(player, players) {
 function calcPlayerScore(player) {
   return (
     calcPartyScore(player.party, player.leaderId).total +
-    (player.scoreTokens ?? 0) -
+    (player.scoreTokens ?? 0) +
+    getTreasureScore(player) -
     (player.abandonedEvents?.length ?? 0)
   )
 }

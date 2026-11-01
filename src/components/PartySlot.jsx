@@ -1,142 +1,62 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useGameStore } from '../store/gameStore.js'
 import { calcPartyScore } from '../logic/scoring.js'
+import SurvivorCardFace from './SurvivorCardFace.jsx'
+import { PLACEMENT_EFFECT_TYPES, getActivePlacementEffectsForParty, getPlacementEffectsForSlot } from '../data/placementBonuses.js'
 
-const TYPE_COLOR = {
-  반장: 'border-blue-500 bg-blue-950/40',
-  분위기메이커: 'border-pink-500 bg-pink-950/40',
-  용감이: 'border-green-500 bg-green-950/40',
-  '4차원': 'border-yellow-500 bg-yellow-950/40',
-  겁쟁이: 'border-purple-500 bg-purple-950/40',
-  평범: 'border-gray-500 bg-gray-900/40',
+const COMMON_UPKEEP_TEXT = '파티 정비 단계: 통조림을 먹여서 기력회복 | 종료시: 모든 배치 보너스 활성화 ★+3'
+
+function getSurvivorSlotIndex(survivor, fallbackIndex = 0) {
+  return Number.isInteger(survivor?.partySlotIndex) ? survivor.partySlotIndex : fallbackIndex
 }
 
-const TYPE_BADGE_COLOR = {
-  반장: 'bg-blue-800 text-blue-200',
-  분위기메이커: 'bg-pink-800 text-pink-200',
-  용감이: 'bg-green-800 text-green-200',
-  '4차원': 'bg-yellow-800 text-yellow-200',
-  겁쟁이: 'bg-purple-800 text-purple-200',
-  평범: 'bg-gray-700 text-gray-300',
-}
-
-const TYPE_HINT_BADGE_COLOR = {
-  반장: 'border-blue-400/40 bg-blue-900/30 text-blue-100/80',
-  용감이: 'border-green-400/40 bg-green-900/30 text-green-100/80',
-  분위기메이커: 'border-pink-400/40 bg-pink-900/30 text-pink-100/80',
-  '4차원': 'border-yellow-400/40 bg-yellow-900/30 text-yellow-100/80',
-  겁쟁이: 'border-purple-400/40 bg-purple-900/30 text-purple-100/80',
-}
-
-const COMMON_UPKEEP_TEXT = '파티 정비: 통조림을 소모해 재활성화'
-
-function getDisplayEffect(effect = '') {
-  if (!effect) return ''
-  const legacyPrefix = '턴 시작: 병뚜껑 1 획득 / 파티 정비: 통조림을 소모해 재활성화'
-  if (effect === legacyPrefix) return ''
-  if (effect.startsWith(`${legacyPrefix} / `)) {
-    return effect.slice(`${legacyPrefix} / `.length)
-  }
-  if (effect === COMMON_UPKEEP_TEXT) return ''
-  if (effect.startsWith(`${COMMON_UPKEEP_TEXT} / `)) {
-    return effect.slice(`${COMMON_UPKEEP_TEXT} / `.length)
-  }
-  return effect
-}
-
-function getPartyDisplayGroups(party = [], breakdown = []) {
-  const groups = []
-
+function getPartyDisplaySlots(party = [], maxPartySize = 5, breakdown = []) {
+  const slots = Array.from({ length: maxPartySize }, () => null)
   party.forEach((survivor, index) => {
-    const lastGroup = groups[groups.length - 1]
+    const slotIndex = Math.max(0, Math.min(maxPartySize - 1, getSurvivorSlotIndex(survivor, index)))
+    const existing = slots[slotIndex]
     const stackKey = survivor.stackGroupKey ?? null
-    if (stackKey && lastGroup?.stackGroupKey === stackKey) {
-      lastGroup.members.push(survivor)
-      lastGroup.indices.push(index)
-      lastGroup.edgeRight = breakdown[index]?.edgeRight ?? 0
+    if (existing && stackKey && existing.stackGroupKey === stackKey) {
+      existing.members.push(survivor)
+      existing.indices.push(index)
+      existing.edgeRight = breakdown[index]?.edgeRight ?? existing.edgeRight ?? 0
       return
     }
-
-    groups.push({
-      key: stackKey ? `stack:${stackKey}` : survivor.uid,
-      stackGroupKey: stackKey,
-      members: [survivor],
-      indices: [index],
-      edgeRight: breakdown[index]?.edgeRight ?? 0,
-    })
+    if (!existing) {
+      slots[slotIndex] = {
+        key: stackKey ? `stack:${stackKey}` : survivor.uid,
+        stackGroupKey: stackKey,
+        members: [survivor],
+        indices: [index],
+        slotIndex,
+        edgeRight: breakdown[index]?.edgeRight ?? 0,
+      }
+    }
   })
-
-  return groups
+  return slots
 }
 
-function getSlotHint(slotIndex) {
-  if (slotIndex <= 1) {
-    return {
-      zone: '앞쪽',
-      tags: [{ type: '반장', label: '반' }, { type: '용감이', label: '용' }],
-      detail: '반장 배치시 순서 변경 비용 -1',
-    }
-  }
-  if (slotIndex === 2) {
-    return {
-      zone: '중앙',
-      tags: [{ type: '분위기메이커', label: '분' }, { type: '4차원', label: '4' }],
-      detail: '배치시 추천 보너스 +1 / 넘기기 무료',
-    }
-  }
-  return {
-    zone: '뒤쪽',
-    tags: [{ type: '겁쟁이', label: '겁' }],
-    detail: '배치시 재활성화 비용 무료',
-  }
+function isPlainSurvivor(survivor) {
+  const normalizedName = String(survivor?.name ?? '').replace(/\s/g, '')
+  return survivor?.id?.startsWith('s_plain_') || normalizedName === '평범생존자' || survivor?.type === '평범'
 }
 
-function SlotHint({ slotIndex, compact = false }) {
-  const hint = getSlotHint(slotIndex)
-  return (
-    <div className={`pointer-events-none absolute inset-x-3 z-0 select-none text-left opacity-35 ${compact ? 'bottom-1' : 'bottom-4'}`}>
-      <div className={`${compact ? 'text-[8px]' : 'text-[10px]'} font-black tracking-wide text-white/70`}>
-        {slotIndex + 1}번 : {hint.zone}
-      </div>
-      <div className="mt-1 flex items-start justify-start gap-1">
-        <div className="flex items-center gap-1 shrink-0">
-          {hint.tags.map(({ type, label }) => (
-            <span
-              key={type}
-              className={`rounded-full border px-1.5 py-0.5 ${compact ? 'text-[7px]' : 'text-[8px]'} font-black leading-none ${TYPE_HINT_BADGE_COLOR[type]}`}
-            >
-              {label}
-            </span>
-          ))}
-        </div>
-        {!compact && (
-          <div className="text-[8px] font-semibold leading-tight text-white/65 flex flex-col">
-            {Array.isArray(hint.detail)
-              ? hint.detail.map((line, i) => <span key={i}>{line}</span>)
-              : <span>{hint.detail}</span>
-            }
-          </div>
-        )}
-      </div>
-    </div>
-  )
+function getEffectiveSurvivorTypeForPlayer(survivor, slotIndex, leaderId) {
+  if (survivor?.id === 's_coward_6' && slotIndex === 0 && leaderId === 'zombie') return '용감이'
+  if (isPlainSurvivor(survivor) && slotIndex === 0 && leaderId === 'robot') return '반장'
+  return survivor?.type
 }
 
-function getUsedPartySlotCount(party = []) {
-  return getPartyDisplayGroups(party).length
-}
-
-function getPartyReorderCostReduction(party = []) {
-  return party.reduce((sum, survivor, index) => {
-    let next = sum
-    if (survivor.type === '반장' && index <= 1) {
-      next += 1
-    }
-    if (survivor.partyPassive?.type === 'reduce_reorder_cost') {
-      next += survivor.partyPassive.amount ?? 0
-    }
-    return next
+function getPartyReorderCostReduction(player) {
+  const placementReduction = getActivePlacementEffectsForParty(player, getEffectiveSurvivorTypeForPlayer)
+    .filter(({ effect }) => effect.type === PLACEMENT_EFFECT_TYPES.REDUCE_REORDER_COST)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+  const passiveReduction = (player?.party ?? []).reduce((sum, survivor) => {
+    if (survivor.partyPassive?.type === 'reduce_reorder_cost') return sum + (survivor.partyPassive.amount ?? 0)
+    return sum
   }, 0)
+  return placementReduction + passiveReduction
 }
 
 function getReactivationCost(player, survivor, survivorIndex) {
@@ -144,11 +64,40 @@ function getReactivationCost(player, survivor, survivorIndex) {
     ? (typeof survivor.reactivationCost === 'number' ? { can: survivor.reactivationCost } : survivor.reactivationCost)
     : { can: 1 }
 
-  if (survivor.type === '겁쟁이' && survivorIndex >= 3) {
-    return { ...base, can: Math.max(0, (base.can ?? 0) - 1) }
-  }
+  const slotIndex = getSurvivorSlotIndex(survivor, survivorIndex)
+  const effectiveType = getEffectiveSurvivorTypeForPlayer(survivor, slotIndex, player?.leaderId)
+  const reduction = getPlacementEffectsForSlot(player?.leaderId, slotIndex)
+    .filter((effect) => effect.type === PLACEMENT_EFFECT_TYPES.REDUCE_REACTIVATION_COST && effect.survivorType === effectiveType)
+    .reduce((sum, effect) => sum + (effect.amount ?? 0), 0)
 
-  return { can: base.can ?? 0, bottleCap: base.bottleCap ?? 0 }
+  return { can: Math.max(0, (base.can ?? 0) - reduction), bottleCap: base.bottleCap ?? 0 }
+}
+
+
+function getEffectiveUiSurvivorType(survivor, index, leaderId) {
+  const slotIndex = getSurvivorSlotIndex(survivor, index)
+  if (survivor?.id === 's_coward_6' && slotIndex === 0 && leaderId === 'zombie') return '용감이'
+  if ((survivor?.id?.startsWith('s_plain_') || String(survivor?.name ?? '').replace(/\s/g, '') === '평범생존자' || survivor?.type === '평범') && slotIndex === 0 && leaderId === 'robot') return '반장'
+  return survivor?.type
+}
+
+function hasOnlyEffectiveUiSurvivorType(player, targetType) {
+  const party = player?.party ?? []
+  return party.length > 0 && party.every((survivor, index) => (
+    getEffectiveUiSurvivorType(survivor, index, player?.leaderId) === targetType
+  ))
+}
+
+function canUiSurvivorActAsType(player, survivor, targetType, usedUids = new Set()) {
+  if (!survivor || usedUids.has(survivor.uid)) return false
+  const idx = player?.party?.findIndex((entry) => entry.uid === survivor.uid) ?? -1
+  const effectiveType = getEffectiveUiSurvivorType(survivor, idx, player?.leaderId)
+  if (effectiveType === targetType) return true
+  if (!hasOnlyEffectiveUiSurvivorType(player, '용감이')) return false
+  return getActivePlacementEffectsForParty(player, getEffectiveSurvivorTypeForPlayer)
+    .some(({ effect, survivor: wildcardSurvivor }) => (
+      effect.type === PLACEMENT_EFFECT_TYPES.BRAVE_WILDCARD && wildcardSurvivor.uid === survivor.uid
+    ))
 }
 
 function getRequiredAssignedType(interaction) {
@@ -161,6 +110,8 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
   const {
     players,
     currentPlayerIndex,
+    localPlayerIndex = 0,
+    preselectedSurvivors = [],
     phase,
     interaction,
     swapPartyMembers,
@@ -169,18 +120,23 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
     selectMySurvivor,
     selectTargetSurvivor,
     selectSwapSurvivor,
+    confirmTreasureCardEffect,
   } = useGameStore()
   const player = players[playerIndex]
   const [dragging, setDragging] = useState(null)
   const [dragOver, setDragOver] = useState(null)
 
+  const [inspected, setInspected] = useState(null)
+  const [stackMembers, setStackMembers] = useState({})
+
   if (!player) return null
-  const canLocalResolveInteraction = currentPlayerIndex === 0 && !players[currentPlayerIndex]?.isBot
+  const canLocalResolveInteraction = currentPlayerIndex === localPlayerIndex && !players[currentPlayerIndex]?.isBot
 
   const { total, breakdown } = calcPartyScore(player.party, player.leaderId)
   const eventBonus = player.scoreTokens ?? 0
+  const treasureBonus = (player.treasureCards ?? []).reduce((sum, card) => sum + (card.score ?? 0), 0)
   const penalty = player.abandonedEvents?.length ?? 0
-  const finalScore = total + eventBonus - penalty
+  const finalScore = total + eventBonus + treasureBonus - penalty
 
   function handleDragStart(i) { setDragging(i) }
   function handleDragOver(e, i) { e.preventDefault(); setDragOver(i) }
@@ -196,6 +152,10 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
     if (!interaction) return null
     if (!canLocalResolveInteraction) return null
 
+    if (interaction.kind === 'use_stim_pack' && playerIndex === currentPlayerIndex) {
+      return players[currentPlayerIndex]?.survivorActivity?.[uid] === false ? 'selectable' : null
+    }
+
     if (interaction.step === 'select_my_survivor' && playerIndex === currentPlayerIndex) {
       const currentPlayer = players[currentPlayerIndex]
       const target = currentPlayer?.party?.find((survivor) => survivor.uid === uid)
@@ -205,15 +165,23 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
       ) {
         return null
       }
+      if (interaction.event?.resolution?.type === 'send_survivor_type' && interaction.kind !== 'assign_event_party') {
+        if (!canUiSurvivorActAsType(currentPlayer, target, interaction.event.resolution.survivorType)) return null
+      }
       const requiredType = getRequiredAssignedType(interaction)
       if (requiredType && interaction.kind === 'assign_event_party') {
         const selected = interaction.payload.selectedMyUids ?? []
+        const usedUids = new Set()
         const selectedHasRequired = selected
           .map((selectedUid) => currentPlayer?.party?.find((survivor) => survivor.uid === selectedUid))
-          .some((survivor) => survivor?.type === requiredType)
+          .some((survivor) => {
+            const matched = canUiSurvivorActAsType(currentPlayer, survivor, requiredType, usedUids)
+            if (matched) usedUids.add(survivor.uid)
+            return matched
+          })
         const isSelected = selected.includes(uid)
         const remainingAfterThis = (interaction.maxCount ?? interaction.requiredCount) - selected.length
-        if (!isSelected && !selectedHasRequired && remainingAfterThis <= 1 && target?.type !== requiredType) {
+        if (!isSelected && !selectedHasRequired && remainingAfterThis <= 1 && !canUiSurvivorActAsType(currentPlayer, target, requiredType, usedUids)) {
           return null
         }
       }
@@ -222,10 +190,13 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
 
     if (interaction.step === 'select_target_survivor' && playerIndex === interaction.payload.targetPlayerIndex) {
       const targetSurvivor = player.party.find((survivor) => survivor.uid === uid)
-      if (interaction.kind === 'survivor_recruit_magicgirl_take' && targetSurvivor?.type !== '평범') {
+      if (interaction.event?.resolution?.type === 'support_roll_dice' && player.survivorActivity?.[uid] === false) {
         return null
       }
-      if (interaction.event?.category === 'attack') {
+      if (interaction.kind === 'survivor_recruit_magicgirl_take' && !(targetSurvivor?.id?.startsWith('s_plain_') || String(targetSurvivor?.name ?? '').replace(/\s/g, '') === '평범생존자' || targetSurvivor?.type === '평범')) {
+        return null
+      }
+      if (interaction.event?.eventType === 'action_attack' || interaction.event?.category === 'attack') {
         if (targetSurvivor?.id === 's_coward_4') return null
         if (targetSurvivor?.id === 's_coward_1' && player.party.length > 1) return null
       }
@@ -248,6 +219,11 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
   function handleSelect(uid) {
     if (!interaction) return
     if (!canLocalResolveInteraction) return
+
+    if (interaction.kind === 'use_stim_pack' && playerIndex === currentPlayerIndex) {
+      confirmTreasureCardEffect(uid)
+      return
+    }
 
     if (interaction.step === 'select_my_survivor' && playerIndex === currentPlayerIndex) {
       selectMySurvivor(uid)
@@ -277,176 +253,60 @@ export default function PartySlot({ playerIndex, isEditable, compact = false, sh
           <div className="text-right">
             <span className="text-lg font-bold text-amber-300">{finalScore}점</span>
             {eventBonus > 0 && <div className="text-[11px] text-emerald-400">해결 이벤트 +{eventBonus}</div>}
+            {treasureBonus > 0 && <div className="text-[11px] text-yellow-300">보물 +{treasureBonus}</div>}
             {penalty > 0 && <div className="text-[11px] text-red-400">이벤트 벌점 -{penalty}</div>}
           </div>
         </div>
       )}
 
-      {/* 생존자 슬롯 */}
-      <div className={`flex gap-2 overflow-x-auto overflow-y-visible pb-1 ${compact ? 'min-h-[72px]' : 'min-h-[208px]'}`}>
-        {getPartyDisplayGroups(player.party, breakdown).flatMap((group, slotIndex, groups) => {
-          const survivor = group.members[0]
-          const i = group.indices[0]
-          const interactionRole = getInteractionRole(survivor.uid)
-          const canInteract = interactionRole === 'selectable' || interactionRole === 'selected'
-          const displayEffect = getDisplayEffect(survivor.effect)
-          const stackPreviewCount = Math.min(Math.max(0, group.members.length - 1), 3)
-          const isActiveNow = player.survivorActivity?.[survivor.uid] !== false
-          const reactivationCost = getReactivationCost(player, survivor, i)
-          const canReactivate =
-            !compact &&
-            isEditable &&
-            playerIndex === currentPlayerIndex &&
-            phase === 'party_maintenance' &&
-            !interaction &&
-            !isActiveNow &&
-            (player.resources.can ?? 0) >= (reactivationCost.can ?? 0) &&
-            (player.resources.bottleCap ?? 0) >= (reactivationCost.bottleCap ?? 0)
-          const baseCardClass = `${compact ? 'w-16 h-[60px] p-2 text-center' : 'w-44 h-[19.25rem] p-3 text-left'} ${TYPE_COLOR[survivor.type] ?? 'border-gray-600 bg-gray-800'}`
-          const canReturnPartySurvivor =
-            !compact &&
-            isEditable &&
-            playerIndex === currentPlayerIndex &&
-            phase === 'party_maintenance' &&
-            !interaction
-
-          const cardEl = (
-            <div key={group.key} className={`relative shrink-0 ${compact ? 'pb-4' : 'pb-10'}`}>
-              {stackPreviewCount > 0 && Array.from({ length: stackPreviewCount }).map((_, stackIndex) => (
-                <div
-                  key={`${group.key}-stack-${stackIndex}`}
-                  className={`absolute left-0 right-0 border-2 rounded-[1.15rem] ${baseCardClass} opacity-80 brightness-75 pointer-events-none`}
-                  style={{
-                    transform: `translateY(${compact ? 8 : 16}px) translateX(${(stackIndex + 1) * 2}px)`,
-                    zIndex: stackIndex,
-                  }}
-                />
-              ))}
-              <div
-                draggable={isEditable && !interaction}
-                onDragStart={() => handleDragStart(i)}
-                onDragOver={(e) => handleDragOver(e, i)}
-                onDrop={() => handleDrop(i)}
-                onClick={() => canInteract && handleSelect(survivor.uid)}
-                className={`relative z-10 overflow-hidden border-2 rounded-[1.15rem] cursor-grab transition-all flex flex-col ${baseCardClass} ${isActiveNow ? '' : 'opacity-70 saturate-75'}
-                  ${dragOver === i ? 'scale-105 border-amber-400' : ''}
-                  ${canInteract ? 'cursor-pointer ring-1 ring-sky-700/60 hover:border-sky-400' : ''}
-                  ${interactionRole === 'selected' ? 'border-sky-400 ring-2 ring-sky-500/70' : ''}
-                `}
-              >
-              {compact && (
-                <>
-                  <div className="text-sm text-gray-500 absolute top-1 left-1.5">#{slotIndex + 1}</div>
-                  <div className="text-2xl mt-3">{survivor.emoji}</div>
-                  <div className="text-xs font-semibold text-gray-200 mt-1 leading-tight">{survivor.name}</div>
-                  {group.members.length > 1 && <div className="text-[10px] text-yellow-300">x{group.members.length}</div>}
-                  <div className="mt-1 text-xs">
-                    <span className="text-gray-400">기본 {survivor.score}</span>
-                  </div>
-                </>
-              )}
-
-              {!compact && (
-                <>
-                  {canReturnPartySurvivor && (
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        returnPartySurvivorToMercenary(survivor.uid)
-                      }}
-                      className="absolute right-2 top-2 z-20 rounded-md bg-gray-950/85 px-2 py-1 text-[10px] text-amber-200 border border-amber-700/60 hover:bg-gray-900"
-                    >
-                      떠나보내기 (+🥫1)
-                    </button>
-                  )}
-
-                  {!isActiveNow && (
-                    <div className="absolute left-2 top-2 z-20 rounded-md bg-black/75 px-2 py-1 text-[10px] text-sky-200 border border-sky-700/60">
-                      비활성
-                    </div>
-                  )}
-
-                  {canReactivate && (
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        reactivateSurvivor(survivor.uid)
-                      }}
-                      className="absolute left-2 top-9 z-20 rounded-md bg-emerald-950/90 px-2 py-1 text-[10px] text-emerald-200 border border-emerald-700/60 hover:bg-emerald-900"
-                    >
-                      {`식사 제공${(reactivationCost.can ?? 0) > 0 ? ` 🥫${reactivationCost.can}` : ''}`}
-                    </button>
-                  )}
-
-                  <div className="absolute left-2 top-1 text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    {survivor.score}
-                  </div>
-
-                  <div className="px-1 pt-7 pb-0.5">
-                    <div className="flex min-h-[4.9rem] items-center justify-center rounded-[0.8rem] bg-black/15">
-                      <div className="text-5xl drop-shadow-[0_3px_0_rgba(0,0,0,0.22)]">{survivor.emoji}</div>
-                    </div>
-
-                    <div className="mt-3 text-center">
-                      <div className="text-[1rem] font-semibold uppercase tracking-[0.06em] leading-tight text-gray-50">
-                        {survivor.name}
-                      </div>
-                      {group.members.length > 1 && (
-                        <div className="mt-1 text-[11px] font-semibold text-yellow-300">겹침 x{group.members.length}</div>
-                      )}
-                    </div>
-
-                    {displayEffect && (
-                      <div className="mt-3 text-[11px] leading-snug text-gray-200 line-clamp-4">
-                        {displayEffect}
-                      </div>
-                    )}
-
-                    <div className="mt-2 text-[9px] leading-snug text-gray-400 line-clamp-3 min-h-[2.35rem]">
-                      {survivor.description}
-                    </div>
-
-                  </div>
-
-                  <div className={`mt-auto -mx-3 -mb-3 px-3 py-2 text-center shrink-0 ${TYPE_BADGE_COLOR[survivor.type]}`}>
-                    <div className="text-[10px] font-semibold uppercase tracking-[0.12em] opacity-80 leading-tight">
-                      {survivor.type}
-                    </div>
-                  </div>
-
-                </>
-              )}
-              </div>
+      <div className="survivor-party-row">
+        {getPartyDisplaySlots(player.party, player.maxPartySize ?? 5, breakdown).map((group, slotIndex) => {
+          const hint = <div className="survivor-slot-note"><strong>{slotIndex + 1}. {slotIndex < 2 ? '앞쪽' : slotIndex === 2 ? '중앙' : '뒤쪽'}</strong>{getPlacementEffectsForSlot(player.leaderId, slotIndex).map(effect => <div key={effect.type}>{effect.label} · {effect.detail}</div>)}</div>
+          if (!group) return <div key={slotIndex} className={`survivor-party-slot ${compact ? 'compact' : ''}`}><div className="survivor-empty-slot">{slotIndex + 1}번 자리</div>{hint}</div>
+          const survivor = group.members.find(member => member.uid === stackMembers[group.key]) ?? group.members[0]
+          const i = player.party.findIndex(member => member.uid === survivor.uid)
+          const role = getInteractionRole(survivor.uid)
+          const canInteract = role === 'selectable' || role === 'selected'
+          const active = player.survivorActivity?.[survivor.uid] !== false
+          const canPreselect = playerIndex === localPlayerIndex && currentPlayerIndex === localPlayerIndex && phase === 'action' && !interaction && active
+          const selected = role === 'selected' || (canPreselect && preselectedSurvivors.includes(survivor.uid))
+          const selectCard = () => {
+            if (canInteract) handleSelect(survivor.uid)
+            else if (canPreselect) useGameStore.setState({ preselectedSurvivors: preselectedSurvivors.includes(survivor.uid) ? preselectedSurvivors.filter(uid => uid !== survivor.uid) : [...preselectedSurvivors, survivor.uid] })
+            else setInspected(survivor)
+          }
+          const canMaintain = isEditable && playerIndex === localPlayerIndex && playerIndex === currentPlayerIndex && phase === 'party_maintenance' && !interaction
+          const meal = getReactivationCost(player, survivor, i)
+          const canAffordMeal = (player.resources.can ?? 0) >= meal.can && (player.resources.bottleCap ?? 0) >= meal.bottleCap
+          return <div key={group.key} className={`survivor-party-slot ${compact ? 'compact' : ''}`}>
+            <div className={`survivor-party-stage ${active ? '' : 'is-inactive'}`}>
+              {group.members.slice(1, 4).map((member, index) => <div key={member.uid} className="survivor-stack-sheet" style={{ transform: `translate(${(index + 1) * 3}px, ${(index + 1) * 3}px)` }} />)}
+              <button type="button" className="survivor-card-button" draggable={canMaintain}
+                onDragStart={() => handleDragStart(i)} onDragEnd={() => { setDragging(null); setDragOver(null) }} onDragOver={event => handleDragOver(event, i)} onDrop={() => handleDrop(i)}
+                aria-label={`${survivor.name} · ${active ? '활성' : '비활성'} · ${canInteract || canPreselect ? '선택' : '자세히 보기'}`} aria-pressed={selected}
+                style={dragOver === i ? { outline: '3px solid #e4a72c' } : undefined}
+                onClick={selectCard}>
+                <SurvivorCardFace survivor={survivor} />
+              </button>
+              {!active && <span className="survivor-activity-label">비활성 · 휴식 중</span>}
             </div>
-          )
-          return [cardEl]
-        })}
-
-        {/* 빈 슬롯 */}
-        {Array.from({ length: Math.max(0, player.maxPartySize - getUsedPartySlotCount(player.party)) }).map((_, i) => {
-          const slotIndex = getUsedPartySlotCount(player.party) + i
-          return (
-          <div
-            key={`empty-${i}`}
-            className={`relative border-2 border-dashed border-gray-700 rounded-lg flex items-center justify-center text-gray-700 text-xs
-              ${compact ? 'w-16 h-[60px]' : 'w-44 h-[19.25rem]'}`}
-          >
-            <SlotHint slotIndex={slotIndex} compact={compact} />
-            빈 슬롯
+            {group.members.length > 1 && <div className="survivor-card-controls"><label>겹친 동료 <select aria-label={`${slotIndex + 1}번 슬롯 동료 선택`} value={survivor.uid} onChange={event => setStackMembers({ ...stackMembers, [group.key]: event.target.value })}>{group.members.map(member => <option key={member.uid} value={member.uid}>{member.name}</option>)}</select></label></div>}
+            {(canInteract || canPreselect) && <div className="survivor-card-controls"><button type="button" onClick={() => setInspected(survivor)}>카드 읽기</button>{selected && canPreselect && <span>탐색 카드를 고르세요</span>}</div>}
+            {canMaintain && <div className="survivor-card-controls">
+              {!active && <button type="button" disabled={!canAffordMeal} onClick={() => reactivateSurvivor(survivor.uid)}>식사 제공 🥫{meal.can}{meal.bottleCap ? ` 🪙${meal.bottleCap}` : ''}</button>}
+              <button type="button" onClick={() => returnPartySurvivorToMercenary(survivor.uid)}>떠나보내기 🥫+1</button>
+              {player.party.length > 1 && <select aria-label={`${survivor.name} 자리 교환`} value="" onChange={event => { if (event.target.value !== '') swapPartyMembers(playerIndex, i, Number(event.target.value)) }}><option value="">자리 교환…</option>{player.party.map((member, index) => index !== i && <option key={member.uid} value={index}>{getSurvivorSlotIndex(member, index) + 1}번 · {member.name}</option>)}</select>}
+            </div>}
+            {hint}
           </div>
-          )
         })}
       </div>
-
-      {isEditable && player.party.length > 1 && (
-        <p className="text-xs text-gray-600 mt-2">드래그해서 순서 변경 (병뚜껑 -{Math.max(0, 2 - getPartyReorderCostReduction(player.party))})</p>
-      )}
-
-      {!compact && (
-        <div className="mt-3 rounded-lg border border-white/10 bg-gray-950/60 px-3 py-2 text-center text-[11px] text-gray-400">
-          각 생존자: {COMMON_UPKEEP_TEXT}
+      {!compact && <div className="survivor-slot-note">{COMMON_UPKEEP_TEXT}{isEditable && player.party.length > 1 && <span> · 드래그 또는 자리 교환 (🪙-{Math.max(0, 2 - getPartyReorderCostReduction(player))})</span>}</div>}
+      {inspected && createPortal(<div className="survivor-inspect-backdrop" onClick={() => setInspected(null)}>
+        <div className="survivor-inspect" role="dialog" aria-modal="true" aria-label={`${inspected.name} 카드 정보`} onClick={event => event.stopPropagation()} onKeyDown={event => { if (event.key === 'Escape') setInspected(null) }}>
+          <SurvivorCardFace survivor={inspected} /><button type="button" autoFocus onClick={() => setInspected(null)}>닫기</button>
         </div>
-      )}
+      </div>, document.body)}
     </div>
   )
 }

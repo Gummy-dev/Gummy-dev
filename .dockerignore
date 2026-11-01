@@ -1,0 +1,10 @@
+.git
+node_modules
+dist
+*.pdf
+.DS_Store
+.env*
+docs
+tests
+scripts
+.vite

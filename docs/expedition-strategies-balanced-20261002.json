@@ -1,0 +1,2762 @@
+{
+  "rulesAtRun": "First successful escape wins immediately; daytime or nighttime attempt. Before concurrent final-round scoring edit on 2026-10-02.",
+  "status": "Historical diagnostic; rerun after agreeing the current victory rule.",
+  "note": "Heuristic policies, not human win-rate estimates.",
+  "rounds": 5,
+  "games": 100,
+  "unfinished": [],
+  "policies": {
+    "rush": {
+      "played": 40,
+      "wins": 24,
+      "cycles": 779,
+      "events": 0,
+      "abilities": 67,
+      "crew": 125,
+      "winPercent": 60,
+      "meanCycles": 19.5
+    },
+    "economy": {
+      "played": 40,
+      "wins": 22,
+      "cycles": 729,
+      "events": 58,
+      "abilities": 134,
+      "crew": 195,
+      "winPercent": 55,
+      "meanCycles": 18.2
+    },
+    "elite": {
+      "played": 40,
+      "wins": 17,
+      "cycles": 750,
+      "events": 61,
+      "abilities": 212,
+      "crew": 197,
+      "winPercent": 42.5,
+      "meanCycles": 18.8
+    },
+    "prepared": {
+      "played": 40,
+      "wins": 15,
+      "cycles": 738,
+      "events": 106,
+      "abilities": 226,
+      "crew": 189,
+      "winPercent": 37.5,
+      "meanCycles": 18.5
+    },
+    "opportunist": {
+      "played": 40,
+      "wins": 22,
+      "cycles": 706,
+      "events": 65,
+      "abilities": 120,
+      "crew": 153,
+      "winPercent": 55,
+      "meanCycles": 17.7
+    }
+  },
+  "matches": [
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "cycles": 22,
+      "steps": 497,
+      "route": [
+        14,
+        21
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        1,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 18,
+      "steps": 373,
+      "route": [
+        8,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "economy",
+      "cycles": 23,
+      "steps": 504,
+      "route": [
+        19,
+        20
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "rush",
+      "cycles": 27,
+      "steps": 401,
+      "route": [
+        1,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "rush",
+      "cycles": 15,
+      "steps": 315,
+      "route": [
+        22,
+        2
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "economy",
+      "cycles": 14,
+      "steps": 313,
+      "route": [
+        22,
+        3
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "cycles": 16,
+      "steps": 334,
+      "route": [
+        9,
+        20
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "rush",
+      "cycles": 16,
+      "steps": 385,
+      "route": [
+        6,
+        20
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        6,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 16,
+      "steps": 397,
+      "route": [
+        21,
+        14
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "cycles": 12,
+      "steps": 300,
+      "route": [
+        5,
+        21
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "cycles": 17,
+      "steps": 423,
+      "route": [
+        23,
+        15
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 23,
+      "steps": 507,
+      "route": [
+        16,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 25,
+      "steps": 520,
+      "route": [
+        10,
+        22
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        3,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "elite",
+      "cycles": 30,
+      "steps": 624,
+      "route": [
+        20,
+        18
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        15,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "rush",
+      "cycles": 17,
+      "steps": 410,
+      "route": [
+        21,
+        17
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 22,
+      "steps": 542,
+      "route": [
+        20,
+        23
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "cycles": 17,
+      "steps": 419,
+      "route": [
+        21,
+        21
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        1,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "rush",
+      "cycles": 16,
+      "steps": 343,
+      "route": [
+        10,
+        20
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        1,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 19,
+      "steps": 427,
+      "route": [
+        20,
+        9
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "cycles": 19,
+      "steps": 461,
+      "route": [
+        17,
+        20
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "cycles": 24,
+      "steps": 566,
+      "route": [
+        19,
+        22
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        2,
+        10
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 14,
+      "steps": 331,
+      "route": [
+        5,
+        22
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "prepared",
+      "cycles": 27,
+      "steps": 610,
+      "route": [
+        19,
+        23
+      ],
+      "events": [
+        0,
+        6
+      ],
+      "abilities": [
+        2,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "rush",
+      "cycles": 22,
+      "steps": 472,
+      "route": [
+        7,
+        23
+      ],
+      "events": [
+        5,
+        0
+      ],
+      "abilities": [
+        0,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "prepared",
+      "cycles": 23,
+      "steps": 499,
+      "route": [
+        15,
+        20
+      ],
+      "events": [
+        0,
+        5
+      ],
+      "abilities": [
+        0,
+        22
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "rush",
+      "cycles": 20,
+      "steps": 459,
+      "route": [
+        13,
+        22
+      ],
+      "events": [
+        4,
+        0
+      ],
+      "abilities": [
+        7,
+        15
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "rush",
+      "cycles": 21,
+      "steps": 439,
+      "route": [
+        23,
+        16
+      ],
+      "events": [
+        0,
+        4
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "rush",
+      "cycles": 21,
+      "steps": 444,
+      "route": [
+        17,
+        20
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        11,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "cycles": 15,
+      "steps": 349,
+      "route": [
+        7,
+        23
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        1,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "cycles": 20,
+      "steps": 461,
+      "route": [
+        18,
+        21
+      ],
+      "events": [
+        4,
+        0
+      ],
+      "abilities": [
+        5,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "cycles": 16,
+      "steps": 292,
+      "route": [
+        22,
+        4
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        1,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "cycles": 15,
+      "steps": 314,
+      "route": [
+        10,
+        20
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        3,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "rush",
+      "cycles": 19,
+      "steps": 372,
+      "route": [
+        20,
+        7
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "rush",
+      "cycles": 18,
+      "steps": 385,
+      "route": [
+        7,
+        20
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "cycles": 21,
+      "steps": 383,
+      "route": [
+        9,
+        24
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        14
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "rush",
+      "cycles": 18,
+      "steps": 383,
+      "route": [
+        15,
+        23
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "cycles": 16,
+      "steps": 317,
+      "route": [
+        10,
+        20
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        3,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "cycles": 18,
+      "steps": 423,
+      "route": [
+        22,
+        15
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "cycles": 19,
+      "steps": 415,
+      "route": [
+        11,
+        21
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "cycles": 28,
+      "steps": 517,
+      "route": [
+        17,
+        21
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        1,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "cycles": 17,
+      "steps": 464,
+      "route": [
+        21,
+        15
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "cycles": 23,
+      "steps": 567,
+      "route": [
+        15,
+        21
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        2,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "economy",
+      "cycles": 17,
+      "steps": 406,
+      "route": [
+        20,
+        12
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        6,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "cycles": 24,
+      "steps": 489,
+      "route": [
+        16,
+        23
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        8,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 16,
+      "steps": 370,
+      "route": [
+        22,
+        7
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        3,
+        10
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 20,
+      "steps": 452,
+      "route": [
+        22,
+        12
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        12,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "cycles": 18,
+      "steps": 428,
+      "route": [
+        11,
+        24
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        5,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 13,
+      "steps": 336,
+      "route": [
+        7,
+        23
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        3,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "economy",
+      "cycles": 22,
+      "steps": 522,
+      "route": [
+        21,
+        19
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        2,
+        17
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "cycles": 20,
+      "steps": 512,
+      "route": [
+        19,
+        22
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        10,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "cycles": 17,
+      "steps": 448,
+      "route": [
+        6,
+        22
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        1,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "prepared",
+      "cycles": 23,
+      "steps": 629,
+      "route": [
+        23,
+        16
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        2,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "economy",
+      "cycles": 18,
+      "steps": 447,
+      "route": [
+        20,
+        17
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "cycles": 19,
+      "steps": 432,
+      "route": [
+        20,
+        18
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 25,
+      "steps": 533,
+      "route": [
+        22,
+        14
+      ],
+      "events": [
+        2,
+        4
+      ],
+      "abilities": [
+        10,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "economy",
+      "cycles": 28,
+      "steps": 690,
+      "route": [
+        17,
+        22
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        11,
+        16
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "cycles": 17,
+      "steps": 413,
+      "route": [
+        23,
+        6
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        1,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 14,
+      "steps": 371,
+      "route": [
+        3,
+        23
+      ],
+      "events": [
+        5,
+        0
+      ],
+      "abilities": [
+        1,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "cycles": 12,
+      "steps": 343,
+      "route": [
+        11,
+        20
+      ],
+      "events": [
+        0,
+        4
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "cycles": 23,
+      "steps": 576,
+      "route": [
+        14,
+        20
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        18,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "cycles": 13,
+      "steps": 320,
+      "route": [
+        21,
+        5
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        4,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "cycles": 11,
+      "steps": 293,
+      "route": [
+        22,
+        4
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        4,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "cycles": 18,
+      "steps": 439,
+      "route": [
+        11,
+        22
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        4,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "cycles": 15,
+      "steps": 364,
+      "route": [
+        20,
+        11
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 16,
+      "steps": 402,
+      "route": [
+        24,
+        11
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "cycles": 16,
+      "steps": 398,
+      "route": [
+        23,
+        11
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "cycles": 21,
+      "steps": 481,
+      "route": [
+        20,
+        17
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        17,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "cycles": 13,
+      "steps": 321,
+      "route": [
+        9,
+        22
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        4,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "cycles": 24,
+      "steps": 556,
+      "route": [
+        6,
+        21
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        2,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "cycles": 17,
+      "steps": 438,
+      "route": [
+        20,
+        8
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        12,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "elite",
+      "cycles": 18,
+      "steps": 435,
+      "route": [
+        23,
+        10
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        1,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "elite",
+      "cycles": 13,
+      "steps": 339,
+      "route": [
+        10,
+        22
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        9,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 13,
+      "steps": 330,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        2,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "cycles": 20,
+      "steps": 471,
+      "route": [
+        23,
+        13
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        0,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "prepared",
+      "cycles": 21,
+      "steps": 495,
+      "route": [
+        13,
+        20
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        4,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 22,
+      "steps": 554,
+      "route": [
+        19,
+        21
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        20
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "cycles": 16,
+      "steps": 412,
+      "route": [
+        20,
+        10
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        1,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "prepared",
+      "cycles": 17,
+      "steps": 425,
+      "route": [
+        23,
+        17
+      ],
+      "events": [
+        5,
+        0
+      ],
+      "abilities": [
+        7,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "cycles": 14,
+      "steps": 376,
+      "route": [
+        8,
+        22
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        13,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "elite",
+      "cycles": 14,
+      "steps": 357,
+      "route": [
+        10,
+        22
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "elite",
+      "cycles": 20,
+      "steps": 496,
+      "route": [
+        22,
+        10
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        1,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "elite",
+      "cycles": 19,
+      "steps": 433,
+      "route": [
+        16,
+        22
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "cycles": 24,
+      "steps": 480,
+      "route": [
+        21,
+        13
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        19,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "cycles": 24,
+      "steps": 558,
+      "route": [
+        20,
+        17
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        7,
+        28
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "cycles": 20,
+      "steps": 477,
+      "route": [
+        15,
+        22
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        0,
+        10
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "cycles": 16,
+      "steps": 380,
+      "route": [
+        21,
+        14
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        2,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "cycles": 19,
+      "steps": 459,
+      "route": [
+        21,
+        21
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        4,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "elite",
+      "cycles": 16,
+      "steps": 367,
+      "route": [
+        7,
+        22
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        12,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "cycles": 14,
+      "steps": 326,
+      "route": [
+        5,
+        20
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "cycles": 15,
+      "steps": 334,
+      "route": [
+        22,
+        11
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "cycles": 16,
+      "steps": 395,
+      "route": [
+        11,
+        20
+      ],
+      "events": [
+        2,
+        2
+      ],
+      "abilities": [
+        2,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "prepared",
+      "cycles": 15,
+      "steps": 343,
+      "route": [
+        8,
+        22
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        1,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "prepared",
+      "cycles": 14,
+      "steps": 329,
+      "route": [
+        24,
+        6
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        3,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "cycles": 14,
+      "steps": 297,
+      "route": [
+        20,
+        1
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "cycles": 12,
+      "steps": 296,
+      "route": [
+        4,
+        20
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "cycles": 13,
+      "steps": 288,
+      "route": [
+        20,
+        8
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "prepared",
+      "cycles": 22,
+      "steps": 476,
+      "route": [
+        20,
+        16
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        2,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "cycles": 29,
+      "steps": 651,
+      "route": [
+        21,
+        19
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        1,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "cycles": 19,
+      "steps": 459,
+      "route": [
+        13,
+        22
+      ],
+      "events": [
+        3,
+        2
+      ],
+      "abilities": [
+        2,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "cycles": 13,
+      "steps": 299,
+      "route": [
+        22,
+        5
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    }
+  ]
+}

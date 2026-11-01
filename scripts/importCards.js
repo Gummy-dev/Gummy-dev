@@ -84,7 +84,7 @@ if (!fs.existsSync(CSV_DIR)) {
   )
   fs.writeFileSync(
     path.join(CSV_DIR, 'leaders.csv'),
-    'id,name,fullName,type,score,initialBottleCap,initialCan,actionCount,uniqueSkillName,uniqueSkillDesc,description,emoji\n'
+    'id,name,fullName,type,score,initialBottleCap,initialCan,uniqueSkillName,uniqueSkillDesc,description,emoji\n'
   )
   fs.writeFileSync(
     path.join(CSV_DIR, 'events.csv'),

@@ -1,0 +1,10044 @@
+{
+  "note": "20-space eligibility; final-round scoring, each resource scored separately. Strategy totals exclude idle-control matches; idle totals are the control only. Ties split equally. Not human win-rate estimates.",
+  "rounds": 5,
+  "games": 150,
+  "unfinished": [
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1276,
+          "bottleCap": 302
+        },
+        {
+          "can": 1344,
+          "bottleCap": 340
+        }
+      ],
+      "cycles": 334,
+      "steps": 1801,
+      "route": [
+        3,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1340,
+          "bottleCap": 339
+        },
+        {
+          "can": 1280,
+          "bottleCap": 303
+        }
+      ],
+      "cycles": 334,
+      "steps": 1801,
+      "route": [
+        0,
+        3
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 3
+        },
+        {
+          "can": 817,
+          "bottleCap": 1
+        }
+      ],
+      "cycles": 163,
+      "steps": 1801,
+      "route": [
+        0,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        6,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 817,
+          "bottleCap": 1
+        },
+        {
+          "can": 4,
+          "bottleCap": 3
+        }
+      ],
+      "cycles": 163,
+      "steps": 1801,
+      "route": [
+        0,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1119,
+          "bottleCap": 282
+        },
+        {
+          "can": 920,
+          "bottleCap": 594
+        }
+      ],
+      "cycles": 305,
+      "steps": 1801,
+      "route": [
+        19,
+        0
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        28,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 920,
+          "bottleCap": 594
+        },
+        {
+          "can": 1119,
+          "bottleCap": 282
+        }
+      ],
+      "cycles": 305,
+      "steps": 1801,
+      "route": [
+        0,
+        19
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        28
+      ]
+    }
+  ],
+  "tied": 0,
+  "policies": {
+    "rush": {
+      "played": 40,
+      "wins": 17,
+      "cycles": 810,
+      "events": 0,
+      "abilities": 160,
+      "crew": 190,
+      "winPercent": 42.5,
+      "meanCycles": 20.3
+    },
+    "economy": {
+      "played": 40,
+      "wins": 28,
+      "cycles": 786,
+      "events": 39,
+      "abilities": 186,
+      "crew": 200,
+      "winPercent": 70,
+      "meanCycles": 19.7
+    },
+    "elite": {
+      "played": 40,
+      "wins": 17,
+      "cycles": 760,
+      "events": 35,
+      "abilities": 152,
+      "crew": 196,
+      "winPercent": 42.5,
+      "meanCycles": 19
+    },
+    "prepared": {
+      "played": 40,
+      "wins": 16,
+      "cycles": 794,
+      "events": 101,
+      "abilities": 278,
+      "crew": 200,
+      "winPercent": 40,
+      "meanCycles": 19.9
+    },
+    "opportunist": {
+      "played": 40,
+      "wins": 22,
+      "cycles": 782,
+      "events": 37,
+      "abilities": 157,
+      "crew": 190,
+      "winPercent": 55,
+      "meanCycles": 19.6
+    },
+    "idle": {
+      "played": 50,
+      "wins": 0,
+      "cycles": 2806,
+      "events": 0,
+      "abilities": 0,
+      "crew": 4,
+      "winPercent": 0,
+      "meanCycles": 56.1
+    }
+  },
+  "matches": [
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 21,
+          "total": 42,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 4,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 11,
+          "bottleCap": 5
+        },
+        {
+          "can": 60,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 24,
+      "steps": 577,
+      "route": [
+        18,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        11,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 15,
+          "total": 32,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 14,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 4,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 46,
+          "bottleCap": 0
+        },
+        {
+          "can": 10,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 424,
+      "route": [
+        20,
+        14
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 2,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 15,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 12,
+          "total": 24,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 36,
+          "bottleCap": 2
+        },
+        {
+          "can": 8,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 24,
+      "steps": 500,
+      "route": [
+        15,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 22,
+          "eligible": true,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 0,
+          "total": 14,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 12
+        },
+        {
+          "can": 2,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 34,
+      "steps": 692,
+      "route": [
+        23,
+        22
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 12,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 16,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 15,
+          "total": 31,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 31,
+          "bottleCap": 8
+        },
+        {
+          "can": 37,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 20,
+      "steps": 477,
+      "route": [
+        22,
+        16
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        3,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 22,
+          "eligible": true,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 6,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 3,
+          "total": 20,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 20,
+          "bottleCap": 2
+        },
+        {
+          "can": 4,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 21,
+      "steps": 509,
+      "route": [
+        22,
+        23
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        6,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 7,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 25,
+          "total": 39,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 72,
+          "bottleCap": 5
+        },
+        {
+          "can": 15,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 425,
+      "route": [
+        18,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 10,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 14,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 9,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 28,
+          "bottleCap": 3
+        },
+        {
+          "can": 25,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 407,
+      "route": [
+        20,
+        14
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        6,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 9,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 18,
+          "total": 34,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 24,
+          "bottleCap": 3
+        },
+        {
+          "can": 36,
+          "bottleCap": 19
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 397,
+      "route": [
+        20,
+        17
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        4,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 6,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 4,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 12,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 9,
+          "bottleCap": 10
+        },
+        {
+          "can": 31,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 15,
+      "steps": 320,
+      "route": [
+        22,
+        4
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 12,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 6,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 6
+        },
+        {
+          "can": 13,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 15,
+      "steps": 353,
+      "route": [
+        22,
+        12
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 10,
+          "total": 31,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 8,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 5,
+          "total": 15,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 14,
+          "bottleCap": 5
+        },
+        {
+          "can": 22,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 15,
+      "steps": 377,
+      "route": [
+        8,
+        22
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 6,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 8,
+          "supplies": 1,
+          "total": 9,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 4
+        },
+        {
+          "can": 8,
+          "bottleCap": 13
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 31,
+      "steps": 580,
+      "route": [
+        19,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        18,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 2,
+          "total": 12,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 3,
+          "bottleCap": 1
+        },
+        {
+          "can": 0,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 28,
+      "steps": 532,
+      "route": [
+        22,
+        17
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 6,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 14,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 21,
+          "total": 33,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 60,
+          "bottleCap": 3
+        },
+        {
+          "can": 20,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 21,
+      "steps": 405,
+      "route": [
+        14,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 12,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 5,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 9,
+          "total": 19,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 35,
+          "bottleCap": 3
+        },
+        {
+          "can": 24,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 13,
+      "steps": 292,
+      "route": [
+        23,
+        5
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 20,
+          "eligible": true,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 17,
+          "total": 31,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 4,
+          "total": 25,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 14,
+          "bottleCap": 1
+        },
+        {
+          "can": 49,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 16,
+      "steps": 390,
+      "route": [
+        23,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        9,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 6,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 10,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 6,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 16,
+          "bottleCap": 3
+        },
+        {
+          "can": 18,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 16,
+      "steps": 375,
+      "route": [
+        10,
+        20
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        6,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 3,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 9,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 3
+        },
+        {
+          "can": 16,
+          "bottleCap": 11
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 423,
+      "route": [
+        21,
+        9
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        3,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 3,
+          "party": 18,
+          "supplies": 14,
+          "total": 35,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 9,
+          "bottleCap": 4
+        },
+        {
+          "can": 33,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 27,
+      "steps": 606,
+      "route": [
+        22,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 0,
+          "total": 17,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 15,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 6,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 0,
+          "bottleCap": 2
+        },
+        {
+          "can": 15,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 22,
+      "steps": 490,
+      "route": [
+        21,
+        15
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        2,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 18,
+          "supplies": 5,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 23,
+          "eligible": true,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 10,
+          "total": 20,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 25,
+          "bottleCap": 8
+        },
+        {
+          "can": 13,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 20,
+      "steps": 459,
+      "route": [
+        23,
+        20
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 3,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 4,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 11,
+          "bottleCap": 1
+        },
+        {
+          "can": 9,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 407,
+      "route": [
+        23,
+        6
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        1,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 17,
+          "total": 34,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 16,
+          "eligible": false,
+          "utopia": 0,
+          "party": 18,
+          "supplies": 10,
+          "total": 28,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 22,
+          "bottleCap": 10
+        },
+        {
+          "can": 48,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 29,
+      "steps": 714,
+      "route": [
+        16,
+        23
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        10,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 17,
+          "total": 34,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 8,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 4,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 48,
+          "bottleCap": 3
+        },
+        {
+          "can": 8,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 20,
+      "steps": 459,
+      "route": [
+        22,
+        8
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        18
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 13,
+          "total": 25,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 3
+        },
+        {
+          "can": 35,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 456,
+      "route": [
+        21,
+        19
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        0,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 11,
+          "total": 32,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 11,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 30,
+          "bottleCap": 5
+        },
+        {
+          "can": 26,
+          "bottleCap": 9
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 369,
+      "route": [
+        11,
+        20
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        1,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 5,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 12,
+          "total": 26,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 14,
+          "bottleCap": 5
+        },
+        {
+          "can": 30,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 26,
+      "steps": 570,
+      "route": [
+        23,
+        19
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        16,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 3,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 2,
+          "total": 14,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 1,
+          "bottleCap": 6
+        },
+        {
+          "can": 6,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 16,
+      "steps": 364,
+      "route": [
+        11,
+        20
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 3,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 22,
+          "eligible": true,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 2,
+          "total": 16,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 1,
+          "bottleCap": 9
+        },
+        {
+          "can": 1,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 22,
+      "steps": 508,
+      "route": [
+        20,
+        22
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        3,
+        16
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 24,
+          "eligible": true,
+          "utopia": 5,
+          "party": 18,
+          "supplies": 4,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 3,
+          "party": 16,
+          "supplies": 7,
+          "total": 26,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 10,
+          "bottleCap": 3
+        },
+        {
+          "can": 18,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 20,
+      "steps": 459,
+      "route": [
+        24,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        1,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 5,
+          "total": 26,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 7,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 6,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 15,
+          "bottleCap": 2
+        },
+        {
+          "can": 6,
+          "bottleCap": 12
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 342,
+      "route": [
+        20,
+        7
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 13,
+          "total": 32,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 20,
+          "total": 32,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 27,
+          "bottleCap": 12
+        },
+        {
+          "can": 55,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 28,
+      "steps": 564,
+      "route": [
+        20,
+        11
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        2,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 16,
+          "total": 35,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 1,
+          "total": 11,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 46,
+          "bottleCap": 4
+        },
+        {
+          "can": 3,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 26,
+      "steps": 576,
+      "route": [
+        23,
+        17
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 24,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 12,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 21,
+          "bottleCap": 5
+        },
+        {
+          "can": 31,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 390,
+      "route": [
+        19,
+        24
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        1,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 8,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 8,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 13,
+          "total": 29,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 36,
+          "bottleCap": 4
+        },
+        {
+          "can": 23,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 15,
+      "steps": 301,
+      "route": [
+        8,
+        23
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 2,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 8,
+          "supplies": 8,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 6,
+          "bottleCap": 0
+        },
+        {
+          "can": 19,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 16,
+      "steps": 322,
+      "route": [
+        21,
+        6
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        2,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 14,
+          "total": 31,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 5,
+          "total": 15,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 32,
+          "bottleCap": 13
+        },
+        {
+          "can": 14,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 332,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        1,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 2,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 3,
+          "total": 15,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 8,
+          "bottleCap": 5
+        },
+        {
+          "can": 7,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 389,
+      "route": [
+        17,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        9,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 10,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 15,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 6,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 12,
+          "bottleCap": 8
+        },
+        {
+          "can": 27,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 414,
+      "route": [
+        15,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        8,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 4,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 38,
+          "total": 38,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 9
+        },
+        {
+          "can": 89,
+          "bottleCap": 27
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 22,
+      "steps": 307,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        4,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 4,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 38,
+          "total": 38,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 89,
+          "bottleCap": 27
+        },
+        {
+          "can": 4,
+          "bottleCap": 9
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 22,
+      "steps": 307,
+      "route": [
+        0,
+        21
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1276,
+          "bottleCap": 302
+        },
+        {
+          "can": 1344,
+          "bottleCap": 340
+        }
+      ],
+      "cycles": 334,
+      "steps": 1801,
+      "route": [
+        3,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1340,
+          "bottleCap": 339
+        },
+        {
+          "can": 1280,
+          "bottleCap": 303
+        }
+      ],
+      "cycles": 334,
+      "steps": 1801,
+      "route": [
+        0,
+        3
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 3
+        },
+        {
+          "can": 817,
+          "bottleCap": 1
+        }
+      ],
+      "cycles": 163,
+      "steps": 1801,
+      "route": [
+        0,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        6,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 817,
+          "bottleCap": 1
+        },
+        {
+          "can": 4,
+          "bottleCap": 3
+        }
+      ],
+      "cycles": 163,
+      "steps": 1801,
+      "route": [
+        0,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 109,
+          "total": 109,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 0
+        },
+        {
+          "can": 259,
+          "bottleCap": 71
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 64,
+      "steps": 823,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 109,
+          "total": 109,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 259,
+          "bottleCap": 71
+        },
+        {
+          "can": 7,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 64,
+      "steps": 823,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "rush",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 15,
+          "total": 34,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 49,
+          "total": 49,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 44,
+          "bottleCap": 3
+        },
+        {
+          "can": 88,
+          "bottleCap": 60
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 27,
+      "steps": 348,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        11,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "rush"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "rush",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 15,
+          "total": 34,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 49,
+          "total": 49,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 88,
+          "bottleCap": 60
+        },
+        {
+          "can": 44,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 27,
+      "steps": 348,
+      "route": [
+        0,
+        21
+      ],
+      "events": [
+        0,
+        0
+      ],
+      "abilities": [
+        0,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 21,
+          "eligible": true,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 3,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 3,
+          "total": 18,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 5,
+          "bottleCap": 7
+        },
+        {
+          "can": 9,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 462,
+      "route": [
+        21,
+        21
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        2,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 4,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 10,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 2,
+          "total": 14,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 5
+        },
+        {
+          "can": 6,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 21,
+      "steps": 539,
+      "route": [
+        10,
+        23
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        3,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 3,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 5,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 5,
+          "total": 17,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 9,
+          "bottleCap": 8
+        },
+        {
+          "can": 5,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 416,
+      "route": [
+        5,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        13,
+        10
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 8,
+          "supplies": 5,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 1,
+          "total": 11,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 3
+        },
+        {
+          "can": 12,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 20,
+      "steps": 436,
+      "route": [
+        18,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 24,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 2,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 13,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 2,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 2
+        },
+        {
+          "can": 2,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 16,
+      "steps": 356,
+      "route": [
+        24,
+        13
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        1,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 18,
+          "supplies": 8,
+          "total": 31,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 18,
+          "bottleCap": 8
+        },
+        {
+          "can": 20,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 387,
+      "route": [
+        19,
+        22
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 3,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 10,
+          "eligible": false,
+          "utopia": 0,
+          "party": 18,
+          "supplies": 7,
+          "total": 25,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 5
+        },
+        {
+          "can": 16,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 16,
+      "steps": 377,
+      "route": [
+        21,
+        10
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        3,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 3,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 7,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 4,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 8,
+          "bottleCap": 4
+        },
+        {
+          "can": 10,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 20,
+      "steps": 427,
+      "route": [
+        20,
+        7
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        13
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 2,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 12,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 30,
+          "bottleCap": 8
+        },
+        {
+          "can": 7,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 426,
+      "route": [
+        19,
+        20
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        0,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 6,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 14,
+          "bottleCap": 12
+        },
+        {
+          "can": 17,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 13,
+      "steps": 284,
+      "route": [
+        6,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 13,
+          "total": 34,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 9,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 11,
+          "total": 25,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 33,
+          "bottleCap": 6
+        },
+        {
+          "can": 24,
+          "bottleCap": 9
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 23,
+      "steps": 531,
+      "route": [
+        22,
+        9
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        1,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 18,
+          "supplies": 15,
+          "total": 38,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 7,
+          "total": 19,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 12,
+          "bottleCap": 10
+        },
+        {
+          "can": 46,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 25,
+      "steps": 658,
+      "route": [
+        18,
+        21
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        9,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 7,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 12,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 15,
+          "total": 25,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 41,
+          "bottleCap": 7
+        },
+        {
+          "can": 15,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 387,
+      "route": [
+        12,
+        21
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        0,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 7,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 5,
+          "total": 17,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 12,
+          "bottleCap": 4
+        },
+        {
+          "can": 20,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 16,
+      "steps": 349,
+      "route": [
+        11,
+        21
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 2,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 6,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 2
+        },
+        {
+          "can": 17,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 368,
+      "route": [
+        23,
+        6
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        4,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 6,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 7,
+          "bottleCap": 2
+        },
+        {
+          "can": 12,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 20,
+      "steps": 463,
+      "route": [
+        21,
+        18
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        6,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 25,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 21,
+          "total": 40,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 61,
+          "bottleCap": 5
+        },
+        {
+          "can": 23,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 21,
+      "steps": 530,
+      "route": [
+        25,
+        19
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        2,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 20,
+          "supplies": 24,
+          "total": 49,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 23,
+          "eligible": true,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 9,
+          "total": 19,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 26,
+          "bottleCap": 3
+        },
+        {
+          "can": 72,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 20,
+      "steps": 490,
+      "route": [
+        23,
+        20
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        2,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 15,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 11,
+          "total": 27,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 29,
+          "bottleCap": 6
+        },
+        {
+          "can": 2,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 413,
+      "route": [
+        15,
+        20
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        6,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 9,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 6,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 17,
+          "bottleCap": 5
+        },
+        {
+          "can": 18,
+          "bottleCap": 11
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 23,
+      "steps": 555,
+      "route": [
+        19,
+        21
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        1,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 9,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 24,
+          "eligible": true,
+          "utopia": 3,
+          "party": 14,
+          "supplies": 1,
+          "total": 18,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 26,
+          "bottleCap": 5
+        },
+        {
+          "can": 5,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 436,
+      "route": [
+        21,
+        24
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 5,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 10,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 27,
+          "bottleCap": 4
+        },
+        {
+          "can": 8,
+          "bottleCap": 9
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 16,
+      "steps": 386,
+      "route": [
+        11,
+        23
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 0,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 13,
+          "eligible": false,
+          "utopia": 0,
+          "party": 8,
+          "supplies": 5,
+          "total": 13,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 13,
+          "bottleCap": 4
+        },
+        {
+          "can": 0,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 438,
+      "route": [
+        13,
+        20
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        4,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 2,
+          "total": 17,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 1,
+          "total": 13,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 4
+        },
+        {
+          "can": 0,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 433,
+      "route": [
+        18,
+        22
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        5,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 14,
+          "total": 29,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 3,
+          "party": 16,
+          "supplies": 1,
+          "total": 20,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 41,
+          "bottleCap": 4
+        },
+        {
+          "can": 3,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 23,
+      "steps": 512,
+      "route": [
+        21,
+        23
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        7,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 21,
+          "eligible": true,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 7,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 3,
+          "total": 20,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 18,
+          "bottleCap": 5
+        },
+        {
+          "can": 9,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 16,
+      "steps": 386,
+      "route": [
+        21,
+        20
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        4,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 4,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 4,
+          "supplies": 20,
+          "total": 24,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 12,
+          "bottleCap": 1
+        },
+        {
+          "can": 61,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 21,
+      "steps": 331,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        17,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 16,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 16,
+          "total": 32,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 5,
+          "bottleCap": 5
+        },
+        {
+          "can": 47,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 23,
+      "steps": 507,
+      "route": [
+        23,
+        16
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        19,
+        16
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 12,
+          "total": 31,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 12,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 14,
+          "total": 26,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 34,
+          "bottleCap": 9
+        },
+        {
+          "can": 38,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 472,
+      "route": [
+        12,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        10,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 12,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 16,
+          "eligible": false,
+          "utopia": 0,
+          "party": 18,
+          "supplies": 9,
+          "total": 27,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 20,
+          "bottleCap": 10
+        },
+        {
+          "can": 35,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 26,
+      "steps": 577,
+      "route": [
+        16,
+        22
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        13,
+        10
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "idle"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 5,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 23,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 17,
+          "bottleCap": 2
+        },
+        {
+          "can": 57,
+          "bottleCap": 12
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 14,
+      "steps": 223,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        5,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "economy"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 5,
+          "total": 24,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 23,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 57,
+          "bottleCap": 12
+        },
+        {
+          "can": 17,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 14,
+      "steps": 223,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 13,
+          "total": 30,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 62,
+          "total": 62,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 34,
+          "bottleCap": 7
+        },
+        {
+          "can": 146,
+          "bottleCap": 42
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 36,
+      "steps": 484,
+      "route": [
+        23,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "economy"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 13,
+          "total": 30,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 62,
+          "total": 62,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 146,
+          "bottleCap": 42
+        },
+        {
+          "can": 34,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 36,
+      "steps": 484,
+      "route": [
+        0,
+        23
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 4,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 73,
+          "total": 73,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 6,
+          "bottleCap": 6
+        },
+        {
+          "can": 215,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 41,
+      "steps": 601,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "economy"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 4,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 73,
+          "total": 73,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 215,
+          "bottleCap": 7
+        },
+        {
+          "can": 6,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 41,
+      "steps": 601,
+      "route": [
+        0,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "idle"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 15,
+          "total": 36,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 39,
+          "total": 39,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 42,
+          "bottleCap": 4
+        },
+        {
+          "can": 98,
+          "bottleCap": 21
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 24,
+      "steps": 349,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        13,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "economy"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 15,
+          "total": 36,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 39,
+          "total": 39,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 98,
+          "bottleCap": 21
+        },
+        {
+          "can": 42,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 24,
+      "steps": 349,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        13
+      ]
+    },
+    {
+      "policies": [
+        "economy",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 15,
+          "total": 32,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 57,
+          "total": 57,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 43,
+          "bottleCap": 5
+        },
+        {
+          "can": 99,
+          "bottleCap": 72
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 32,
+      "steps": 477,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "economy"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "economy",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 15,
+          "total": 32,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 57,
+          "total": 57,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 99,
+          "bottleCap": 72
+        },
+        {
+          "can": 43,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 32,
+      "steps": 477,
+      "route": [
+        0,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 6,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 12,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 10,
+          "total": 24,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 20
+        },
+        {
+          "can": 28,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 427,
+      "route": [
+        23,
+        12
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        5,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 9,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 19,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 15,
+          "total": 27,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 42,
+          "bottleCap": 4
+        },
+        {
+          "can": 20,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 478,
+      "route": [
+        19,
+        20
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        1,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 7,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 7,
+          "total": 19,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 3
+        },
+        {
+          "can": 14,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 406,
+      "route": [
+        20,
+        7
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        0,
+        9
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 11,
+          "total": 26,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 9,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 4,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 8,
+          "bottleCap": 7
+        },
+        {
+          "can": 22,
+          "bottleCap": 12
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 15,
+      "steps": 354,
+      "route": [
+        9,
+        22
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        9,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 7,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 13,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 37,
+          "bottleCap": 5
+        },
+        {
+          "can": 16,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 378,
+      "route": [
+        6,
+        20
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        21
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 3,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 20,
+          "total": 32,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 3
+        },
+        {
+          "can": 55,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 400,
+      "route": [
+        20,
+        3
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        6,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 25,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 8,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 3,
+          "party": 16,
+          "supplies": 8,
+          "total": 27,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 24,
+          "bottleCap": 2
+        },
+        {
+          "can": 24,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 21,
+      "steps": 524,
+      "route": [
+        25,
+        21
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        0,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 8,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 9,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 4,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 22,
+          "bottleCap": 4
+        },
+        {
+          "can": 11,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 418,
+      "route": [
+        21,
+        9
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        8,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 3,
+          "party": 14,
+          "supplies": 19,
+          "total": 36,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 4,
+          "total": 25,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 55,
+          "bottleCap": 3
+        },
+        {
+          "can": 9,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 25,
+      "steps": 651,
+      "route": [
+        23,
+        22
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        11,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 10,
+          "supplies": 14,
+          "total": 29,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 10,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 2,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 3
+        },
+        {
+          "can": 39,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 426,
+      "route": [
+        10,
+        22
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        15,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 3,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 9,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 4,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 10
+        },
+        {
+          "can": 8,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 398,
+      "route": [
+        21,
+        9
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        7,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 9,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 11,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 3,
+          "total": 19,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 28,
+          "bottleCap": 0
+        },
+        {
+          "can": 6,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 436,
+      "route": [
+        21,
+        11
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        0,
+        20
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 16,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 20,
+          "eligible": true,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 3,
+          "total": 15,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 5,
+          "bottleCap": 8
+        },
+        {
+          "can": 43,
+          "bottleCap": 8
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 25,
+      "steps": 569,
+      "route": [
+        20,
+        20
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        3,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 21,
+          "eligible": true,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 15,
+          "total": 29,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 5,
+          "total": 22,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 40,
+          "bottleCap": 7
+        },
+        {
+          "can": 6,
+          "bottleCap": 9
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 21,
+      "steps": 427,
+      "route": [
+        21,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        4,
+        1
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 23,
+          "total": 42,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 15,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 17,
+          "total": 31,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 45,
+          "bottleCap": 6
+        },
+        {
+          "can": 71,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 27,
+      "steps": 600,
+      "route": [
+        15,
+        23
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        1,
+        18
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 18,
+          "supplies": 10,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 6,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 4,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 31,
+          "bottleCap": 0
+        },
+        {
+          "can": 9,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 431,
+      "route": [
+        22,
+        6
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        14
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 6,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 13,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 9,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 23,
+          "bottleCap": 6
+        },
+        {
+          "can": 9,
+          "bottleCap": 11
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 392,
+      "route": [
+        13,
+        21
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        4,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 1,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 8,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 21,
+          "bottleCap": 5
+        },
+        {
+          "can": 4,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 15,
+      "steps": 309,
+      "route": [
+        1,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        1,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 15,
+          "total": 36,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 13,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 6,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 14,
+          "bottleCap": 8
+        },
+        {
+          "can": 44,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 14,
+      "steps": 344,
+      "route": [
+        13,
+        22
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 11,
+          "total": 30,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 10,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 15,
+          "total": 25,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 27,
+          "bottleCap": 8
+        },
+        {
+          "can": 40,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 371,
+      "route": [
+        23,
+        10
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "idle"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 22,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 5
+        },
+        {
+          "can": 49,
+          "bottleCap": 20
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 12,
+      "steps": 188,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        5,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "elite"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 22,
+          "total": 22,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 49,
+          "bottleCap": 20
+        },
+        {
+          "can": 2,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 12,
+      "steps": 188,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        5
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 36,
+          "total": 36,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 1,
+          "bottleCap": 3
+        },
+        {
+          "can": 90,
+          "bottleCap": 20
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 22,
+      "steps": 310,
+      "route": [
+        23,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        8,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "elite"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 36,
+          "total": 36,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 90,
+          "bottleCap": 20
+        },
+        {
+          "can": 1,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 22,
+      "steps": 310,
+      "route": [
+        0,
+        23
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 20,
+          "supplies": 4,
+          "total": 29,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 63,
+          "total": 63,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 11,
+          "bottleCap": 5
+        },
+        {
+          "can": 184,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 35,
+      "steps": 595,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        13,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "elite"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 20,
+          "supplies": 4,
+          "total": 29,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 63,
+          "total": 63,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 184,
+          "bottleCap": 7
+        },
+        {
+          "can": 11,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 35,
+      "steps": 595,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        13
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "idle"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 23,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 2
+        },
+        {
+          "can": 58,
+          "bottleCap": 13
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 14,
+      "steps": 202,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        4,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "elite"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 1,
+          "total": 18,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 23,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 58,
+          "bottleCap": 13
+        },
+        {
+          "can": 4,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 14,
+      "steps": 202,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "elite",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 1,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 49,
+          "total": 49,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 2,
+          "bottleCap": 3
+        },
+        {
+          "can": 93,
+          "bottleCap": 55
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 30,
+      "steps": 412,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        13,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "elite"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "elite",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 1,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 49,
+          "total": 49,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 93,
+          "bottleCap": 55
+        },
+        {
+          "can": 2,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 30,
+      "steps": 412,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        13
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 1,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 8,
+          "total": 20,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 1,
+          "bottleCap": 5
+        },
+        {
+          "can": 21,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 405,
+      "route": [
+        21,
+        17
+      ],
+      "events": [
+        1,
+        1
+      ],
+      "abilities": [
+        7,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 14,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 11,
+          "total": 23,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 28,
+          "bottleCap": 6
+        },
+        {
+          "can": 2,
+          "bottleCap": 3
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 23,
+      "steps": 496,
+      "route": [
+        14,
+        20
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        1,
+        11
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 8,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 12,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 3,
+          "total": 15,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 19,
+          "bottleCap": 6
+        },
+        {
+          "can": 3,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 434,
+      "route": [
+        20,
+        12
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        3,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 2,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 20,
+          "eligible": true,
+          "utopia": 0,
+          "party": 8,
+          "supplies": 0,
+          "total": 8,
+          "rank": 2
+        }
+      ],
+      "resources": [
+        {
+          "can": 0,
+          "bottleCap": 2
+        },
+        {
+          "can": 7,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 21,
+      "steps": 493,
+      "route": [
+        20,
+        22
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        5,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 4,
+          "total": 25,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 13,
+          "eligible": false,
+          "utopia": 0,
+          "party": 10,
+          "supplies": 3,
+          "total": 13,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 6,
+          "bottleCap": 4
+        },
+        {
+          "can": 14,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 17,
+      "steps": 412,
+      "route": [
+        13,
+        20
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        5,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 9,
+          "total": 26,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 8,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 6,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 25,
+          "bottleCap": 3
+        },
+        {
+          "can": 11,
+          "bottleCap": 10
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 381,
+      "route": [
+        21,
+        8
+      ],
+      "events": [
+        1,
+        3
+      ],
+      "abilities": [
+        7,
+        8
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 17,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 26,
+          "total": 40,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 69,
+          "bottleCap": 9
+        },
+        {
+          "can": 13,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 25,
+      "steps": 562,
+      "route": [
+        17,
+        20
+      ],
+      "events": [
+        3,
+        1
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 7,
+          "total": 26,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 12,
+          "supplies": 6,
+          "total": 18,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 23,
+          "bottleCap": 0
+        },
+        {
+          "can": 17,
+          "bottleCap": 5
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 17,
+      "steps": 423,
+      "route": [
+        21,
+        18
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        3,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 18,
+          "eligible": false,
+          "utopia": 0,
+          "party": 16,
+          "supplies": 3,
+          "total": 19,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 9,
+          "bottleCap": 4
+        },
+        {
+          "can": 8,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 22,
+      "steps": 505,
+      "route": [
+        20,
+        18
+      ],
+      "events": [
+        2,
+        1
+      ],
+      "abilities": [
+        6,
+        19
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 2,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 8,
+          "eligible": false,
+          "utopia": 0,
+          "party": 14,
+          "supplies": 2,
+          "total": 16,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 8,
+          "bottleCap": 2
+        },
+        {
+          "can": 8,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 16,
+      "steps": 345,
+      "route": [
+        20,
+        8
+      ],
+      "events": [
+        1,
+        2
+      ],
+      "abilities": [
+        0,
+        12
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 0,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 46,
+          "total": 46,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 1,
+          "bottleCap": 0
+        },
+        {
+          "can": 110,
+          "bottleCap": 30
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 28,
+      "steps": 342,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        6,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 0,
+          "total": 19,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 46,
+          "total": 46,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 110,
+          "bottleCap": 30
+        },
+        {
+          "can": 1,
+          "bottleCap": 0
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 28,
+      "steps": 342,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 35,
+          "total": 35,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 12,
+          "bottleCap": 1
+        },
+        {
+          "can": 89,
+          "bottleCap": 18
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 23,
+      "steps": 329,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        25,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 4,
+          "total": 21,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 35,
+          "total": 35,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 89,
+          "bottleCap": 18
+        },
+        {
+          "can": 12,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 23,
+      "steps": 329,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        25
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 11,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 33,
+          "total": 33,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 31,
+          "bottleCap": 4
+        },
+        {
+          "can": 93,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 18,
+      "steps": 256,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 12,
+          "supplies": 11,
+          "total": 28,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 33,
+          "total": 33,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 93,
+          "bottleCap": 7
+        },
+        {
+          "can": 31,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 18,
+      "steps": 256,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 12,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 33,
+          "total": 33,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 37,
+          "bottleCap": 2
+        },
+        {
+          "can": 80,
+          "bottleCap": 23
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 19,
+      "steps": 285,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        2,
+        0
+      ],
+      "abilities": [
+        6,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "prepared",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 12,
+          "total": 33,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 33,
+          "total": 33,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 80,
+          "bottleCap": 23
+        },
+        {
+          "can": 37,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 19,
+      "steps": 285,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        2
+      ],
+      "abilities": [
+        0,
+        6
+      ]
+    },
+    {
+      "policies": [
+        "prepared",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 1119,
+          "bottleCap": 282
+        },
+        {
+          "can": 920,
+          "bottleCap": 594
+        }
+      ],
+      "cycles": 305,
+      "steps": 1801,
+      "route": [
+        19,
+        0
+      ],
+      "events": [
+        3,
+        0
+      ],
+      "abilities": [
+        28,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "prepared"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": null,
+      "ended": false,
+      "tied": false,
+      "resources": [
+        {
+          "can": 920,
+          "bottleCap": 594
+        },
+        {
+          "can": 1119,
+          "bottleCap": 282
+        }
+      ],
+      "cycles": 305,
+      "steps": 1801,
+      "route": [
+        0,
+        19
+      ],
+      "events": [
+        0,
+        3
+      ],
+      "abilities": [
+        0,
+        28
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "idle"
+      ],
+      "seed": 1,
+      "reverse": 0,
+      "leaders": [
+        "idol",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 2,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 24,
+          "total": 24,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 6,
+          "bottleCap": 2
+        },
+        {
+          "can": 58,
+          "bottleCap": 16
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 15,
+      "steps": 215,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        4,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "opportunist"
+      ],
+      "seed": 1,
+      "reverse": 1,
+      "leaders": [
+        "zombie",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 2,
+          "total": 23,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 24,
+          "total": 24,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 58,
+          "bottleCap": 16
+        },
+        {
+          "can": 8,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 15,
+      "steps": 214,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        4
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "idle"
+      ],
+      "seed": 2,
+      "reverse": 0,
+      "leaders": [
+        "zombie",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 3,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 42,
+          "total": 42,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 4,
+          "bottleCap": 6
+        },
+        {
+          "can": 101,
+          "bottleCap": 28
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 26,
+      "steps": 350,
+      "route": [
+        23,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        3,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "opportunist"
+      ],
+      "seed": 2,
+      "reverse": 1,
+      "leaders": [
+        "duck",
+        "zombie"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 23,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 3,
+          "total": 22,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 42,
+          "total": 42,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 101,
+          "bottleCap": 28
+        },
+        {
+          "can": 4,
+          "bottleCap": 6
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 26,
+      "steps": 350,
+      "route": [
+        0,
+        23
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        3
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "idle"
+      ],
+      "seed": 3,
+      "reverse": 0,
+      "leaders": [
+        "duck",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 75,
+          "total": 75,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 5,
+          "bottleCap": 2
+        },
+        {
+          "can": 227,
+          "bottleCap": 1
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 44,
+      "steps": 603,
+      "route": [
+        20,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        7,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "opportunist"
+      ],
+      "seed": 3,
+      "reverse": 1,
+      "leaders": [
+        "shy",
+        "duck"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 20,
+          "eligible": true,
+          "utopia": 5,
+          "party": 14,
+          "supplies": 1,
+          "total": 20,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 75,
+          "total": 75,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 227,
+          "bottleCap": 1
+        },
+        {
+          "can": 5,
+          "bottleCap": 2
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 44,
+      "steps": 603,
+      "route": [
+        0,
+        20
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        7
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "idle"
+      ],
+      "seed": 4,
+      "reverse": 0,
+      "leaders": [
+        "shy",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 25,
+          "total": 46,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 47,
+          "total": 47,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 71,
+          "bottleCap": 7
+        },
+        {
+          "can": 110,
+          "bottleCap": 34
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 27,
+      "steps": 395,
+      "route": [
+        21,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        2,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "opportunist"
+      ],
+      "seed": 4,
+      "reverse": 1,
+      "leaders": [
+        "robot",
+        "shy"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 21,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 25,
+          "total": 46,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 47,
+          "total": 47,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 110,
+          "bottleCap": 34
+        },
+        {
+          "can": 71,
+          "bottleCap": 7
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 27,
+      "steps": 395,
+      "route": [
+        0,
+        21
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        2
+      ]
+    },
+    {
+      "policies": [
+        "opportunist",
+        "idle"
+      ],
+      "seed": 5,
+      "reverse": 0,
+      "leaders": [
+        "robot",
+        "idol"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 6,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 50,
+          "total": 50,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 17,
+          "bottleCap": 4
+        },
+        {
+          "can": 91,
+          "bottleCap": 60
+        }
+      ],
+      "firstEntry": "p0",
+      "cycles": 28,
+      "steps": 381,
+      "route": [
+        22,
+        0
+      ],
+      "events": [
+        1,
+        0
+      ],
+      "abilities": [
+        9,
+        0
+      ]
+    },
+    {
+      "policies": [
+        "idle",
+        "opportunist"
+      ],
+      "seed": 5,
+      "reverse": 1,
+      "leaders": [
+        "idol",
+        "robot"
+      ],
+      "winner": "opportunist",
+      "ended": true,
+      "tied": false,
+      "score": [
+        {
+          "seatId": "p1",
+          "name": "P1",
+          "escaped": true,
+          "route": 22,
+          "eligible": true,
+          "utopia": 5,
+          "party": 16,
+          "supplies": 6,
+          "total": 27,
+          "rank": 1
+        },
+        {
+          "seatId": "p0",
+          "name": "P0",
+          "escaped": false,
+          "route": 0,
+          "eligible": false,
+          "utopia": 0,
+          "party": 0,
+          "supplies": 50,
+          "total": 50,
+          "rank": null
+        }
+      ],
+      "resources": [
+        {
+          "can": 91,
+          "bottleCap": 60
+        },
+        {
+          "can": 17,
+          "bottleCap": 4
+        }
+      ],
+      "firstEntry": "p1",
+      "cycles": 28,
+      "steps": 381,
+      "route": [
+        0,
+        22
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "abilities": [
+        0,
+        9
+      ]
+    }
+  ]
+}

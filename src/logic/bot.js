@@ -2,11 +2,15 @@ import { calcPartyScore } from './scoring.js'
 import { RULES } from '../data/rules.js'
 import { DEFAULT_TURN_END_RESOURCES } from '../data/survivors.js'
 import { LEADERS } from '../data/leaders.js'
+import { PLACEMENT_EFFECT_TYPES, getActivePlacementEffectsForParty, getPlacementEffectsForSlot } from '../data/placementBonuses.js'
 
 const VALUE = {
   can: 0.28,
   bottleCap: 0.45,
   score: 1.6,
+  key: 1.4,
+  item: 1.2,
+  treasure: 2.4,
   survivor: 2.3,
   abandoned: 2.8,
   upkeep: 1.0,
@@ -16,6 +20,30 @@ const VALUE = {
 }
 
 const BOT_EVENT_REPLACE_MARGIN = 1.25
+
+
+function normalizeRewardEntries(reward) {
+  if (!reward) return []
+  return Array.isArray(reward) ? reward : [reward]
+}
+
+function hasRewardType(event, types = []) {
+  const typeSet = new Set(types)
+  return normalizeRewardEntries(event?.reward).some((entry) => typeSet.has(entry?.type))
+}
+
+function isKeyUnlockEvent(event) {
+  return Boolean(
+    event &&
+    (event.requiresKey || event.resolution?.requiresKey) &&
+    (event.resolution?.type === 'roll_dice' || event.resolution?.type === 'roll_dice_score_bonus') &&
+    hasRewardType(event, ['item', 'treasure'])
+  )
+}
+
+function canUseKeyToUnlock(player, event) {
+  return isKeyUnlockEvent(event) && (player?.keyCards?.length ?? 0) > 0
+}
 
 function getPartySlotCount(party = []) {
   let count = 0
@@ -68,6 +96,74 @@ function getAttackTargetableSurvivors(player) {
   return (player?.party ?? []).filter((survivor) => canBeAttackTarget(player, survivor))
 }
 
+function isPlainSurvivor(survivor) {
+  const normalizedName = String(survivor?.name ?? '').replace(/\s/g, '')
+  return survivor?.id?.startsWith('s_plain_') || normalizedName === '평범생존자' || survivor?.type === '평범'
+}
+
+function getEffectiveBotSurvivorType(survivor, index, leaderId) {
+  if (survivor?.id === 's_coward_6' && index === 0 && leaderId === 'zombie') return '용감이'
+  if (isPlainSurvivor(survivor) && index === 0 && leaderId === 'robot') return '반장'
+  return survivor?.type
+}
+
+function getBotPlacementEffectsByType(player, type) {
+  return getActivePlacementEffectsForParty(player, getEffectiveBotSurvivorType)
+    .filter(({ effect }) => effect.type === type)
+}
+
+function hasOnlyEffectiveBotSurvivorType(player, targetType) {
+  const party = player?.party ?? []
+  return party.length > 0 && party.every((survivor, index) => (
+    getEffectiveBotSurvivorType(survivor, index, player.leaderId) === targetType
+  ))
+}
+
+function canBotSurvivorActAsType(player, survivor, targetType, usedUids = new Set()) {
+  if (!survivor || usedUids.has(survivor.uid)) return false
+  const idx = player.party.indexOf(survivor)
+  const effectiveType = getEffectiveBotSurvivorType(survivor, idx, player.leaderId)
+  if (effectiveType === targetType) return true
+  if (!hasOnlyEffectiveBotSurvivorType(player, '용감이')) return false
+  return getBotPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.BRAVE_WILDCARD)
+    .some(({ survivor: wildcardSurvivor }) => wildcardSurvivor.uid === survivor.uid)
+}
+
+function isRequiredKeyEntry(entry) {
+  return entry?.type === 'key' || entry?.type === '열쇠'
+}
+
+function getRequiredKeyCountForBot(event) {
+  return getRequiredPartyTypesForBot(event)
+    .filter(isRequiredKeyEntry)
+    .reduce((sum, entry) => sum + (entry.count ?? 1), 0)
+}
+
+function getRequiredSurvivorTypesForBot(event) {
+  return getRequiredPartyTypesForBot(event).filter((entry) => !isRequiredKeyEntry(entry))
+}
+
+function canBotSatisfyTypeRequirements(player, requiredTypes = [], candidates = []) {
+  const usedUids = new Set()
+  const survivorTypes = requiredTypes.filter((entry) => !isRequiredKeyEntry(entry))
+  const expanded = survivorTypes.flatMap(({ type, count = 1 }) => Array.from({ length: count }, () => type))
+  return expanded.every((type) => {
+    const match = candidates.find((survivor) => canBotSurvivorActAsType(player, survivor, type, usedUids))
+    if (!match) return false
+    usedUids.add(match.uid)
+    return true
+  })
+}
+
+function countActiveEffectiveType(player, activeMembers, type) {
+  const usedUids = new Set()
+  return activeMembers.filter((survivor) => {
+    const matched = canBotSurvivorActAsType(player, survivor, type, usedUids)
+    if (matched) usedUids.add(survivor.uid)
+    return matched
+  }).length
+}
+
 function getSharedDepartedSurvivors(gameState) {
   const players = gameState?.players ?? []
   const extra = gameState?.departedSurvivors ?? []
@@ -84,11 +180,6 @@ export function decideBotAction(player, gameState, availableSurvivors) {
   const upkeep = calcBotUpkeep(player)
   const canReserve = upkeep + 2
   const partyFull = getPartySlotCount(player.party) >= player.maxPartySize
-  const capReserve = partyFull ? 0 : 1
-
-  if (player.resources.can < canReserve && player.resources.bottleCap >= 1) {
-    return [{ type: 'EXCHANGE_CAP_TO_CAN' }]
-  }
 
   // 파티에 여유가 있을 때만 영입 시도
   if (!partyFull) {
@@ -106,14 +197,6 @@ export function decideBotAction(player, gameState, availableSurvivors) {
     return [{ type: 'REORDER', from: reorder.from, to: reorder.to }]
   }
 
-  const canSurplus = player.resources.can - canReserve
-  if (
-    canSurplus >= RULES.canToCapRate + 2 &&
-    player.resources.bottleCap < capReserve + 2
-  ) {
-    return [{ type: 'EXCHANGE_CAN_TO_CAP' }]
-  }
-
   return [{ type: 'SKIP', reason: '기대값이 높은 구매 행동 없음' }]
 }
 
@@ -125,9 +208,13 @@ export function evaluateEvent(event, player, gameState) {
     return { resolve: false, replace: false, score: -Infinity, reason: 'cannot assign required survivors' }
   }
 
+  if (event.opponentRequirement && !getOpponents(gameState, player.id).some((opponent) => botTargetSatisfiesOpponentRequirement(opponent, event.opponentRequirement))) {
+    return { resolve: false, replace: true, score: -Infinity, reason: 'no target satisfies opponent requirement' }
+  }
+
   const score = scoreEvent(event, player, gameState)
   const pressure = getHumanPressure(player, gameState)
-  const resolveThreshold = pressure > 3 ? -0.45 : 0
+  const resolveThreshold = canUseKeyToUnlock(player, event) ? -Infinity : (pressure > 3 ? -0.45 : 0)
   const resolve = score >= resolveThreshold
   return {
     resolve,
@@ -139,25 +226,27 @@ export function evaluateEvent(event, player, gameState) {
 
 function shouldBotReplaceEvent(event, player, score) {
   if (event?.category === 'clue') return false
-  if (hasCenterWeirdType(player)) return score < 0
   return score < -(VALUE.abandoned + BOT_EVENT_REPLACE_MARGIN)
 }
 
 export function canBotAttemptEvent(event, player) {
   if (!event || !player) return false
-  const requiredCount = getRequiredAssignmentCount(event)
+  if ((event.requiresKey || event.resolution?.requiresKey) && (player.keyCards?.length ?? 0) <= 0) return false
+  if ((player.keyCards?.length ?? 0) < getRequiredKeyCountForBot(event)) return false
+  const requiredCount = canUseKeyToUnlock(player, event) ? 1 : getRequiredAssignmentCount(event)
   const activeMembers = getActivePartyMembers(player)
   if (activeMembers.length < requiredCount) return false
 
+  const requiredTypes = getRequiredSurvivorTypesForBot(event)
+  const hasRequiredTypes = canBotSatisfyTypeRequirements(player, requiredTypes, activeMembers)
+  if (!hasRequiredTypes) return false
+
   if (event?.resolution?.type === 'check_survivor_type') {
-    return activeMembers.some((survivor) => survivor.type === event.resolution.survivorType)
+    const usedUids = new Set()
+    return activeMembers.some((survivor) => canBotSurvivorActAsType(player, survivor, event.resolution.survivorType, usedUids))
   }
 
   return true
-}
-
-function hasCenterWeirdType(player) {
-  return player?.party?.[2]?.type === '4차원'
 }
 
 export function shouldAcceptGlobalEvent(event) {
@@ -166,7 +255,7 @@ export function shouldAcceptGlobalEvent(event) {
 
 export function calcBotUpkeep(player) {
   const rawUpkeep = player.party.reduce((sum, survivor, index) => {
-    const endDelta = getTurnEndCanDelta(survivor, index)
+    const endDelta = getTurnEndCanDelta(survivor, index, player)
     return sum + Math.max(0, -endDelta)
   }, 0)
   // 지도자 패시브 통조림 수입으로 실질 유지비 감산
@@ -235,7 +324,11 @@ export function chooseBotDiscardUids(player, count) {
 
 export function chooseBotSacrifice(player, amount = 1, survivorType = null) {
   return [...player.party]
-    .filter((survivor) => !survivorType || survivor.type === survivorType)
+    .filter((survivor) => {
+      if (!survivorType) return true
+      const idx = player.party.indexOf(survivor)
+      return getEffectiveBotSurvivorType(survivor, idx, player.leaderId) === survivorType
+    })
     .map((survivor) => ({
       uid: survivor.uid,
       value: getMemberRetentionValue(player, survivor.uid),
@@ -257,7 +350,7 @@ function pickRecruitAction(player, available, canBuffer, upkeep = 0) {
       survivor &&
       (survivor.recruitCost ?? 0) <= player.resources.bottleCap &&
       (getPartySlotCount(player.party) < player.maxPartySize || canStackOnExistingSlot(player.party, survivor)) &&
-      (survivor.type !== '평범' || !player.party.some((entry) => entry.id === 's_military_2'))
+      (!isPlainSurvivor(survivor) || !player.party.some((entry) => entry.id === 's_military_2'))
     )
     .map((survivor) => {
       const survivorUpkeep = Math.max(0, -(survivor.turnEndResources?.can ?? DEFAULT_TURN_END_RESOURCES.can))
@@ -277,7 +370,7 @@ function pickRecruitAction(player, available, canBuffer, upkeep = 0) {
       .filter((survivor) =>
         survivor &&
         (survivor.recruitCost ?? 0) <= player.resources.bottleCap &&
-        (survivor.type !== '평범' || !player.party.some((entry) => entry.id === 's_military_2'))
+        (!isPlainSurvivor(survivor) || !player.party.some((entry) => entry.id === 's_military_2'))
       )
       .map((survivor) => ({ survivor, score: scoreRecruit(player, survivor) }))
       .sort((a, b) => b.score - a.score)[0]
@@ -313,6 +406,9 @@ function scoreEvent(event, player, gameState) {
   const rewardValue = getRewardValue(event.reward, player)
   const penaltyValue = getPenaltyValue(event.failPenalty, player)
   const abandonValue = -VALUE.abandoned
+  if (canUseKeyToUnlock(player, event)) {
+    return rewardValue - VALUE.key + 0.35
+  }
   const opponents = getOpponents(gameState, player.id)
   const pressure = getHumanPressure(player, gameState)
   const comebackScoreBonus = Math.min(1.25, Math.max(0, pressure) * 0.12)
@@ -355,8 +451,54 @@ function scoreEvent(event, player, gameState) {
       }
       return rewardValue - cost
     }
+    case 'resource_delta': {
+      const amount = resolution.amount ?? 0
+      const resourceValue = resolution.resource === 'bottleCap' ? VALUE.bottleCap : VALUE.can
+      const resourceCount = player.resources?.[resolution.resource] ?? 0
+      if (amount < 0 && resourceCount < Math.abs(amount)) return abandonValue - 0.5
+      return rewardValue + amount * resourceValue
+    }
+    case 'survivor_delta': {
+      const amount = resolution.amount ?? 0
+      if (amount > 0) {
+        const openSlots = Math.max(0, (player.maxPartySize ?? RULES.maxPartySize) - getPartySlotCount(player.party))
+        if (openSlots <= 0) return abandonValue - 0.25
+        return rewardValue + Math.min(amount, openSlots) * VALUE.survivor
+      }
+      const count = Math.abs(amount)
+      if (player.party.length < count) return abandonValue - 1
+      return rewardValue - sumLowestRetention(player, count)
+    }
+    case 'survivor_type_delta': {
+      const amount = resolution.amount ?? 0
+      if (amount > 0) {
+        const openSlots = Math.max(0, (player.maxPartySize ?? RULES.maxPartySize) - getPartySlotCount(player.party))
+        if (openSlots <= 0) return abandonValue - 0.25
+        return rewardValue + Math.min(amount, openSlots) * (VALUE.survivor + 0.25)
+      }
+      const count = Math.abs(amount)
+      const candidates = player.party.filter((survivor) => canBotSurvivorActAsType(player, survivor, resolution.survivorType))
+      if (candidates.length < count) return abandonValue - 1
+      const loss = [...candidates]
+        .sort((a, b) => calcSurvivorUtility(a, player) - calcSurvivorUtility(b, player))
+        .slice(0, count)
+        .reduce((sum, survivor) => sum + calcSurvivorUtility(survivor, player), 0)
+      return rewardValue - loss
+    }
+    case 'deactivate_survivor': {
+      const activeCount = getActivePartyMembers(player).length
+      const amount = Math.max(1, resolution.amount ?? 1)
+      if (activeCount < amount) return abandonValue - 0.5
+      return rewardValue - 0.45 * amount
+    }
+    case 'deactivate_survivor_type': {
+      const candidates = getActivePartyMembers(player).filter((survivor) => canBotSurvivorActAsType(player, survivor, resolution.survivorType))
+      const amount = Math.max(1, resolution.amount ?? 1)
+      if (candidates.length < amount) return abandonValue - 0.5
+      return rewardValue - 0.55 * amount
+    }
     case 'check_survivor_type': {
-      const hasType = player.party.some((survivor) => survivor.type === resolution.survivorType)
+      const hasType = player.party.some((survivor) => canBotSurvivorActAsType(player, survivor, resolution.survivorType))
       if (hasType) return rewardValue
       return rewardValue - penaltyValue
     }
@@ -383,6 +525,49 @@ function scoreEvent(event, player, gameState) {
       const picks = chooseBotSacrifice(player, amount)
       if (picks.length < amount || !opponents.length) return abandonValue - 0.5
       return rewardValue - sumRetentionByUids(player, picks)
+    }
+    case 'steal_can_from_player': {
+      const target = opponents
+        .map((opponent, index) => ({ opponent, index, gain: Math.min(opponent.resources?.can ?? 0, resolution.amount ?? 1) }))
+        .sort((a, b) => b.gain - a.gain)[0]
+      if (!target || target.gain <= 0) return abandonValue - 0.5
+      return target.gain * VALUE.can + getHumanTargetBonus({ player: target.opponent, index: target.index })
+    }
+    case 'steal_cap_from_player': {
+      const target = opponents
+        .map((opponent, index) => ({ opponent, index, gain: Math.min(opponent.resources?.bottleCap ?? 0, resolution.amount ?? 1) }))
+        .sort((a, b) => b.gain - a.gain)[0]
+      if (!target || target.gain <= 0) return abandonValue - 0.5
+      return target.gain * VALUE.bottleCap + getHumanTargetBonus({ player: target.opponent, index: target.index })
+    }
+    case 'steal_can_from_all_others': {
+      const total = opponents.reduce((sum, opponent) => sum + Math.min(opponent.resources?.can ?? 0, resolution.amount ?? 1), 0)
+      return total > 0 ? total * VALUE.can : abandonValue - 0.25
+    }
+    case 'steal_cap_from_all_others': {
+      const total = opponents.reduce((sum, opponent) => sum + Math.min(opponent.resources?.bottleCap ?? 0, resolution.amount ?? 1), 0)
+      return total > 0 ? total * VALUE.bottleCap : abandonValue - 0.25
+    }
+    case 'deactivate_from_party': {
+      const target = getBestTargetForRemoval(opponents)
+      if (!target) return abandonValue - 0.5
+      return target.gain * 0.45 + rewardValue + getHumanTargetBonus(target)
+    }
+    case 'return_survivor_to_deck': {
+      const target = getBestTargetForRemoval(opponents)
+      if (!target) return abandonValue - 0.5
+      return target.gain * 0.75 + rewardValue + getHumanTargetBonus(target)
+    }
+    case 'deactivate_type_all_others': {
+      const survivorType = resolution.survivorType
+      const gain = opponents.reduce((sum, opponent) => {
+        const targetGain = (opponent.party ?? []).reduce((inner, survivor, index) => {
+          if (getEffectiveBotSurvivorType(survivor, index, opponent.leaderId) !== survivorType) return inner
+          return inner + ((survivor.score ?? 1) * 0.35 + 0.4)
+        }, 0)
+        return sum + targetGain * getThreatWeight(opponent)
+      }, 0)
+      return gain > 0 ? gain + rewardValue : abandonValue - 0.25
     }
     case 'take_from_party': {
       const target = getBestTargetForTake(player, opponents)
@@ -416,6 +601,47 @@ function scoreEvent(event, player, gameState) {
       if (!target) return abandonValue - 0.5
       return target.gain + rewardValue
     }
+    case 'trade_offer': {
+      const giveResource = resolution.give?.resource === 'bottleCap' ? 'bottleCap' : 'can'
+      const receiveResource = resolution.receive?.resource === 'bottleCap' ? 'bottleCap' : 'can'
+      const giveValue = giveResource === 'bottleCap' ? VALUE.bottleCap : VALUE.can
+      const receiveValue = receiveResource === 'bottleCap' ? VALUE.bottleCap : VALUE.can
+      const hasTradePartner = opponents.some((opponent) => (opponent.resources?.[receiveResource] ?? 0) >= (resolution.receive?.amount ?? 2))
+      if (!hasTradePartner || (player.resources?.[giveResource] ?? 0) < (resolution.give?.amount ?? 2)) return abandonValue - 0.5
+      return receiveValue * ((resolution.receive?.amount ?? 2) + (resolution.receive?.bonus ?? 1)) -
+        giveValue * (resolution.give?.amount ?? 2) + 0.35
+    }
+    case 'shared_distribution':
+      return VALUE.can * (resolution.currentAmount ?? 3) + 0.25
+    case 'shared_dispatch_reward': {
+      const hasPartner = opponents.some((opponent) => getActivePartyMembers(opponent).length > 0)
+      if (!hasPartner) return abandonValue - 0.5
+      const resourceValue = resolution.resource === 'can' ? VALUE.can : VALUE.bottleCap
+      return resourceValue * (resolution.currentAmount ?? 3) - 0.15
+    }
+    case 'support_roll_dice': {
+      const activeCount = getActivePartyMembers(player).length
+      const assignedCount = event.assignment?.minSurvivors ?? 2
+      const hasSupporter = opponents.some((opponent) => getActivePartyMembers(opponent).length > 0)
+      const diceCount = assignedCount + (hasSupporter ? 1 : 0)
+      const successRate = getDiceSuccessRate(Math.min(diceCount, activeCount + 1), resolution.target ?? 8)
+      return (VALUE.bottleCap * 3 * successRate) - (hasSupporter ? 0.1 : 0.8)
+    }
+    case 'resource_duel': {
+      const bestTarget = opponents
+        .filter((opponent) => (opponent.resources?.bottleCap ?? 0) > 0)
+        .sort((a, b) => (b.resources?.bottleCap ?? 0) - (a.resources?.bottleCap ?? 0))[0]
+      if (!bestTarget) return abandonValue - 0.5
+      const assignedCount = event.assignment?.minSurvivors ?? 2
+      const targetCanAccept = getActivePartyMembers(bestTarget).length >= assignedCount
+      if (!targetCanAccept) return VALUE.bottleCap * (resolution.declineCost ?? 1)
+      return VALUE.bottleCap * (resolution.amount ?? 2) * 0.15
+    }
+    case 'rich_cap_raid': {
+      const richest = opponents.sort((a, b) => (b.resources?.bottleCap ?? 0) - (a.resources?.bottleCap ?? 0))[0]
+      if (!richest || (richest.resources?.bottleCap ?? 0) <= 0) return abandonValue - 0.5
+      return VALUE.bottleCap * Math.min(richest.resources.bottleCap, resolution.amount ?? 3) + 0.5
+    }
     case 'roll_dice': {
       const activeCount = getActivePartyMembers(player).length
       const diceCount = getRecommendedDiceAssignmentCount(event, activeCount)
@@ -435,30 +661,56 @@ function scoreEvent(event, player, gameState) {
   }
 }
 
+function getRequiredPartyTypesForBot(event) {
+  return event?.requiredTypes
+    ?? (event?.requiredType ? [{ type: event.requiredType, count: 1 }] : [])
+}
+
+function getRequiredTypeSlotCountForBot(event) {
+  const requiredPartyTypeCount = getRequiredSurvivorTypesForBot(event)
+    .flatMap(({ type, count = 1 }) => Array.from({ length: count }, () => type))
+    .length
+  const requiredAssignedTypeCount = event?.resolution?.type === 'check_survivor_type' ? 1 : 0
+  return Math.max(requiredPartyTypeCount, requiredAssignedTypeCount)
+}
+
 function getRequiredAssignmentCount(event) {
-  if (event?.resolution?.type === 'roll_dice') return 1
-  if (event?.assignment?.minSurvivors) return event.assignment.minSurvivors
-  const tier = event?.tier ?? 1
-  return RULES.exploration?.tiers?.[tier]?.minAssigned ?? 1
+  const baseRequired = event?.assignment?.minSurvivors != null
+    ? event.assignment.minSurvivors
+    : (RULES.exploration?.tiers?.[event?.tier ?? 1]?.minAssigned ?? 1)
+  return Math.max(baseRequired, getRequiredTypeSlotCountForBot(event))
 }
 
 function getRecommendedDiceAssignmentCount(event, activeCount) {
   if (event?.resolution?.type !== 'roll_dice') return getRequiredAssignmentCount(event)
+  const required = getRequiredAssignmentCount(event)
+  if (required <= 0) return 0
   const target = event.resolution?.target ?? 4
-  return Math.max(1, Math.min(5, activeCount, Math.ceil(target / 3.5)))
+  return Math.max(required, Math.min(activeCount, Math.ceil(target / 3.5)))
 }
 
-function getPotentialRecommendedPartyBonus(event, player) {
+function getPotentialRecommendedPartyBonus(event, player, assignedSurvivors = null) {
   const recommended = event?.recommendedParty ?? []
-  if (recommended.length === 0) return 0
-  const active = getActivePartyMembers(player)
-  const hasAll = recommended.every(({ type, count = 1 }) => (
-    active.filter((survivor) => survivor?.type === type).length >= count
-  ))
-  if (!hasAll) return 0
-  const base = event.recommendedPartyBonus ?? event.resolution?.recommendedPartyBonus ?? event.check?.recommendedPartyBonus ?? 2
-  const moodMakerBoost = player?.party?.[2]?.type === '분위기메이커' ? 1 : 0
-  return base + moodMakerBoost
+  const requiredTypes = recommended.flatMap(({ type, count = 1 }) => Array.from({ length: count }, () => type))
+  if (requiredTypes.length === 0) return 0
+
+  const active = assignedSurvivors ?? getActivePartyMembers(player)
+  const usedByUid = new Set()
+  const matches = []
+
+  for (const type of requiredTypes) {
+    const match = active
+      .filter((survivor) => canBotSurvivorActAsType(player, survivor, type, usedByUid))
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))[0]
+    if (!match) return 0
+    usedByUid.add(match.uid)
+    matches.push(match)
+  }
+
+  const matchedScore = matches.reduce((scoreSum, survivor) => scoreSum + (survivor.score ?? 0), 0)
+  const placementBonus = getBotPlacementEffectsByType(player, PLACEMENT_EFFECT_TYPES.EXPLORATION_TYPE_BONUS)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+  return matchedScore + placementBonus
 }
 
 function getActivePartyMembers(player) {
@@ -502,6 +754,8 @@ function evaluatePlayerState(player) {
     (player.abandonedEvents?.length ?? 0) * VALUE.abandoned -
     calcBotUpkeep(player) * VALUE.upkeep +
     (player.clueTokens ?? 0) * VALUE.clue +
+    (player.keyCards?.length ?? 0) * VALUE.key +
+    (player.treasureCards ?? []).reduce((sum, card) => sum + (card.score ?? 0), 0) * VALUE.score +
     getLeaderEndBonusEstimate(player) +
     (player.resources.can ?? 0) * VALUE.can +
     (player.resources.bottleCap ?? 0) * VALUE.bottleCap
@@ -515,6 +769,9 @@ function getRewardValue(reward, player) {
     if (entry.type === 'can') return sum + (entry.amount ?? 0) * VALUE.can
     if (entry.type === 'cap') return sum + (entry.amount ?? 0) * VALUE.bottleCap
     if (entry.type === 'score') return sum + (entry.amount ?? 0) * VALUE.score
+    if (entry.type === 'key') return sum + (entry.amount ?? 1) * VALUE.key
+    if (entry.type === 'item') return sum + (entry.amount ?? 1) * VALUE.item
+    if (entry.type === 'treasure') return sum + (entry.amount ?? 1) * VALUE.treasure
     if (entry.type === 'survivor') {
       return sum + Math.min(entry.amount ?? 1, Math.max(0, player.maxPartySize - getPartySlotCount(player.party))) * VALUE.survivor
     }
@@ -556,6 +813,7 @@ function estimateFinalScore(player) {
     party.total +
     (player.scoreTokens ?? 0) -
     (player.abandonedEvents?.length ?? 0) +
+    (player.treasureCards ?? []).reduce((sum, card) => sum + (card.score ?? 0), 0) +
     getLeaderEndBonusEstimate(player) +
     (player.clueTokens ?? 0) * 0.6
   )
@@ -689,16 +947,14 @@ function getOpponents(gameState, playerId) {
 }
 
 function calcReorderCost(player) {
-  const reduction = player.party.reduce((sum, survivor, index) => {
-    if (survivor.type === '반장' && index <= 1) {
-      sum += 1
-    }
-    if (survivor.partyPassive?.type === 'reduce_reorder_cost') {
-      return sum + (survivor.partyPassive.amount ?? 0)
-    }
+  const placementReduction = getActivePlacementEffectsForParty(player, getEffectiveBotSurvivorType)
+    .filter(({ effect }) => effect.type === PLACEMENT_EFFECT_TYPES.REDUCE_REORDER_COST)
+    .reduce((sum, { effect }) => sum + (effect.amount ?? 0), 0)
+  const passiveReduction = player.party.reduce((sum, survivor) => {
+    if (survivor.partyPassive?.type === 'reduce_reorder_cost') return sum + (survivor.partyPassive.amount ?? 0)
     return sum
   }, 0)
-  return Math.max(0, RULES.partyReorderCost - reduction)
+  return Math.max(0, RULES.partyReorderCost - placementReduction - passiveReduction)
 }
 
 function calcSurvivorUtility(survivor, player) {
@@ -730,11 +986,13 @@ function calcSurvivorUtility(survivor, player) {
   return bonus
 }
 
-function getTurnEndCanDelta(survivor, survivorIndex) {
+function getTurnEndCanDelta(survivor, survivorIndex, player = null) {
   let delta = survivor.turnEndResources?.can ?? DEFAULT_TURN_END_RESOURCES.can
-  if (survivor.type === '겁쟁이' && survivorIndex >= 3) {
-    delta += 1
-  }
+  const effectiveType = player ? getEffectiveBotSurvivorType(survivor, survivorIndex, player.leaderId) : survivor.type
+  const reduction = getPlacementEffectsForSlot(player?.leaderId, survivorIndex)
+    .filter((effect) => effect.type === PLACEMENT_EFFECT_TYPES.REDUCE_REACTIVATION_COST && effect.survivorType === effectiveType)
+    .reduce((sum, effect) => sum + (effect.amount ?? 0), 0)
+  delta += reduction
   if (survivor.positionBonus?.positions?.includes(survivorIndex) && survivor.positionBonus.turnEnd) {
     delta += survivor.positionBonus.turnEnd.can ?? 0
   }

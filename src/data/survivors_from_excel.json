@@ -1,0 +1,662 @@
+[
+  {
+    "id": "s_weird_1",
+    "name": "오리교도 생존자",
+    "type": "4차원",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "동물과 인접 불가\n덕: 1번 슬롯 → 파견 시 🥫+1",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "천상천하 오리독존",
+    "emoji": "🦆",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_coward_1",
+    "name": "고양이 생존자",
+    "type": "겁쟁이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "개와 인접 불가\n샤이: 5번 슬롯 → 턴 시작 🥫+1",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "길고양이의 예리한 감각을 가지고 있습니다.",
+    "emoji": "🐱",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_coward_6",
+    "name": "겁쟁이 좀비 생존자",
+    "type": "겁쟁이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "비: 1번 슬롯 → 용감이 취급",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "죽지 않는 몸을 갖게 되었지만\n세상은 여전히 두렵기만 합니다.",
+    "emoji": "🧟",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_coward_3",
+    "name": "실패한 실험체",
+    "type": "겁쟁이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "분위기메이커와 인접 불가",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "뭔가 잘못된 것 같지만 살아있습니다.",
+    "emoji": "🧪",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_weird_7",
+    "name": "유령 생존자",
+    "type": "겁쟁이",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "영입 시 생존자 아래에 겹쳐 보관\n위 생존자 이탈 시 슬롯 차지",
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1",
+    "description": "세상이 망했지만 유령으로 살아남았습니다.",
+    "emoji": "👻",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_military_5",
+    "name": "지리선생 생존자",
+    "type": "반장",
+    "score": 4,
+    "recruitCost": 7,
+    "partyPassive": {
+      "type": "reduce_reorder_cost",
+      "amount": 2
+    },
+    "effect": "영입 시 원하는 슬롯에 배치\n다른 생존자와 자리 교환 가능",
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1",
+    "description": "그녀가 30년 넘게 공부한 지리 지식이 생존에 상당한 도움이 됩니다.",
+    "emoji": "🗺️",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_mood_1",
+    "name": "여고생 생존자",
+    "type": "분위기메이커",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "지리선생과 인접 불가\n먼저 있으면 지리선생 합류 가능",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "일반적인 여고생 생존자입니다.",
+    "emoji": "🎒",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_mood_twins",
+    "name": "쌍둥이 생존자",
+    "type": "분위기메이커",
+    "score": 2,
+    "recruitCost": 5,
+    "stackKey": "twins",
+    "effect": "쌍둥이가 있으면 같은 슬롯에 겹쳐 보관",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "둘은 언제나 함께 움직입니다. 한 명이 있으면 다른 한 명도 그 자리에 자연스럽게 합류합니다.",
+    "emoji": "👯",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_mood_5",
+    "name": "팬클럽 회장 생존자",
+    "type": "분위기메이커",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "소염 더 고트: 1번 슬롯 → 식사 비용 🥫-1",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "팬들의 열정이 모두에게 활력을 줍니다.",
+    "emoji": "📣",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "give_cap_all"
+      }
+    ],
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_charge_2",
+    "name": "개 생존자",
+    "type": "용감이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "영입 시 고양이 옆으로 이동\n자리 없으면 밀어내고 차지",
+    "description": "충성스러운 개 생존자는 주인을 지키기 위해 무엇이든 할 것입니다.",
+    "emoji": "🐕",
+    "count": 1,
+    "triggers": [],
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_charge_4",
+    "name": "햄스터 생존자",
+    "type": "용감이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "고양이와 인접 불가\n나중에 합류한 쪽 이탈",
+    "description": "귀여운 햄스터입니다. 다른 플레이어가 공격 시 귀여움에 공격을 멈춥니다.",
+    "emoji": "🐾",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "gain_can",
+        "amount": 3
+      }
+    ],
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_coward_twins",
+    "name": "쌍둥이 생존자",
+    "type": "4차원",
+    "score": 2,
+    "recruitCost": 5,
+    "stackKey": "twins",
+    "effect": "쌍둥이가 있으면 같은 슬롯에 겹쳐 보관",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "둘은 언제나 함께 움직입니다. 한 명이 있으면 다른 한 명도 그 자리에 자연스럽게 합류합니다.",
+    "emoji": "👯",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_weird_6",
+    "name": "독실한 오리교도 생존자",
+    "type": "4차원",
+    "score": 3,
+    "count": 1,
+    "recruitCost": 6,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 1
+    },
+    "effect": "영입 시 생존자 덱에서 1명 추가 영입",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "꽥꽥. 오리는 빠르게 늘어납니다"
+  },
+  {
+    "id": "s_coward_4",
+    "name": "은밀기동 생존자",
+    "type": "겁쟁이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "공격 대상 불가",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "자신의 그룹도 은밀기동 생존자가 있는지 모릅니다.",
+    "emoji": "🥷",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 1
+    }
+  },
+  {
+    "id": "s_coward_2",
+    "name": "돌팔이 의사 생존자",
+    "type": "겁쟁이",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "이벤트 이탈 시 🥫3 지불 → 이탈 취소",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "세상이 망해서 의사 면허 없이도 치료할 수 있게 되었습니다.",
+    "emoji": "👨‍⚕️",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_military_1",
+    "name": "숙련된 생존자",
+    "type": "반장",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "재난 시 생존자 1명 이탈 → 재난 피해 무효",
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1",
+    "description": "세상이 망한 것이 오히려 너무나 편안해졌습니다.",
+    "emoji": "💂",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_military_2",
+    "name": "양아치 햄스터",
+    "type": "반장",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "공격 목표를 다른 아군으로 전환\n평범생존자 영입 불가",
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1",
+    "description": "원래 주인이 죽은 지금, 양아치 햄스터를 막을 수 있는 사람은 많지 않습니다!",
+    "emoji": "🐹",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_military_3",
+    "name": "슬레셔 무비 배우",
+    "type": "반장",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "겁쟁이 대신 이탈 가능\n겁쟁이와 인접 불가",
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1",
+    "description": "메소드 연기 중에 세상이 망해버렸습니다. 그는 아직도 열심히 연기 중입니다.",
+    "emoji": "🎬",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_mood_3",
+    "name": "카피바라 생존자",
+    "type": "분위기메이커",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "동물 영입 시 같은 슬롯에 겹쳐 보관",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "모든 동물들이 이상하리만치 편안함을 느낍니다. 옆자리가 아니라 같은 자리에 붙어 있어도 괜찮습니다.",
+    "emoji": "🦫",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_mood_4",
+    "name": "수의사 생존자",
+    "type": "분위기메이커",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "영입 시 떠난 동물 1명 부활",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "사람을 치료하는 것은 불법이지만, 세상이 망해버려서 괜찮습니다!",
+    "emoji": "🩺",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "revive_from_own_grave"
+      }
+    ],
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_charge_5",
+    "name": "걷는식물 생존자",
+    "type": "용감이",
+    "score": 2,
+    "recruitCost": 5,
+    "effect": "공격 성공 시 상대 생존자 1명 추가 이탈",
+    "description": "어떻게 걷게 되었는지는 알 수 없습니다.",
+    "emoji": "🌿",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_charge_6",
+    "name": "사냥꾼 생존자",
+    "type": "용감이",
+    "score": 3,
+    "recruitCost": 6,
+    "effect": "공격 지목 시 상대 고유효과 무시\n대상 제한 무시",
+    "description": "세상이 망하면서 오히려 사냥꾼의 기술이 더 쓸모 있어졌습니다.",
+    "emoji": "🏹",
+    "count": 1,
+    "tier": 2,
+    "searchTier": 2,
+    "reactivationCost": {
+      "can": 2
+    }
+  },
+  {
+    "id": "s_weird_2",
+    "name": "요정 생존자",
+    "type": "4차원",
+    "score": 5,
+    "recruitCost": 8,
+    "effect": "상대 파티에 4차원이 있으면 교환 가능",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "요정들이 살던 숲도 망해버려서 세상 밖으로 나왔습니다.",
+    "emoji": "🧚",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_weird_4",
+    "name": "마법사 생존자",
+    "type": "4차원",
+    "score": 5,
+    "recruitCost": 8,
+    "effect": "턴 종료 🎲: 성공 시 상대 생존자와 위치 교체",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "마술사인 척하며 살아왔지만, 이제 속일 필요가 없어졌습니다. 망한 세상은 마법을 연습하기 아주 좋습니다.",
+    "emoji": "🧙",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_turn_end",
+        "effect": "swap_with_other_party",
+        "successOn": 2
+      }
+    ],
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_weird_5",
+    "name": "외계인 생존자",
+    "type": "4차원",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "1회: 내 생존자 1명을 덱 맨 위 카드로 교체",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "망해버린 세상을 견학하러 왔습니다.",
+    "emoji": "👽",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "replace_party_member"
+      }
+    ],
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_weird_3",
+    "name": "탈옥 생존자",
+    "type": "4차원",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "영입 시 🥫+10\n턴 종료 🎲1: 통조림 전부 들고 타 파티 이동",
+    "specialBonus": "중앙(3번) 배치 시 이벤트 버림 비용 무료",
+    "description": "통조림 공장을 털다가 감옥에 갇혔지만 지금은 자유의 몸입니다.",
+    "emoji": "🔓",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "gain_can",
+        "amount": 10
+      },
+      {
+        "on": "on_turn_end",
+        "effect": "escape_with_cans",
+        "successOn": 1
+      }
+    ],
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_coward_5",
+    "name": "가든일 생존자",
+    "type": "겁쟁이",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "재난 면역\n재난 후 🥫+2",
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료",
+    "description": "바다가 망해서 육지에 적응했는데 육지도 망해버렸습니다.",
+    "emoji": "🌊",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_military_6",
+    "name": "대통령 생존자",
+    "type": "반장",
+    "score": 5,
+    "recruitCost": 8,
+    "effect": "턴 종료: 다른 플레이어 전원 🪙-1",
+    "description": "멸망 후에도 추경을 편성합니다.",
+    "emoji": "🏛️",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_mood_2",
+    "name": "마법소녀 생존자",
+    "type": "분위기메이커",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "영입 시 타 파티 평범생존자 1명 데려오기\n빈 슬롯 없으면 무효",
+    "specialBonus": "중앙(3번) 배치 시 타입 보너스 +1",
+    "description": "변신! 정의의 이름으로 용서하지 않겠습니다.",
+    "emoji": "✨",
+    "count": 1,
+    "triggers": [
+      {
+        "on": "on_recruit",
+        "effect": "take_normal_from_other_party"
+      }
+    ],
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_charge_3",
+    "name": "티라노 생존자",
+    "type": "용감이",
+    "score": 5,
+    "recruitCost": 8,
+    "effect": "턴 종료 🥫-3\n부족 시 무작위 아군 이탈",
+    "description": "또 세상이 멸망하는 것을 두고 볼 수 없습니다.",
+    "emoji": "🦕",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_charge_1",
+    "name": "용사 생존자",
+    "type": "용감이",
+    "score": 4,
+    "recruitCost": 7,
+    "effect": "이벤트 실패 시 🎲 재시도 1회\n재실패 시 파티 이탈",
+    "description": "이세계(지구)로 소환당했습니다. 이세계의 마왕을 잡으러 가고 싶어합니다.",
+    "emoji": "⚔️",
+    "count": 1,
+    "tier": 3,
+    "searchTier": 3,
+    "reactivationCost": {
+      "can": 3
+    }
+  },
+  {
+    "id": "s_plain_coward",
+    "name": "평범생존자",
+    "type": "겁쟁이",
+    "score": 1,
+    "recruitCost": 3,
+    "effect": "특별한 고유기능 없음",
+    "description": "특별한 점은 없지만 그래서 어디든 잘 섞입니다.",
+    "emoji": "🧑",
+    "count": 4,
+    "tier": 1,
+    "searchTier": 1,
+    "reactivationCost": {
+      "can": 1
+    },
+    "specialBonus": "뒤쪽(4-5번) 배치 시 식사 비용 무료"
+  },
+  {
+    "id": "s_plain_mood",
+    "name": "평범생존자",
+    "type": "분위기메이커",
+    "score": 1,
+    "recruitCost": 3,
+    "effect": "특별한 고유기능 없음",
+    "description": "특별한 점은 없지만 그래서 어디든 잘 섞입니다.",
+    "emoji": "🧑",
+    "count": 3,
+    "tier": 1,
+    "searchTier": 1,
+    "reactivationCost": {
+      "can": 1
+    },
+    "specialBonus": "중앙(3번) 배치 시 추가 수색 비용 🥫-1"
+  },
+  {
+    "id": "s_plain_charge",
+    "name": "평범생존자",
+    "type": "용감이",
+    "score": 1,
+    "recruitCost": 3,
+    "effect": "특별한 고유기능 없음",
+    "description": "특별한 점은 없지만 그래서 어디든 잘 섞입니다.",
+    "emoji": "🧑",
+    "count": 2,
+    "tier": 1,
+    "searchTier": 1,
+    "reactivationCost": {
+      "can": 1
+    },
+    "specialBonus": "앞쪽(1-2번) 배치 시 탐색 타입 보너스 +1"
+  },
+  {
+    "id": "s_plain_military",
+    "name": "평범생존자",
+    "type": "반장",
+    "score": 1,
+    "recruitCost": 3,
+    "effect": "특별한 고유기능 없음",
+    "description": "특별한 점은 없지만 그래서 어디든 잘 섞입니다.",
+    "emoji": "🧑",
+    "count": 2,
+    "tier": 1,
+    "searchTier": 1,
+    "reactivationCost": {
+      "can": 1
+    },
+    "specialBonus": "앞쪽(1-2번) 배치 시 순서 변경 비용 🪙-1"
+  },
+  {
+    "id": "s_plain_weird",
+    "name": "평범생존자",
+    "type": "4차원",
+    "score": 1,
+    "recruitCost": 3,
+    "effect": "특별한 고유기능 없음",
+    "description": "특별한 점은 없지만 그래서 어디든 잘 섞입니다.",
+    "emoji": "🧑",
+    "count": 1,
+    "tier": 1,
+    "searchTier": 1,
+    "reactivationCost": {
+      "can": 1
+    }
+  }
+]

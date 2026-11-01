@@ -1,0 +1,138 @@
+{
+  "baseline": [
+    {
+      "n": 2,
+      "completed": 30,
+      "runs": 30,
+      "meanCycles": 16.27,
+      "medianCycles": 16,
+      "range": [
+        8,
+        29
+      ],
+      "meanSteps": 285.77,
+      "meanGate": 13.53,
+      "meanExplorations": 7.63,
+      "meanSolved": 1.2,
+      "meanAttempts": 1.37,
+      "fiveParty": 28,
+      "tier3": 30,
+      "meanEvents": 6,
+      "meanEmptyEvents": 2.73,
+      "meanMaxJump": 7.2,
+      "meanWinnerCrew": 4.67
+    },
+    {
+      "n": 3,
+      "completed": 30,
+      "runs": 30,
+      "meanCycles": 18.67,
+      "medianCycles": 17,
+      "range": [
+        6,
+        38
+      ],
+      "meanSteps": 459.33,
+      "meanGate": 12.87,
+      "meanExplorations": 11.83,
+      "meanSolved": 1.37,
+      "meanAttempts": 1.87,
+      "fiveParty": 26,
+      "tier3": 30,
+      "meanEvents": 6,
+      "meanEmptyEvents": 2.33,
+      "meanMaxJump": 7.2,
+      "meanWinnerCrew": 4.23
+    },
+    {
+      "n": 4,
+      "completed": 28,
+      "runs": 30,
+      "meanCycles": 15.57,
+      "medianCycles": 14,
+      "range": [
+        6,
+        27
+      ],
+      "meanSteps": 498.75,
+      "meanGate": 11.36,
+      "meanExplorations": 13.54,
+      "meanSolved": 1.39,
+      "meanAttempts": 1.46,
+      "fiveParty": 25,
+      "tier3": 28,
+      "meanEvents": 6,
+      "meanEmptyEvents": 2,
+      "meanMaxJump": 7.46,
+      "meanWinnerCrew": 4.36
+    }
+  ],
+  "duels": [
+    {
+      "name": "skipEvents",
+      "total": 60,
+      "finished": 60,
+      "wins": 30,
+      "winPercent": 50,
+      "meanCycles": 16.42
+    },
+    {
+      "name": "routeRush3",
+      "total": 60,
+      "finished": 53,
+      "wins": 24,
+      "winPercent": 45.283018867924525,
+      "meanCycles": 17.96
+    }
+  ],
+  "odds": [
+    {
+      "party": "기본 3타입",
+      "route": 20,
+      "eventBonus": 0,
+      "percent": 37.5
+    },
+    {
+      "party": "기본 3타입",
+      "route": 20,
+      "eventBonus": 1,
+      "percent": 50
+    },
+    {
+      "party": "기본 3타입",
+      "route": 20,
+      "eventBonus": 2,
+      "percent": 62.5
+    },
+    {
+      "party": "기본 3타입",
+      "route": 24,
+      "eventBonus": 0,
+      "percent": 62.5
+    },
+    {
+      "party": "고양이·선생님·앞 용감이",
+      "route": 20,
+      "eventBonus": 0,
+      "percent": 93.67
+    },
+    {
+      "party": "고양이·선생님·앞 용감이",
+      "route": 20,
+      "eventBonus": 1,
+      "percent": 96.57
+    },
+    {
+      "party": "고양이·선생님·앞 용감이",
+      "route": 20,
+      "eventBonus": 2,
+      "percent": 98.32
+    },
+    {
+      "party": "고양이·선생님·앞 용감이",
+      "route": 24,
+      "eventBonus": 0,
+      "percent": 98.32
+    }
+  ]
+}

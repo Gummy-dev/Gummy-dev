@@ -1,0 +1,162 @@
+[
+  {
+    "id": "robot",
+    "name": "HAL-4935",
+    "fullName": "AI 로봇 / HAL-4935",
+    "type": "반장",
+    "score": 0,
+    "initialResources": {
+      "bottleCap": 100,
+      "can": 100
+    },
+    "maxResources": {
+      "bottleCap": 100,
+      "can": 100
+    },
+    "maxPartySize": 5,
+    "uniqueSkill": {
+      "name": "행복수치 계산",
+      "description": "수색단계에서 생존자 영입 시 2장 확인 후 1장 선택 가능",
+      "effect": "happiness_calc"
+    },
+    "specialWin": {
+      "name": "완전한 행복",
+      "description": "게임 종료 시 군기반장, 분위기메이커, 돌격대장, 4차원, 겁쟁이를 모두 보유"
+    },
+    "passiveIncome": {
+      "can": 1,
+      "bottleCap": 1
+    },
+    "description": "다목적 인공위성 HAL-4935. 세상이 망한 후 남은 사람들을 찾아 행복칩을 심었습니다.",
+    "color": "#4A7FB5",
+    "emoji": "🤖"
+  },
+  {
+    "id": "idol",
+    "name": "소염 더 고트",
+    "fullName": "아이돌 / 소염 더 고트",
+    "type": "분위기메이커",
+    "score": 0,
+    "initialResources": {
+      "bottleCap": 5,
+      "can": 5
+    },
+    "maxResources": {
+      "bottleCap": 15,
+      "can": 12
+    },
+    "maxPartySize": 6,
+    "uniqueSkill": {
+      "name": "콘서트",
+      "description": "턴 종료시 발동\n🎲6+: 팬 획득\n🎲2-: 팬 제거",
+      "effect": "concert"
+    },
+    "specialWin": {
+      "name": "궁극의 아이돌",
+      "description": "게임 종료 시 가장 많은 생존자를 보유할 경우"
+    },
+    "passiveIncome": {
+      "can": 1,
+      "bottleCap": 0
+    },
+    "description": "매력과 군중 조종의 달인. 세상이 망해도 무대는 계속됩니다.",
+    "color": "#C45A8A",
+    "emoji": "🎤"
+  },
+  {
+    "id": "zombie",
+    "name": "비",
+    "fullName": "좀비 / 비",
+    "type": "용감이",
+    "score": 0,
+    "initialResources": {
+      "bottleCap": 3,
+      "can": 2
+    },
+    "maxResources": {
+      "bottleCap": 14,
+      "can": 10
+    },
+    "maxPartySize": 5,
+    "uniqueSkill": {
+      "name": "자신감있는 좀비행동",
+      "description": "턴 종료시 발동\n🎲6: 상대 생존자 1인 내 파티로 흡수\n🎲1: 내 생존자 1인 제거",
+      "effect": "zombify"
+    },
+    "specialWin": {
+      "name": "우어어어",
+      "description": "게임 종료 시 파티의 모든 생존자가 용감이일 경우"
+    },
+    "passiveIncome": {
+      "can": 2,
+      "bottleCap": 1
+    },
+    "description": "살아있을 적에도 자신감이 넘치던 비는 좀비가 되어서도 존재감이 넘칩니다.",
+    "color": "#5A8A5A",
+    "emoji": "🧟"
+  },
+  {
+    "id": "duck",
+    "name": "덕이",
+    "fullName": "오리교 교주 / 덕이",
+    "type": "4차원",
+    "score": 0,
+    "initialResources": {
+      "bottleCap": 6,
+      "can": 2
+    },
+    "maxResources": {
+      "bottleCap": 10,
+      "can": 16
+    },
+    "maxPartySize": 6,
+    "uniqueSkill": {
+      "name": "오리의 기적",
+      "description": "턴 종료시 발동\n🪙6개 사용하여 상대 생존자 1인 내 파티로 흡수가능",
+      "effect": "duck_miracle"
+    },
+    "specialWin": {
+      "name": "꽥의 날",
+      "description": "게임 종료 시 파티에 4차원 생존자 3명 이상 보유"
+    },
+    "passiveIncome": {
+      "can": 0,
+      "bottleCap": 2
+    },
+    "description": "오리는 모두 알고 있었습니다. 꽥의 날이 다가올 것이란 것을.",
+    "color": "#C4A44A",
+    "emoji": "🦆"
+  },
+  {
+    "id": "shy",
+    "name": "샤이",
+    "fullName": "내성적인 아이 /샤이",
+    "type": "겁쟁이",
+    "score": 0,
+    "initialResources": {
+      "bottleCap": 4,
+      "can": 4
+    },
+    "maxResources": {
+      "bottleCap": 12,
+      "can": 18
+    },
+    "maxPartySize": 5,
+    "uniqueSkill": {
+      "name": "울기",
+      "description": "턴 종료시 주사위 굴림,  🎲3이상일 경우 🥫+3",
+      "effect": "cry"
+    },
+    "specialWin": {
+      "name": "배부른 울보",
+      "description": "게임 종료 시 가장 많은 통조림을 보유"
+    },
+    "passiveIncome": {
+      "can": 2,
+      "bottleCap": 1
+    },
+    "description": "보는 사람들로 하여금 강한 동정심이 들게 만드는 겁이 많은 샤이입니다.",
+    "color": "#8B7BA8",
+    "emoji": "😶"
+  }
+]

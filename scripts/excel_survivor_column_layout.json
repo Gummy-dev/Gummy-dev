@@ -1,0 +1,373 @@
+{
+  "sourceFile": "멸망했는데_바쁨_데이터.xlsx",
+  "sourcePath": "/Users/gummy/Dev/Gummy-dev/apocalypse-card/멸망했는데_바쁨_데이터.xlsx",
+  "capturedAt": "2026-05-20T23:48:06",
+  "headerRow": 3,
+  "firstDataRow": 4,
+  "survivorSheetCandidates": [
+    "V1_생존자카드",
+    "V1_생존자카드 재욱테스트"
+  ],
+  "recommendedSheet": "V1_생존자카드",
+  "notes": [
+    "엑셀에는 정확히 \"생존자\"라는 시트명은 없고 V1_생존자카드 계열 시트가 존재한다.",
+    "V1_생존자카드 재욱테스트도 같은 열 구조를 사용하지만 테스트/재배치용 데이터가 섞여 있으므로 실제 연결 전 선택이 필요하다.",
+    "현재 import_from_excel.py는 일부 예전 헤더 별칭을 사용하므로, 배치 보너스 등은 이 매핑을 기준으로 보강해야 한다."
+  ],
+  "sheets": {
+    "V1_생존자카드": {
+      "headerRowValues": [
+        "ID",
+        "단계",
+        "속성",
+        "이모지",
+        "이름",
+        "점수",
+        "영입\n비용",
+        "장수",
+        "기본 기능",
+        "캐릭터 설명",
+        "배치 보너스",
+        "겹침\n그룹키",
+        "트리거\n(코드)",
+        "메모",
+        "1열",
+        null
+      ],
+      "dataRowCount": 34,
+      "columns": [
+        {
+          "index": 1,
+          "letter": "A",
+          "header": "ID",
+          "normalizedHeader": "ID",
+          "field": "id",
+          "codeField": "survivor.id",
+          "note": "카드 고유 ID"
+        },
+        {
+          "index": 2,
+          "letter": "B",
+          "header": "단계",
+          "normalizedHeader": "단계",
+          "field": "tier",
+          "codeField": "survivor.tier/searchTier",
+          "note": "생존자 수색 단계"
+        },
+        {
+          "index": 3,
+          "letter": "C",
+          "header": "속성",
+          "normalizedHeader": "속성",
+          "field": "type",
+          "codeField": "survivor.type",
+          "note": "생존자 타입"
+        },
+        {
+          "index": 4,
+          "letter": "D",
+          "header": "이모지",
+          "normalizedHeader": "이모지",
+          "field": "emoji",
+          "codeField": "survivor.emoji",
+          "note": "임시/대표 얼굴 아이콘"
+        },
+        {
+          "index": 5,
+          "letter": "E",
+          "header": "이름",
+          "normalizedHeader": "이름",
+          "field": "name",
+          "codeField": "survivor.name",
+          "note": "카드명"
+        },
+        {
+          "index": 6,
+          "letter": "F",
+          "header": "점수",
+          "normalizedHeader": "점수",
+          "field": "score",
+          "codeField": "survivor.score",
+          "note": "최종 점수"
+        },
+        {
+          "index": 7,
+          "letter": "G",
+          "header": "영입\n비용",
+          "normalizedHeader": "영입비용",
+          "field": "recruitCost",
+          "codeField": "survivor.recruitCost",
+          "note": "영입 비용"
+        },
+        {
+          "index": 8,
+          "letter": "H",
+          "header": "장수",
+          "normalizedHeader": "장수",
+          "field": "count",
+          "codeField": "survivor.count",
+          "note": "덱 포함 장수"
+        },
+        {
+          "index": 9,
+          "letter": "I",
+          "header": "기본 기능",
+          "normalizedHeader": "기본기능",
+          "field": "effect",
+          "codeField": "survivor.effect",
+          "note": "카드 기능 문구"
+        },
+        {
+          "index": 10,
+          "letter": "J",
+          "header": "캐릭터 설명",
+          "normalizedHeader": "캐릭터설명",
+          "field": "description",
+          "codeField": "survivor.description",
+          "note": "컨셉 설명 문구"
+        },
+        {
+          "index": 11,
+          "letter": "K",
+          "header": "배치 보너스",
+          "normalizedHeader": "배치보너스",
+          "field": "specialBonus",
+          "codeField": "survivor.specialBonus",
+          "note": "배치/위치 보너스 문구"
+        },
+        {
+          "index": 12,
+          "letter": "L",
+          "header": "겹침\n그룹키",
+          "normalizedHeader": "겹침그룹키",
+          "field": "stackKey",
+          "codeField": "survivor.stackKey",
+          "note": "겹침 판정 그룹 키"
+        },
+        {
+          "index": 13,
+          "letter": "M",
+          "header": "트리거\n(코드)",
+          "normalizedHeader": "트리거(코드)",
+          "field": "triggers",
+          "codeField": "survivor.triggers",
+          "note": "코드 트리거 존재 여부/메모"
+        },
+        {
+          "index": 14,
+          "letter": "N",
+          "header": "메모",
+          "normalizedHeader": "메모",
+          "field": "memo",
+          "codeField": null,
+          "note": "기획 메모, 코드 연결 제외"
+        },
+        {
+          "index": 15,
+          "letter": "O",
+          "header": "1열",
+          "normalizedHeader": "1열",
+          "field": "printColumnGroup",
+          "codeField": null,
+          "note": "인쇄/레이아웃 보조 컬럼으로 추정"
+        },
+        {
+          "index": 16,
+          "letter": "P",
+          "header": null,
+          "normalizedHeader": "",
+          "field": null,
+          "codeField": null,
+          "note": "빈 컬럼 또는 아직 매핑되지 않은 보조 컬럼"
+        }
+      ],
+      "sampleIds": [
+        "s_weird_1",
+        "s_coward_1",
+        "s_weird_7",
+        "s_coward_4",
+        "s_coward_5",
+        "s_military_5",
+        "s_mood_twins",
+        "s_mood_5"
+      ]
+    },
+    "V1_생존자카드 재욱테스트": {
+      "headerRowValues": [
+        "ID",
+        "단계",
+        "속성",
+        "이모지",
+        "이름",
+        "점수",
+        "영입\n비용",
+        "장수",
+        "기본 기능",
+        "캐릭터 설명",
+        "배치 보너스",
+        "겹침\n그룹키",
+        "트리거\n(코드)",
+        "메모",
+        "1열",
+        null
+      ],
+      "dataRowCount": 34,
+      "columns": [
+        {
+          "index": 1,
+          "letter": "A",
+          "header": "ID",
+          "normalizedHeader": "ID",
+          "field": "id",
+          "codeField": "survivor.id",
+          "note": "카드 고유 ID"
+        },
+        {
+          "index": 2,
+          "letter": "B",
+          "header": "단계",
+          "normalizedHeader": "단계",
+          "field": "tier",
+          "codeField": "survivor.tier/searchTier",
+          "note": "생존자 수색 단계"
+        },
+        {
+          "index": 3,
+          "letter": "C",
+          "header": "속성",
+          "normalizedHeader": "속성",
+          "field": "type",
+          "codeField": "survivor.type",
+          "note": "생존자 타입"
+        },
+        {
+          "index": 4,
+          "letter": "D",
+          "header": "이모지",
+          "normalizedHeader": "이모지",
+          "field": "emoji",
+          "codeField": "survivor.emoji",
+          "note": "임시/대표 얼굴 아이콘"
+        },
+        {
+          "index": 5,
+          "letter": "E",
+          "header": "이름",
+          "normalizedHeader": "이름",
+          "field": "name",
+          "codeField": "survivor.name",
+          "note": "카드명"
+        },
+        {
+          "index": 6,
+          "letter": "F",
+          "header": "점수",
+          "normalizedHeader": "점수",
+          "field": "score",
+          "codeField": "survivor.score",
+          "note": "최종 점수"
+        },
+        {
+          "index": 7,
+          "letter": "G",
+          "header": "영입\n비용",
+          "normalizedHeader": "영입비용",
+          "field": "recruitCost",
+          "codeField": "survivor.recruitCost",
+          "note": "영입 비용"
+        },
+        {
+          "index": 8,
+          "letter": "H",
+          "header": "장수",
+          "normalizedHeader": "장수",
+          "field": "count",
+          "codeField": "survivor.count",
+          "note": "덱 포함 장수"
+        },
+        {
+          "index": 9,
+          "letter": "I",
+          "header": "기본 기능",
+          "normalizedHeader": "기본기능",
+          "field": "effect",
+          "codeField": "survivor.effect",
+          "note": "카드 기능 문구"
+        },
+        {
+          "index": 10,
+          "letter": "J",
+          "header": "캐릭터 설명",
+          "normalizedHeader": "캐릭터설명",
+          "field": "description",
+          "codeField": "survivor.description",
+          "note": "컨셉 설명 문구"
+        },
+        {
+          "index": 11,
+          "letter": "K",
+          "header": "배치 보너스",
+          "normalizedHeader": "배치보너스",
+          "field": "specialBonus",
+          "codeField": "survivor.specialBonus",
+          "note": "배치/위치 보너스 문구"
+        },
+        {
+          "index": 12,
+          "letter": "L",
+          "header": "겹침\n그룹키",
+          "normalizedHeader": "겹침그룹키",
+          "field": "stackKey",
+          "codeField": "survivor.stackKey",
+          "note": "겹침 판정 그룹 키"
+        },
+        {
+          "index": 13,
+          "letter": "M",
+          "header": "트리거\n(코드)",
+          "normalizedHeader": "트리거(코드)",
+          "field": "triggers",
+          "codeField": "survivor.triggers",
+          "note": "코드 트리거 존재 여부/메모"
+        },
+        {
+          "index": 14,
+          "letter": "N",
+          "header": "메모",
+          "normalizedHeader": "메모",
+          "field": "memo",
+          "codeField": null,
+          "note": "기획 메모, 코드 연결 제외"
+        },
+        {
+          "index": 15,
+          "letter": "O",
+          "header": "1열",
+          "normalizedHeader": "1열",
+          "field": "printColumnGroup",
+          "codeField": null,
+          "note": "인쇄/레이아웃 보조 컬럼으로 추정"
+        },
+        {
+          "index": 16,
+          "letter": "P",
+          "header": null,
+          "normalizedHeader": "",
+          "field": null,
+          "codeField": null,
+          "note": "빈 컬럼 또는 아직 매핑되지 않은 보조 컬럼"
+        }
+      ],
+      "sampleIds": [
+        "s_weird_1",
+        "s_coward_twins",
+        "s_weird_6",
+        "s_weird_3",
+        "s_weird_5",
+        "s_weird_2",
+        "s_weird_4",
+        "s_coward_1"
+      ]
+    }
+  }
+}

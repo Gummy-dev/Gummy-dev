@@ -1,0 +1,1001 @@
+[
+  {
+    "id": "e_sacrifice",
+    "tier": 2,
+    "category": "score",
+    "name": "희생 요구",
+    "scope": "personal",
+    "emoji": "🔥",
+    "description": "무언가가 희생을 요구한다. \n생존자 한 명을 직접 골라 보내면 위기를 넘긴 공으로 점수 1을 얻는다.",
+    "resolution": {
+      "type": "remove_choice"
+    },
+    "reward": {
+      "type": "item",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "생존자 선택 제거 (1명)",
+    "_summary_reward": "점수+1"
+  },
+  {
+    "id": "e_random_misfortune",
+    "tier": 2,
+    "category": "score",
+    "name": "불의의 사고",
+    "scope": "personal",
+    "emoji": "💥",
+    "autoStartOnReveal": true,
+    "penalizeOnFail": true,
+    "description": "카드를 넘기는 순간 어딘가가 폭발한다. \n사고를 수습하는 동안 무작위 생존자 1명을 잃지만, \n위기를 넘긴 공으로 점수 1을 얻는다.",
+    "resolution": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "reward": {
+      "type": "item",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "생존자 무작위 제거 (1명)",
+    "_summary_reward": "점수+1"
+  },
+  {
+    "id": "e_two_gone",
+    "tier": 3,
+    "category": "score",
+    "name": "연쇄 이탈",
+    "scope": "personal",
+    "emoji": "🚪",
+    "description": "파티 내 갈등이 심화됐다. \n원하는 생존자 2명을 제거해 질서를 바로잡으면 점수 2를 얻는다.",
+    "resolution": {
+      "type": "remove_choice",
+      "amount": 2
+    },
+    "reward": {
+      "type": "treasure",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "생존자 선택 제거 (2명)",
+    "_summary_reward": "점수+2"
+  },
+  {
+    "emoji": "🌀",
+    "name": "내부 혼란",
+    "scope": "personal",
+    "category": "score",
+    "count": 1,
+    "description": "내 파티 내에서 생존자 2명의 순서를 직접 바꿔 질서를 되찾으면 점수 1을 얻는다.",
+    "_summary_resolution": "내 파티 순서 변경",
+    "_summary_reward": "점수+1"
+  },
+  {
+    "id": "e_revive_grave",
+    "tier": 2,
+    "category": "score",
+    "name": "기적의 소생",
+    "scope": "personal",
+    "emoji": "💫",
+    "description": "떠난 생존자 더미에서 생존자 1명을 파티로 되돌린다. 파티가 가득 차 있거나 떠난 생존자가 없으면 해결 불가.",
+    "requiredType": "겁쟁이",
+    "resolution": {
+      "type": "revive_from_grave"
+    },
+    "reward": {
+      "type": "item",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "무덤에서 부활",
+    "_summary_reward": "점수+1"
+  },
+  {
+    "emoji": "🪙",
+    "name": "통행세 징수",
+    "scope": "personal",
+    "category": "resource",
+    "count": 1,
+    "description": "이 지역을 지나려면 통행세를 내야 한다. \n병뚜껑 3개를 지불해 통과하라.",
+    "_summary_resolution": "병뚜껑 지불 (3개)",
+    "_summary_reward": "통조림+4"
+  },
+  {
+    "id": "e_food_tax",
+    "tier": 2,
+    "category": "resource",
+    "name": "식량 공출",
+    "scope": "personal",
+    "emoji": "🥫",
+    "description": "인근 세력이 식량을 요구하고 있다. \n통조림 4개를 납부하면 안전하게 이동할 수 있다.",
+    "resolution": {
+      "type": "pay_can",
+      "amount": 4
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 5
+    },
+    "count": 1,
+    "_summary_resolution": "통조림 지불 (4개)",
+    "_summary_reward": "병뚜껑+5"
+  },
+  {
+    "emoji": "🌉",
+    "name": "다리 통행료",
+    "scope": "personal",
+    "category": "resource",
+    "count": 1,
+    "description": "다리를 건너려면 요금을 내야 한다. \n병뚜껑 2개를 지불하라.",
+    "_summary_resolution": "병뚜껑 지불 (2개)",
+    "_summary_reward": "통조림+3"
+  },
+  {
+    "id": "e_need_muscle",
+    "tier": 2,
+    "category": "resource",
+    "name": "험한 길",
+    "scope": "personal",
+    "emoji": "🏔️",
+    "description": "험준한 산길. 반장이 있어야 안전하게 통과할 수 있다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 9
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 5
+    },
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "속성 확인: 반장",
+    "_summary_reward": "병뚜껑+5",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "emoji": "😔",
+    "name": "무너진 사기",
+    "scope": "personal",
+    "category": "resource",
+    "count": 1,
+    "description": "파티의 사기가 바닥났다. 분위기메이커가 없으면 생존자 1명이 이탈한다.",
+    "_summary_resolution": "속성 확인: 분위기메이커",
+    "_summary_reward": "통조림+3",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_global_supply",
+    "tier": 1,
+    "category": "resource",
+    "name": "구호물자 도착",
+    "scope": "personal",
+    "emoji": "📦",
+    "description": "구호물자 수송대가 도착했다. 받아들이면 모든 플레이어가 통조림 3개를 받는다.",
+    "resolution": {
+      "type": "global_effect"
+    },
+    "globalEffect": {
+      "type": "gain_can_all",
+      "amount": 2
+    },
+    "count": 1,
+    "_summary_resolution": "전체 효과 선택 발동",
+    "_summary_globalEffect": "모든 플레이어 통조림 +3"
+  },
+  {
+    "id": "e_need_numbers",
+    "tier": 2,
+    "count": 1,
+    "category": "encounter",
+    "name": "인원 부족",
+    "scope": "personal",
+    "emoji": "👥",
+    "description": "이 작업은 최소 3명이 필요하다. 생존자 3명 이상이면 해결 가능하며, 소문을 듣고 떠돌이 생존자 1명이 합류한다.",
+    "assignment": {
+      "minSurvivors": 2,
+      "maxSurvivors": 2
+    },
+    "resolution": {
+      "type": "check_survivors_n",
+      "amount": 2
+    },
+    "reward": {
+      "type": "survivor",
+      "amount": 1
+    },
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 1
+    },
+    "_summary_resolution": "생존자 3명 이상",
+    "_summary_reward": "생존자+1",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "emoji": "⚠️",
+    "name": "위험 구역",
+    "scope": "personal",
+    "category": "encounter",
+    "count": 1,
+    "description": "4차원 생존자의 예측 능력이 필요하다. 길을 잡아내면 숨어 있던 생존자 1명이 파티에 합류한다. 없으면 무작위로 한 명이 다친다.",
+    "_summary_resolution": "속성 확인: 4차원",
+    "_summary_reward": "생존자+1",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_global_recruit",
+    "tier": 1,
+    "category": "encounter",
+    "name": "대규모 합류",
+    "scope": "personal",
+    "emoji": "🧑",
+    "description": "근처 생존자 무리가 몰려온다. 받아들이면 모든 파티에 생존자 1명이 덱에서 자동 합류한다.",
+    "resolution": {
+      "type": "global_effect"
+    },
+    "globalEffect": {
+      "type": "add_survivors_all",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "전체 효과 선택 발동",
+    "_summary_globalEffect": "모든 파티 생존자 +1명"
+  },
+  {
+    "id": "e_dice_ruins",
+    "tier": 2,
+    "category": "dice",
+    "name": "폐허 탐색",
+    "scope": "personal",
+    "emoji": "🏚️",
+    "description": "폐건물 더미를 뒤져 물자를 찾는다. \n실패시 생존자 1명이 다친다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 9
+    },
+    "reward": [
+      {
+        "type": "can",
+        "amount": 3
+      },
+      {
+        "type": "cap",
+        "amount": 2
+      }
+    ],
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 10",
+    "_summary_reward": "통조림+3 / 병뚜껑+2",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_dice_negotiate",
+    "tier": 1,
+    "count": 1,
+    "category": "dice",
+    "name": "불안한 협상",
+    "scope": "personal",
+    "emoji": "🤝",
+    "description": "적대 세력과 협상을 시도한다. \n실패시 통조림 2개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 7
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 5
+    },
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 2
+    },
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 9",
+    "_summary_reward": "통조림+5",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "emoji": "🏊",
+    "name": "위험한 도하",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "급류를 건너야 한다. \n실패시 통조림 3개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 12",
+    "_summary_reward": "병뚜껑+4",
+    "_summary_failPenalty": "통조림 -3"
+  },
+  {
+    "id": "e_dice_ambush",
+    "tier": 3,
+    "category": "dice",
+    "name": "야간 기습",
+    "scope": "personal",
+    "emoji": "🌙",
+    "description": "어둠 속에서 적 세력을 기습한다. \n실패시 생존자 1명이 다친다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 13
+    },
+    "reward": [
+      {
+        "type": "score",
+        "amount": 2
+      },
+      {
+        "type": "cap",
+        "amount": 3
+      }
+    ],
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 14",
+    "_summary_reward": "점수+2 / 병뚜껑+3",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_dice_lucky",
+    "tier": 1,
+    "count": 1,
+    "category": "dice",
+    "name": "행운의 발견",
+    "scope": "personal",
+    "emoji": "🍀",
+    "description": "폐허에서 홀로 떠도는 생존자를 발견했다. \n같이 가자고 제안해볼까?\n실패시 통조림 1개를 잃는다",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 5
+    },
+    "reward": [
+      {
+        "type": "survivor",
+        "amount": 1
+      },
+      {
+        "type": "cap",
+        "amount": 1
+      }
+    ],
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 1
+    },
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 9",
+    "_summary_reward": "생존자+1",
+    "_summary_failPenalty": "통조림 -1"
+  },
+  {
+    "emoji": "⛈️",
+    "name": "폭풍 속 행군",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "거센 폭풍을 뚫고 전진한다. \n실패시 통조림 2개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 10",
+    "_summary_reward": "통조림+4",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "id": "e_dice_wait",
+    "tier": 2,
+    "category": "dice",
+    "name": "숨죽여 기다리기",
+    "scope": "personal",
+    "emoji": "🫣",
+    "description": "위험이 지나가길 기다려볼까?\n실패시 통조림 2개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 9,
+      "requiresKey": true
+    },
+    "requiresKey": true,
+    "reward": {
+      "type": "item",
+      "amount": 1
+    },
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 2
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 10",
+    "_summary_reward": "점수+2",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "id": "e_dice_scavenge",
+    "tier": 2,
+    "count": 1,
+    "category": "dice",
+    "name": "약탈 원정",
+    "scope": "personal",
+    "emoji": "🎒",
+    "description": "황폐한 마을을 훑는다. \n실패시 통조림 2개를 잃는다.",
+    "assignment": {
+      "minSurvivors": 2,
+      "maxSurvivors": 2
+    },
+    "resolution": {
+      "type": "resource_duel",
+      "resource": "bottleCap",
+      "amount": 2,
+      "declineCost": 1
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 2
+    },
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 8",
+    "_summary_reward": "통조림+4 / 병뚜껑+1",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "id": "e_dice_trap",
+    "tier": 2,
+    "category": "dice",
+    "name": "함정 피하기",
+    "scope": "personal",
+    "emoji": "⚙️",
+    "description": "누군가 장치해 둔 함정이 있다. \n실패시 동료를 한명 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 9
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 4
+    },
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 12",
+    "_summary_reward": "병뚜껑+3",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_dice_abandoned",
+    "tier": 3,
+    "category": "dice",
+    "name": "버려진 기지",
+    "scope": "personal",
+    "emoji": "🏕️",
+    "description": "오래된 군사 기지를 발견했다. \n실패시 통조림 2개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 13
+    },
+    "reward": [
+      {
+        "type": "survivor",
+        "amount": 1
+      },
+      {
+        "type": "cap",
+        "amount": 3
+      }
+    ],
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 2
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 12",
+    "_summary_reward": "생존자+2",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "id": "e_dice_gamble",
+    "tier": 3,
+    "category": "dice",
+    "name": "목숨을 건 도박",
+    "scope": "personal",
+    "emoji": "🎰",
+    "description": "다 걸었다.\n실패시 통조림 4개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 13
+    },
+    "reward": [
+      {
+        "type": "score",
+        "amount": 2
+      },
+      {
+        "type": "cap",
+        "amount": 4
+      }
+    ],
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 4
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 15",
+    "_summary_reward": "점수+3",
+    "_summary_failPenalty": "통조림 -4"
+  },
+  {
+    "emoji": "🚀",
+    "name": "어둠 속 탈출",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "추격자들을 따돌려야 한다. \n실패하면 통조림 2개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 10",
+    "_summary_reward": "병뚜껑+3",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "emoji": "🗣️",
+    "name": "담판 짓기",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "세력 수장과 맞담판을 벌인다. \n실패시 통조림 2개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 11",
+    "_summary_reward": "통조림+5 / 점수+1",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "emoji": "🕳️",
+    "name": "비밀 통로",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "지하 통로를 발견했다. \n실패시 통조림 2개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 12",
+    "_summary_reward": "생존자+1 / 점수+1",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "id": "e_dice_rescue",
+    "tier": 1,
+    "count": 1,
+    "category": "dice",
+    "name": "구조 작전",
+    "scope": "personal",
+    "emoji": "🆘",
+    "description": "위험에 빠진 생존자를 찾았다. \n실패시 통조림 1개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 5
+    },
+    "reward": [
+      {
+        "type": "survivor",
+        "amount": 1
+      },
+      {
+        "type": "can",
+        "amount": 2
+      }
+    ],
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 1
+    },
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 8",
+    "_summary_reward": "생존자+1 / 통조림+2",
+    "_summary_failPenalty": "통조림 -1"
+  },
+  {
+    "id": "e_dice_lastbet",
+    "tier": 3,
+    "category": "dice",
+    "name": "최후의 도박",
+    "scope": "personal",
+    "emoji": "🃏",
+    "description": "모든 것을 걸었다. \n실패시 동료를 한명 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 15,
+      "requiresKey": true
+    },
+    "requiresKey": true,
+    "reward": {
+      "type": "treasure",
+      "amount": 1
+    },
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 16",
+    "_summary_reward": "점수+4",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_dice_signal",
+    "tier": 2,
+    "category": "dice",
+    "name": "수상한 신호",
+    "scope": "personal",
+    "emoji": "📡",
+    "description": "미지의 신호를 수신했다.\n실패시 통조림 2개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 9
+    },
+    "reward": [
+      {
+        "type": "cap",
+        "amount": 3
+      },
+      {
+        "type": "can",
+        "amount": 3
+      }
+    ],
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 2
+    },
+    "count": 1,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 11",
+    "_summary_reward": "병뚜껑+3 / 통조림+3",
+    "_summary_failPenalty": "통조림 -2"
+  },
+  {
+    "emoji": "🌈",
+    "name": "기적의 경로",
+    "scope": "personal",
+    "category": "dice",
+    "count": 1,
+    "description": "예상치 못한 안전한 길이 열렸다.\n파티의 운을 시험해 보자\n실패시 통조림 3개를 잃는다.",
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 13",
+    "_summary_reward": "점수+2 / 병뚜껑+3",
+    "_summary_failPenalty": "통조림 -3"
+  },
+  {
+    "id": "e_clue_map",
+    "tier": 2,
+    "category": "clue",
+    "name": "유토피아 지도 조각",
+    "scope": "personal",
+    "emoji": "🗺️",
+    "description": "찢긴 지도 한 조각. \n점선이 가리키는 방향에 우리가 찾던 그 땅이 있는 것 같다. \n실패시 생존자 1명이 다친다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 11
+    },
+    "reward": {
+      "type": "clue",
+      "amount": 1
+    },
+    "failPenalty": {
+      "type": "remove_random",
+      "amount": 1
+    },
+    "count": 3,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 15",
+    "_summary_reward": "점수+3 / 병뚜껑+5",
+    "_summary_failPenalty": "생존자 -1명"
+  },
+  {
+    "id": "e_clue_witness",
+    "tier": 2,
+    "category": "clue",
+    "name": "생존자의 증언",
+    "scope": "personal",
+    "emoji": "👁️",
+    "description": "「거긴 진짜 있어. 내가 봤다고.」 유토피아를 목격한 생존자의 증언. \n실패시 통조림 3개를 잃는다.",
+    "resolution": {
+      "type": "roll_dice",
+      "diceCount": 1,
+      "target": 11
+    },
+    "reward": {
+      "type": "clue",
+      "amount": 1
+    },
+    "failPenalty": {
+      "type": "lose_can",
+      "amount": 3
+    },
+    "count": 2,
+    "_summary_resolution": "주사위(2d6) + 파티점수 ≥ 15",
+    "_summary_reward": "점수+3 / 통조림+5 / 생존자+1",
+    "_summary_failPenalty": "통조림 -3"
+  },
+  {
+    "id": "e_send_troublemaker",
+    "tier": 2,
+    "category": "attack",
+    "name": "골칫덩이 전가",
+    "scope": "personal",
+    "emoji": "↗️",
+    "description": "반장 1명을 다른 파티로 보내면 해결. 그 대가로 통조림을 받는다.",
+    "requiredType": "4차원",
+    "resolution": {
+      "type": "send_survivor_type",
+      "survivorType": "반장"
+    },
+    "assignment": {
+      "minSurvivors": 1,
+      "maxSurvivors": 1
+    },
+    "reward": {
+      "type": "can",
+      "amount": 4
+    },
+    "count": 1,
+    "_summary_resolution": "속성 생존자 이전: 반장",
+    "_summary_reward": "통조림+5"
+  },
+  {
+    "id": "e_refugee_wave",
+    "tier": 2,
+    "category": "attack",
+    "name": "난민 이전",
+    "scope": "personal",
+    "emoji": "🚶",
+    "description": "생존자 2명을 원하는 타 파티로 보내면 병뚜껑을 보상받는다.",
+    "requiredType": "반장",
+    "resolution": {
+      "type": "send_survivors_n",
+      "amount": 2
+    },
+    "reward": {
+      "type": "cap",
+      "amount": 6
+    },
+    "count": 1,
+    "_summary_resolution": "생존자 2명 이전",
+    "_summary_reward": "병뚜껑+6"
+  },
+  {
+    "id": "e_raid",
+    "tier": 3,
+    "category": "attack",
+    "name": "습격",
+    "scope": "personal",
+    "emoji": "⚡",
+    "description": "다른 파티를 습격해 생존자 1명을 데려온다.",
+    "resolution": {
+      "type": "take_from_party"
+    },
+    "reward": {
+      "type": "survivor",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "타 파티 생존자 획득"
+  },
+  {
+    "id": "e_sabotage",
+    "tier": 3,
+    "category": "attack",
+    "name": "방해 공작",
+    "scope": "personal",
+    "emoji": "💣",
+    "description": "다른 파티의 생존자 1명을 제거한다. 통조림 2개를 지불하면 가능.",
+    "resolution": {
+      "type": "pay_can",
+      "amount": 2,
+      "then": "remove_from_party"
+    },
+    "reward": null,
+    "count": 1,
+    "_summary_resolution": "통조림 지불 (2개) → 타 파티 생존자 제거"
+  },
+  {
+    "id": "e_headhunt",
+    "tier": 3,
+    "category": "attack",
+    "name": "스카우트",
+    "scope": "personal",
+    "emoji": "🎯",
+    "description": "다른 파티의 특정 생존자를 병뚜껑 3개로 데려온다.",
+    "resolution": {
+      "type": "pay_cap",
+      "amount": 3,
+      "then": "take_from_party"
+    },
+    "reward": {
+      "type": "survivor",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "병뚜껑 지불 (3개) → 타 파티 생존자 획득"
+  },
+  {
+    "id": "e_provoke",
+    "tier": 2,
+    "count": 1,
+    "category": "attack",
+    "name": "도발",
+    "scope": "personal",
+    "emoji": "😤",
+    "description": "다른 파티의 생존자 2명의 순서를 바꾼다. 병뚜껑 1개를 지불하면 가능.",
+    "requiredType": "4차원",
+    "resolution": {
+      "type": "pay_cap",
+      "amount": 1,
+      "then": "reorder_other_party"
+    },
+    "reward": null,
+    "_summary_resolution": "병뚜껑 지불 (1개) → 타 파티 순서 변경"
+  },
+  {
+    "id": "e_steal_grave",
+    "tier": 2,
+    "category": "attack",
+    "name": "무덤 약탈",
+    "scope": "personal",
+    "emoji": "⚰️",
+    "description": "떠난 생존자 더미에서 생존자 1명을 데려온다.",
+    "resolution": {
+      "type": "steal_from_grave"
+    },
+    "reward": {
+      "type": "survivor",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "무덤에서 획득"
+  },
+  {
+    "id": "e_necromancer",
+    "tier": 3,
+    "category": "attack",
+    "name": "강령술사의 거래",
+    "scope": "personal",
+    "emoji": "🧟",
+    "description": "통조림 3개를 지불하고 떠난 생존자 더미에서 생존자 1명을 데려와 내 파티에 합류시킨다.",
+    "resolution": {
+      "type": "pay_can",
+      "amount": 3,
+      "then": "steal_from_grave"
+    },
+    "reward": {
+      "type": "survivor",
+      "amount": 1
+    },
+    "count": 1,
+    "_summary_resolution": "통조림 지불 (3개) → 무덤에서 획득"
+  },
+  {
+    "id": "e_global_drain",
+    "tier": 2,
+    "category": "attack",
+    "name": "물자 약탈",
+    "scope": "personal",
+    "emoji": "💸",
+    "description": "약탈이 번진다. 받아들이면 모든 플레이어의 병뚜껑이 2개 감소한다.",
+    "resolution": {
+      "type": "global_effect"
+    },
+    "globalEffect": {
+      "type": "lose_cap_all",
+      "amount": 2
+    },
+    "count": 1,
+    "_summary_resolution": "전체 효과 선택 발동",
+    "_summary_globalEffect": "모든 플레이어 병뚜껑 -2"
+  },
+  {
+    "id": "e_global_conflict",
+    "tier": 2,
+    "count": 1,
+    "name": "세력 충돌",
+    "scope": "global",
+    "emoji": "⚔️",
+    "description": "각 파티에서 생존자 1명씩 제거된다.",
+    "globalEffect": {
+      "type": "remove_all_n",
+      "amount": 1
+    },
+    "category": "desaster",
+    "_summary_globalEffect": "모든 파티 생존자 -1명"
+  },
+  {
+    "emoji": "🕺",
+    "name": "광란의 댄스파티",
+    "scope": "global",
+    "category": "desaster",
+    "count": 1,
+    "description": "모든 파티의 생존자 순서가 무작위로 섞인다.",
+    "_summary_globalEffect": "모든 파티 순서 셔플"
+  },
+  {
+    "id": "e_disaster_comet",
+    "tier": 3,
+    "name": "혜성 충돌",
+    "scope": "disaster",
+    "emoji": "☄️",
+    "description": "모든 파티에서 생존자 2명씩 제거된다.",
+    "globalEffect": {
+      "type": "remove_all_n",
+      "amount": 2
+    },
+    "category": "desaster",
+    "count": 1,
+    "_summary_globalEffect": "모든 파티 생존자 -2명"
+  },
+  {
+    "id": "e_disaster_flood",
+    "tier": 3,
+    "name": "대홍수",
+    "scope": "disaster",
+    "emoji": "🌊",
+    "description": "모든 플레이어의 통조림 5개 감소, 생존자 1명 무작위 제거.",
+    "globalEffect": {
+      "type": "compound",
+      "effects": [
+        {
+          "type": "lose_can_all",
+          "amount": 5
+        },
+        {
+          "type": "remove_all_n",
+          "amount": 1
+        }
+      ]
+    },
+    "category": "desaster",
+    "count": 1,
+    "_summary_globalEffect": "모든 플레이어 통조림 -5 + 모든 파티 생존자 -1명"
+  },
+  {
+    "id": "e_disaster_drought",
+    "tier": 2,
+    "name": "극심한 가뭄",
+    "scope": "disaster",
+    "emoji": "🏜️",
+    "description": "모든 플레이어의 통조림이 절반으로 줄어든다.",
+    "globalEffect": {
+      "type": "halve_can_all"
+    },
+    "category": "desaster",
+    "count": 1,
+    "_summary_globalEffect": "모든 통조림 절반"
+  },
+  {
+    "id": "e_disaster_quake",
+    "tier": 2,
+    "name": "대지진",
+    "scope": "disaster",
+    "emoji": "🌋",
+    "description": "모든 파티의 생존자 순서가 무작위로 섞이고 생존자 1명이 제거된다.",
+    "globalEffect": {
+      "type": "compound",
+      "effects": [
+        {
+          "type": "shuffle_all_parties"
+        },
+        {
+          "type": "remove_all_n",
+          "amount": 1
+        }
+      ]
+    },
+    "category": "desaster",
+    "count": 1,
+    "_summary_globalEffect": "모든 파티 순서 셔플 + 모든 파티 생존자 -1명"
+  }
+]

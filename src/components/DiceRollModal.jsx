@@ -9,7 +9,7 @@ const CATEGORY_COLOR = {
 }
 
 export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
-  const { diceRollModal, confirmDiceRoll } = useGameStore()
+  const { diceRollModal, serverDiceRolls, rollDice, confirmDiceRoll, networkBusy } = useGameStore()
   const [phase, setPhase] = useState('idle') // idle | rolling | settled
   const [displayRolls, setDisplayRolls] = useState([1, 1])
   const [finalRolls, setFinalRolls] = useState(null)
@@ -25,12 +25,20 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [diceRollModal?.slotIndex, diceRollModal?.event?.id])
+  }, [diceRollModal?.slotIndex, diceRollModal?.event?.id, Boolean(diceRollModal)])
+
+  useEffect(() => {
+    if (serverDiceRolls) {
+      setFinalRolls(serverDiceRolls)
+      setDisplayRolls(serverDiceRolls)
+      setPhase('settled')
+    }
+  }, [serverDiceRolls])
 
   if (!diceRollModal) return null
   if (!isMyTurn || diceRollModal.playerIndex !== myIndex) return null
 
-  const { event, partyScore = 0, recommendedBonus = 0, bonusLabel = '추천' } = diceRollModal
+  const { event, partyScore = 0, recommendedBonus = 0, typeScoreBonus = partyScore, placementBonus = 0, bonusLabel = '타입점수' } = diceRollModal
   const resolution = event.resolution
   const diceCount = resolution.diceCount ?? 1
   const borderClass = CATEGORY_COLOR[event.category] ?? 'border-violet-600 bg-violet-950/40'
@@ -39,25 +47,13 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
   const total = rollSum + partyScore
   const success = phase === 'settled' && total >= resolution.target
 
-  function handleRoll() {
-    const final = Array.from({ length: diceCount }, () => Math.ceil(Math.random() * 6))
-    setFinalRolls(final)
+  async function handleRoll() {
     setPhase('rolling')
-
-    let elapsed = 0
-    intervalRef.current = setInterval(() => {
-      setDisplayRolls(Array.from({ length: diceCount }, () => Math.ceil(Math.random() * 6)))
-      elapsed += 80
-      if (elapsed >= 1400) {
-        clearInterval(intervalRef.current)
-        setDisplayRolls(final)
-        setPhase('settled')
-      }
-    }, 80)
+    if (!await rollDice()) setPhase('idle')
   }
 
   function handleConfirm() {
-    confirmDiceRoll(finalRolls)
+    confirmDiceRoll()
   }
 
   return (
@@ -84,6 +80,9 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
           <div className="rounded-lg bg-sky-900/50 border border-sky-700 px-3 py-1.5 text-center">
             <div className="text-sky-400 leading-tight">{bonusLabel} 보너스</div>
             <div className="text-sky-300 font-bold text-base">+{partyScore}</div>
+            {bonusLabel === '타입점수' && placementBonus > 0 && (
+              <div className="text-[10px] text-sky-200/70 leading-tight">타입 {typeScoreBonus} + 배치 {placementBonus}</div>
+            )}
           </div>
         </div>
 
@@ -111,7 +110,7 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
           }`}>
             <div className="text-sm text-gray-300">
               🎲 {finalRolls.join(' + ')}
-              <span className="text-sky-300"> + {partyScore} ({bonusLabel})</span>
+              <span className="text-sky-300"> + {partyScore} ({bonusLabel}{bonusLabel === '타입점수' && placementBonus > 0 ? ` ${typeScoreBonus}+배치${placementBonus}` : ''})</span>
               {' = '}
               <span className="font-bold text-white text-lg">{total}</span>
             </div>
@@ -134,7 +133,7 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
         {/* 버튼 */}
         {phase === 'idle' && (
           <button
-            onClick={handleRoll}
+            disabled={networkBusy} onClick={handleRoll}
             className="py-3 rounded-xl border-2 border-violet-500 bg-violet-800 hover:bg-violet-700 text-white font-bold text-sm tracking-wide transition-colors"
           >
             🎲 주사위 굴리기
@@ -149,7 +148,7 @@ export default function DiceRollModal({ isMyTurn = false, myIndex = 0 }) {
 
         {phase === 'settled' && (
           <button
-            onClick={handleConfirm}
+            disabled={networkBusy} onClick={handleConfirm}
             className={`py-3 rounded-xl border-2 font-bold text-sm tracking-wide transition-colors ${
               success
                 ? 'border-emerald-500 bg-emerald-800 hover:bg-emerald-700 text-white'

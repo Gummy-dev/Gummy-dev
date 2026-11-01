@@ -24,7 +24,7 @@ export function calcPartyScore(party, leaderId) {
     })
   })
 
-  const allNormal = party.every((s) => s.type === '평범')
+  const allNormal = party.every((s) => s.id?.startsWith('s_plain_') || String(s.name ?? '').replace(/\s/g, '') === '평범생존자' || s.type === '평범')
   if (allNormal && party.length > 0) {
     total += RULES.allNormalPartyBonus
     bonusTotal += RULES.allNormalPartyBonus

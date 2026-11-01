@@ -1,0 +1,206 @@
+{
+  "escapeOdds": [
+    {
+      "party": "기본 3타입",
+      "successfulStreams": 81,
+      "totalStreams": 216,
+      "chance": 37.5
+    },
+    {
+      "party": "앞 용감이 포함",
+      "successfulStreams": 108,
+      "totalStreams": 216,
+      "chance": 50
+    },
+    {
+      "party": "앞 용감이 + 단서 12",
+      "successfulStreams": 160,
+      "totalStreams": 216,
+      "chance": 74.07
+    },
+    {
+      "party": "선생님 + 앞 용감이",
+      "successfulStreams": 924,
+      "totalStreams": 1296,
+      "chance": 71.3
+    },
+    {
+      "party": "고양이 + 앞 용감이",
+      "successfulStreams": 1090,
+      "totalStreams": 1296,
+      "chance": 84.1
+    },
+    {
+      "party": "선생님 + 고양이 + 앞 용감이 + 단서 12",
+      "successfulStreams": 7645,
+      "totalStreams": 7776,
+      "chance": 98.32
+    }
+  ],
+  "note": "Seeded heuristic bots; pacing/legality evidence only, not human balance proof.",
+  "gamesPerTableSize": 80,
+  "summary": [
+    {
+      "players": 2,
+      "games": 80,
+      "gamesWithEscape": 24,
+      "meanDay": 7.66,
+      "meanTopRoute": 9.74,
+      "meanPlayerRoute": 6.78,
+      "meanAttempts": 0.45,
+      "meanResolved": 5.55,
+      "meanFailed": 0.14,
+      "gamesSeeingTier3": 79,
+      "meanFirstTier3": 4.18,
+      "meanRecruited": 12.5,
+      "meanInitialParty": 2.34,
+      "gamesWithFivePersonParty": 76,
+      "meanAbilityUses": 2.61,
+      "meanDisasterLosses": 1.16,
+      "meanPrepared": 5.74,
+      "winsFrom2CluesBehindDay4": 11,
+      "days": [
+        {
+          "day": 2,
+          "samples": 80,
+          "can": 4.15,
+          "caps": 1.7,
+          "crew": 3.54,
+          "route": 1.08
+        },
+        {
+          "day": 4,
+          "samples": 80,
+          "can": 3.92,
+          "caps": 3.01,
+          "crew": 4.26,
+          "route": 2.72
+        },
+        {
+          "day": 6,
+          "samples": 78,
+          "can": 3.62,
+          "caps": 3.45,
+          "crew": 4.25,
+          "route": 5.38
+        },
+        {
+          "day": 8,
+          "samples": 65,
+          "can": 3.35,
+          "caps": 4.75,
+          "crew": 3.98,
+          "route": 6.6
+        }
+      ]
+    },
+    {
+      "players": 3,
+      "games": 80,
+      "gamesWithEscape": 27,
+      "meanDay": 7.63,
+      "meanTopRoute": 11.03,
+      "meanPlayerRoute": 6.37,
+      "meanAttempts": 0.69,
+      "meanResolved": 8.03,
+      "meanFailed": 0.33,
+      "gamesSeeingTier3": 80,
+      "meanFirstTier3": 4.15,
+      "meanRecruited": 19.11,
+      "meanInitialParty": 2.21,
+      "gamesWithFivePersonParty": 80,
+      "meanAbilityUses": 4.44,
+      "meanDisasterLosses": 1.8,
+      "meanPrepared": 8.34,
+      "winsFrom2CluesBehindDay4": 18,
+      "days": [
+        {
+          "day": 2,
+          "samples": 80,
+          "can": 4.16,
+          "caps": 1.55,
+          "crew": 3.28,
+          "route": 0.99
+        },
+        {
+          "day": 4,
+          "samples": 80,
+          "can": 3.77,
+          "caps": 2.74,
+          "crew": 4.14,
+          "route": 2.53
+        },
+        {
+          "day": 6,
+          "samples": 77,
+          "can": 3.14,
+          "caps": 2.81,
+          "crew": 4.13,
+          "route": 5.12
+        },
+        {
+          "day": 8,
+          "samples": 63,
+          "can": 3.08,
+          "caps": 4.38,
+          "crew": 3.71,
+          "route": 6.36
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "games": 80,
+      "gamesWithEscape": 38,
+      "meanDay": 7.53,
+      "meanTopRoute": 11.24,
+      "meanPlayerRoute": 6.15,
+      "meanAttempts": 0.66,
+      "meanResolved": 10.51,
+      "meanFailed": 0.42,
+      "gamesSeeingTier3": 80,
+      "meanFirstTier3": 4.03,
+      "meanRecruited": 26.01,
+      "meanInitialParty": 2.21,
+      "gamesWithFivePersonParty": 80,
+      "meanAbilityUses": 5.47,
+      "meanDisasterLosses": 2.73,
+      "meanPrepared": 10.56,
+      "winsFrom2CluesBehindDay4": 27,
+      "days": [
+        {
+          "day": 2,
+          "samples": 80,
+          "can": 3.83,
+          "caps": 1.53,
+          "crew": 3.25,
+          "route": 0.88
+        },
+        {
+          "day": 4,
+          "samples": 80,
+          "can": 3.32,
+          "caps": 2.77,
+          "crew": 4.05,
+          "route": 2.61
+        },
+        {
+          "day": 6,
+          "samples": 77,
+          "can": 2.8,
+          "caps": 2.89,
+          "crew": 4.01,
+          "route": 5.14
+        },
+        {
+          "day": 8,
+          "samples": 60,
+          "can": 3.13,
+          "caps": 4.06,
+          "crew": 3.6,
+          "route": 6.2
+        }
+      ]
+    }
+  ]
+}

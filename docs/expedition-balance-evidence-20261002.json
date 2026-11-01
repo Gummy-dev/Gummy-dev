@@ -1,0 +1,253 @@
+{
+  "rulesAtRun": "First successful escape wins immediately; daytime or nighttime attempt. Before concurrent final-round scoring edit on 2026-10-02.",
+  "status": "Historical diagnostic; rerun after agreeing the current victory rule.",
+  "escapeOdds": [
+    {
+      "party": "기본 3타입",
+      "successfulStreams": 81,
+      "totalStreams": 216,
+      "chance": 37.5
+    },
+    {
+      "party": "앞 용감이 포함",
+      "successfulStreams": 108,
+      "totalStreams": 216,
+      "chance": 50
+    },
+    {
+      "party": "앞 용감이 + 여정 24",
+      "successfulStreams": 108,
+      "totalStreams": 216,
+      "chance": 50
+    },
+    {
+      "party": "선생님 + 앞 용감이",
+      "successfulStreams": 924,
+      "totalStreams": 1296,
+      "chance": 71.3
+    },
+    {
+      "party": "고양이 + 앞 용감이",
+      "successfulStreams": 947,
+      "totalStreams": 1296,
+      "chance": 73.07
+    },
+    {
+      "party": "선생님 + 고양이 + 앞 용감이",
+      "successfulStreams": 6674,
+      "totalStreams": 7776,
+      "chance": 85.83
+    },
+    {
+      "party": "기본 3타입 + 사건 1",
+      "successfulStreams": 108,
+      "totalStreams": 216,
+      "chance": 50
+    },
+    {
+      "party": "기본 3타입 + 사건 2",
+      "successfulStreams": 135,
+      "totalStreams": 216,
+      "chance": 62.5
+    },
+    {
+      "party": "고양이 + 선생님 + 앞 용감이 + 사건 1",
+      "successfulStreams": 7155,
+      "totalStreams": 7776,
+      "chance": 92.01
+    }
+  ],
+  "note": "Seeded heuristic bots; pacing/legality evidence only, not human balance proof.",
+  "gamesPerTableSize": 30,
+  "summary": [
+    {
+      "players": 2,
+      "games": 30,
+      "gamesWithEscape": 30,
+      "unfinished": [],
+      "meanDay": 17.5,
+      "medianDay": 19,
+      "meanTopRoute": 21.17,
+      "meanPlayerRoute": 16.92,
+      "meanAttempts": 1.43,
+      "meanResolved": 16.87,
+      "meanFailed": 0.2,
+      "gamesSeeingTier3": 30,
+      "meanFirstTier3": 4.43,
+      "meanRecruited": 16.6,
+      "meanInitialParty": 1.88,
+      "gamesWithFivePersonParty": 30,
+      "meanAbilityUses": 8.7,
+      "meanDisasterLosses": 0,
+      "meanSolvedEvents": 3.27,
+      "winsFrom2CluesBehindDay4": 6,
+      "meanEvents": 5.73,
+      "meanDisasters": 2.3,
+      "meanMiracles": 3.43,
+      "days": [
+        {
+          "day": 2,
+          "samples": 30,
+          "can": 4.33,
+          "caps": 1.3,
+          "crew": 3.13,
+          "route": 0.33,
+          "lead": 0.63
+        },
+        {
+          "day": 4,
+          "samples": 30,
+          "can": 6.05,
+          "caps": 2.25,
+          "crew": 4.07,
+          "route": 1.3,
+          "lead": 2.33
+        },
+        {
+          "day": 6,
+          "samples": 30,
+          "can": 8.1,
+          "caps": 2.75,
+          "crew": 4.5,
+          "route": 3.22,
+          "lead": 5.2
+        },
+        {
+          "day": 8,
+          "samples": 30,
+          "can": 11,
+          "caps": 3.83,
+          "crew": 4.65,
+          "route": 5.35,
+          "lead": 7.87
+        }
+      ]
+    },
+    {
+      "players": 3,
+      "games": 30,
+      "gamesWithEscape": 30,
+      "unfinished": [],
+      "meanDay": 15.23,
+      "medianDay": 15,
+      "meanTopRoute": 21.17,
+      "meanPlayerRoute": 13.76,
+      "meanAttempts": 1.83,
+      "meanResolved": 16.27,
+      "meanFailed": 0.33,
+      "gamesSeeingTier3": 30,
+      "meanFirstTier3": 4.43,
+      "meanRecruited": 23.07,
+      "meanInitialParty": 1.78,
+      "gamesWithFivePersonParty": 30,
+      "meanAbilityUses": 11.6,
+      "meanDisasterLosses": 0,
+      "meanSolvedEvents": 3.3,
+      "winsFrom2CluesBehindDay4": 13,
+      "meanEvents": 5.77,
+      "meanDisasters": 2.33,
+      "meanMiracles": 3.43,
+      "days": [
+        {
+          "day": 2,
+          "samples": 30,
+          "can": 4.68,
+          "caps": 1.49,
+          "crew": 2.79,
+          "route": 0.47,
+          "lead": 1.23
+        },
+        {
+          "day": 4,
+          "samples": 30,
+          "can": 6.79,
+          "caps": 2.23,
+          "crew": 3.59,
+          "route": 1.54,
+          "lead": 3.77
+        },
+        {
+          "day": 6,
+          "samples": 30,
+          "can": 9.06,
+          "caps": 2.67,
+          "crew": 4.08,
+          "route": 3.52,
+          "lead": 7.37
+        },
+        {
+          "day": 8,
+          "samples": 30,
+          "can": 12.19,
+          "caps": 3.01,
+          "crew": 4.32,
+          "route": 5.63,
+          "lead": 10.73
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "games": 30,
+      "gamesWithEscape": 30,
+      "unfinished": [],
+      "meanDay": 15.4,
+      "medianDay": 15,
+      "meanTopRoute": 21.7,
+      "meanPlayerRoute": 12.63,
+      "meanAttempts": 1.37,
+      "meanResolved": 19.77,
+      "meanFailed": 0.67,
+      "gamesSeeingTier3": 30,
+      "meanFirstTier3": 4.83,
+      "meanRecruited": 30.33,
+      "meanInitialParty": 1.86,
+      "gamesWithFivePersonParty": 30,
+      "meanAbilityUses": 17.77,
+      "meanDisasterLosses": 0,
+      "meanSolvedEvents": 3.8,
+      "winsFrom2CluesBehindDay4": 13,
+      "meanEvents": 5.73,
+      "meanDisasters": 2.57,
+      "meanMiracles": 3.17,
+      "days": [
+        {
+          "day": 2,
+          "samples": 30,
+          "can": 4.17,
+          "caps": 1.91,
+          "crew": 2.72,
+          "route": 0.62,
+          "lead": 2.03
+        },
+        {
+          "day": 4,
+          "samples": 30,
+          "can": 5.75,
+          "caps": 1.92,
+          "crew": 3.59,
+          "route": 1.66,
+          "lead": 3.93
+        },
+        {
+          "day": 6,
+          "samples": 30,
+          "can": 7.63,
+          "caps": 2.53,
+          "crew": 3.99,
+          "route": 3.13,
+          "lead": 7.03
+        },
+        {
+          "day": 8,
+          "samples": 30,
+          "can": 10.35,
+          "caps": 2.68,
+          "crew": 4.22,
+          "route": 4.99,
+          "lead": 10.63
+        }
+      ]
+    }
+  ]
+}

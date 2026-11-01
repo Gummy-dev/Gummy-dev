@@ -8,10 +8,6 @@ const nestedRules = {
     canPerSurvivorPerTurn: 1,
     capPerSurvivorPerTurn: 1,
     defaultReactivationCost: { can: 1 },
-    exchange: {
-      capToCanRate: 2, // 병뚜껑 1개 -> 통조림 2개
-      canToCapRate: 3, // 통조림 3개 -> 병뚜껑 1개
-    },
   },
 
   turn: {
@@ -33,9 +29,15 @@ const nestedRules = {
 
   exploration: {
     eventSlotCountByTier: {
-      1: 4,
+      1: 3,
       2: 4,
-      3: 4,
+      3: 3,
+    },
+    // Legacy alias for older UI/store helpers. Keep synced with eventSlotCountByTier.
+    slotCountByTier: {
+      1: 3,
+      2: 4,
+      3: 3,
     },
     revealCanCostByTier: { 1: 1, 2: 2, 3: 3 },
     tiers: {
@@ -105,8 +107,6 @@ export const RULES = {
   // 자원
   canPerSurvivorPerTurn: nestedRules.economy.canPerSurvivorPerTurn,
   capPerSurvivorPerTurn: nestedRules.economy.capPerSurvivorPerTurn,
-  capToCanRate: nestedRules.economy.exchange.capToCanRate,
-  canToCapRate: nestedRules.economy.exchange.canToCapRate,
 
   // 용병소 / 생존자 수색
   mercenaryDrawCount: Object.values(nestedRules.search.slotCountByTier).reduce((sum, count) => sum + count, 0),
@@ -128,3 +128,34 @@ export const RULES = {
 export const SEARCH_RULES = RULES.search
 export const EXPLORATION_RULES = RULES.exploration
 export const UTOPIA_RULES = RULES.utopia
+
+// 카드 텍스트에서 사용하는 기호 정의.
+// RichText 컴포넌트가 이 토큰을 파싱해 실제 뱃지/아이콘으로 렌더링한다.
+//
+//  자원 이모지 (직접 삽입):
+//    🪙  병뚜껑
+//    🥫  통조림
+//    🔍  단서
+//    🎲  주사위
+//
+//  인라인 토큰 (중괄호 표기 → RichText가 처리):
+//    {반}  반장 타입 뱃지
+//    {용}  용감이 타입 뱃지
+//    {분}  분위기메이커 타입 뱃지
+//    {겁}  겁쟁이 타입 뱃지
+//    {4}   4차원 타입 뱃지
+//    {sv}      생존자 아이콘 (문장 내 인라인: 11px)
+//    {dim}...{/dim}  회색 흐린 텍스트 (보조 설명용)
+export const GAME_SYMBOLS = {
+  can: '🥫',
+  bottleCap: '🪙',
+  clue: '🔍',
+  dice: '🎲',
+  typeTokens: {
+    반: '반장',
+    용: '용감이',
+    분: '분위기메이커',
+    겁: '겁쟁이',
+    '4': '4차원',
+  },
+}
